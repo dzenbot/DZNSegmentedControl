@@ -378,7 +378,6 @@
 {
     UIButton *button = (UIButton *)sender;
     button.highlighted = NO;
-    button.selected = YES;
 }
 
 - (void)willSelectedButton:(id)sender
