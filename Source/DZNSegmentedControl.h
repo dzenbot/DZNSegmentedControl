@@ -33,6 +33,7 @@
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.
  * The returned segmented control is automatically sized to fit its content within the width of its superview.
+ * If items is nil, the control will still be created but expecting titles and counts to be assigned.
  *
  * @params items An array of NSString objects only.
  * @returns A DZNSegmentedControl object or nil if there was a problem in initializing the object.

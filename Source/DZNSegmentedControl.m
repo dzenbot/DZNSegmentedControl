@@ -301,10 +301,6 @@
 
 - (void)setSelected:(BOOL)selected forSegmentAtIndex:(NSUInteger)segment
 {
-//    if (!_items) {
-//        return;
-//    }
-    
     for (UIButton *_button in [self buttons]) {
         _button.highlighted = NO;
         _button.selected = NO;
@@ -351,16 +347,13 @@
     for (int i = 0; i < self.numberOfSegments; i++) {
         [self addButtonForSegment:i];
     }
-    
-    
-    
-    
 }
 
 - (void)addButtonForSegment:(NSUInteger)segment
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     
+    [button addTarget:self action:@selector(shouldSelectedButton:) forControlEvents:UIControlEventTouchDragInside|UIControlEventTouchDragOutside|UIControlEventTouchDragEnter|UIControlEventTouchCancel];
     [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
     [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
     
@@ -369,6 +362,9 @@
     button.clipsToBounds = YES;
     button.titleLabel.font = [UIFont fontWithName:_font.fontName size:12.0];
     button.titleLabel.numberOfLines = 2;
+    button.titleLabel.adjustsFontSizeToFitWidth = NO;
+    button.adjustsImageWhenHighlighted = NO;
+    button.adjustsImageWhenDisabled = NO;
     button.tag = segment;
     
     [self addSubview:button];
@@ -376,6 +372,13 @@
     [self setCount:@(0) forSegmentAtIndex:segment];
     
     [self layoutIfNeeded];
+}
+
+- (void)shouldSelectedButton:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    button.highlighted = NO;
+    button.selected = YES;
 }
 
 - (void)willSelectedButton:(id)sender
@@ -395,9 +398,7 @@
         return;
     }
     
-    if (!button.selected && self.isTransitioning) {
-        button.selected = YES;
-    }
+    button.selected = YES;
 }
 
 - (void)removeAllSegments
