@@ -20,7 +20,17 @@
 {
     [super loadView];
     
+    self.title = @"DZNSegmentedControl";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addSegment:)];
+    
     self.tableView.tableFooterView = [UIView new];
+    self.tableView.scrollEnabled = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -31,7 +41,9 @@
     [control setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
     [control setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
     
+    [self.tableView reloadData];
 }
+
 
 #pragma mark - UITableViewDataSource Methods
 
@@ -42,7 +54,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return 20;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -52,33 +64,39 @@
     
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.textLabel.textColor = [UIColor darkGrayColor];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"Cell %d", indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ #%d", [[control titleForSegmentAtIndex:control.selectedSegmentIndex] capitalizedString], indexPath.row+1];
     
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.0;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 50;
+    return 56.0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *contentView = [UIView new];
+    if (!control) {
+        
+        NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
+        
+        control = [[DZNSegmentedControl alloc] initWithItems:items];
+        control.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
+        control.delegate = self;
+        control.selectedSegmentIndex = 1;
+        
+        [control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
+    }
     
-    NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
-    
-    control = [[DZNSegmentedControl alloc] initWithItems:items];
-    control.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
-    control.delegate = self;
-    control.selectedSegmentIndex = 1;
-    
-    [control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
-    [contentView addSubview:control];
-    
-    return contentView;
+    return control;
 }
 
 
@@ -89,9 +107,17 @@
     
 }
 
+
+#pragma mark - ViewController Methods
+
+- (void)addSegment:(id)sender
+{
+    [control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:control.numberOfSegments];
+}
+
 - (void)selectedSegment:(DZNSegmentedControl *)control
 {
-    NSLog(@"%s : %d",__FUNCTION__, control.selectedSegmentIndex);
+    [self.tableView reloadData];
 }
 
 
