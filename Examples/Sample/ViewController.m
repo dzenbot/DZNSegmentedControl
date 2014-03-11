@@ -11,9 +11,8 @@
 
 #define twitterColor [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0]
 
-@interface ViewController () <DZNSegmentedControlDelegate> {
-    DZNSegmentedControl *control;
-}
+@interface ViewController () <DZNSegmentedControlDelegate>
+@property (nonatomic, strong) DZNSegmentedControl *control;
 @end
 
 @implementation ViewController
@@ -27,7 +26,8 @@
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor], NSFontAttributeName: [UIFont systemFontOfSize:18.0]}];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addSegment:)];
-    
+
+    self.tableView.tableHeaderView = self.control;
     self.tableView.tableFooterView = [UIView new];
 }
 
@@ -44,11 +44,27 @@
 {
     [super viewDidAppear:animated];
     
-    [control setCount:@((arc4random() % 300)) forSegmentAtIndex:0];
-    [control setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
-    [control setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
+    [self.control setCount:@((arc4random() % 300)) forSegmentAtIndex:0];
+    [self.control setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
+    [self.control setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
     
     [self.tableView reloadData];
+}
+
+- (DZNSegmentedControl *)control
+{
+    if (!_control)
+    {
+        NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
+        
+        _control = [[DZNSegmentedControl alloc] initWithItems:items];
+        _control.tintColor = twitterColor;
+        _control.delegate = self;
+        _control.selectedSegmentIndex = 1;
+        
+        [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
+    }
+    return _control;
 }
 
 
@@ -74,7 +90,7 @@
         cell.textLabel.textColor = [UIColor darkGrayColor];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ #%d", [[control titleForSegmentAtIndex:control.selectedSegmentIndex] capitalizedString], indexPath.row+1];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ #%d", [[self.control titleForSegmentAtIndex:self.control.selectedSegmentIndex] capitalizedString], indexPath.row+1];
     
     return cell;
 }
@@ -86,24 +102,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 74.0;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (!control) {
-        
-        NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
-        
-        control = [[DZNSegmentedControl alloc] initWithItems:items];
-        control.tintColor = twitterColor;
-        control.delegate = self;
-        control.selectedSegmentIndex = 1;
-        
-        [control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
-    }
-    
-    return control;
+    return 30.0;
 }
 
 
@@ -119,7 +118,7 @@
 
 - (void)addSegment:(id)sender
 {
-    [control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:control.numberOfSegments];
+    [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:self.control.numberOfSegments];
 }
 
 - (void)selectedSegment:(DZNSegmentedControl *)control
