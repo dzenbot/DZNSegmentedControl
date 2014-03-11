@@ -21,7 +21,7 @@
 @synthesize barPosition = _barPosition;
 @synthesize font = _font;
 
-- (id)initWithItems:(NSArray *)items
+- (id)init
 {
     if (self = [super init]) {
         
@@ -31,6 +31,16 @@
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
         
+        if (!_items) {
+            [self configure];
+        }
+    }
+    return self;
+}
+
+- (id)initWithItems:(NSArray *)items
+{
+    if (self = [self init]) {
         self.items = items;
     }
     return self;
@@ -72,13 +82,14 @@
     [self bringSubviewToFront:self.selectionIndicator];
 }
 
-- (void)didMoveToWindow
-{   
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    [super willMoveToSuperview:newSuperview];
+    
     if (_selectedSegmentIndex < 0) {
         self.selectedSegmentIndex = 0;
     }
 }
-
 
 #pragma mark - Getter Methods
 
@@ -100,7 +111,10 @@
 
 - (UIButton *)buttonAtIndex:(NSUInteger)segment
 {
-    return (UIButton *)[[self buttons] objectAtIndex:segment];
+    if (_items.count > 0 && segment < [self buttons].count) {
+        return (UIButton *)[[self buttons] objectAtIndex:segment];
+    }
+    return nil;
 }
 
 - (UIButton *)selectedButton
@@ -162,7 +176,10 @@
         [self setItems:nil];
     }
     
-    _items = [NSArray arrayWithArray:items];
+    if (items) {
+        _items = [NSArray arrayWithArray:items];
+    }
+    
     [self configure];
 }
 
@@ -186,7 +203,7 @@
 
 - (void)setTintColor:(UIColor *)color
 {
-    if (!color) {
+    if (!color || !_items) {
         return;
     }
     
@@ -223,7 +240,7 @@
 
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment
 {
-    if (!count) {
+    if (!count || !_items) {
         return;
     }
     
@@ -279,6 +296,10 @@
 
 - (void)setSelected:(BOOL)selected forSegmentAtIndex:(NSUInteger)segment
 {
+//    if (!_items) {
+//        return;
+//    }
+    
     for (UIButton *_button in [self buttons]) {
         _button.highlighted = NO;
         _button.selected = NO;
@@ -289,19 +310,18 @@
         return;
     }
     
+    CGFloat duration = (_selectedSegmentIndex < 0) ? 0.0 : _animationDuration;
+    
     _selectedSegmentIndex = segment;
     _transitioning = YES;
     
     UIButton *button = [self buttonAtIndex:segment];
-    CGFloat duration = CGRectEqualToRect(self.selectionIndicator.frame, CGRectZero) ? 0.0 : _animationDuration;
     
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.selectionIndicator.frame = [self selectionIndicatorRect];
-                         
-                         NSLog(@"selectionIndicatorRect : %@", NSStringFromCGRect([self selectionIndicatorRect]));
                      }
                      completion:^(BOOL finished) {
                          button.userInteractionEnabled = NO;

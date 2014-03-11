@@ -30,7 +30,6 @@
     [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:0];
     [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
     [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
-    [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:3];
     
 }
 
