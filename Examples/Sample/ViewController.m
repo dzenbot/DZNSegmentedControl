@@ -10,7 +10,7 @@
 #import "DZNSegmentedControl.h"
 
 @interface ViewController () <DZNSegmentedControlDelegate> {
-    DZNSegmentedControl *segmentedControl;
+    DZNSegmentedControl *control;
 }
 @end
 
@@ -27,9 +27,9 @@
 {
     [super viewDidAppear:animated];
     
-    [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:0];
-    [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
-    [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
+    [control setCount:@((arc4random() % 300)) forSegmentAtIndex:0];
+    [control setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
+    [control setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
     
 }
 
@@ -70,13 +70,13 @@
     
     NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
     
-    segmentedControl = [[DZNSegmentedControl alloc] initWithItems:items];
-    segmentedControl.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
-    segmentedControl.delegate = self;
-    segmentedControl.selectedSegmentIndex = 1;
+    control = [[DZNSegmentedControl alloc] initWithItems:items];
+    control.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
+    control.delegate = self;
+    control.selectedSegmentIndex = 1;
     
-    [segmentedControl addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
-    [contentView addSubview:segmentedControl];
+    [control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
+    [contentView addSubview:control];
     
     return contentView;
 }

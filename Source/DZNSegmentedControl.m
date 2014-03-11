@@ -31,9 +31,15 @@
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
         
-        if (!_items) {
-            [self configure];
-        }
+        _selectionIndicator = [UIView new];
+        _selectionIndicator.backgroundColor = self.tintColor;
+        [self addSubview:_selectionIndicator];
+        
+        _hairline = [UIView new];
+        _hairline.backgroundColor = [UIColor lightGrayColor];
+        [self addSubview:_hairline];
+        
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -63,9 +69,8 @@
 
 - (void)layoutSubviews
 {
-    [self sizeToFit];
-    
     [super layoutSubviews];
+    [self sizeToFit];
     
     for (int i = 0; i < [self buttons].count; i++)
     {
@@ -347,15 +352,9 @@
         [self addButtonForSegment:i];
     }
     
-    _selectionIndicator = [UIView new];
-    _selectionIndicator.backgroundColor = self.tintColor;
-    [self addSubview:_selectionIndicator];
     
-    _hairline = [UIView new];
-    _hairline.backgroundColor = [UIColor lightGrayColor];
-    [self addSubview:_hairline];
     
-    self.backgroundColor = [UIColor whiteColor];
+    
 }
 
 - (void)addButtonForSegment:(NSUInteger)segment
