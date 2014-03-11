@@ -1,4 +1,4 @@
-DZNCountSegmentedControl
+DZNSegmentedControl
 ========================
 
 A drop-in replacement for UISegmentedControl for showing counts, to be used typically on a user profile.
@@ -13,22 +13,22 @@ A drop-in replacement for UISegmentedControl for showing counts, to be used typi
 
 ## Installation
 
-Available in [Cocoa Pods](http://cocoapods.org/?q=DZNCountSegmentedControl)
+Available in [Cocoa Pods](http://cocoapods.org/?q=DZNSegmentedControl)
 ```
-pod 'DZNCountSegmentedControl'
+pod 'DZNSegmentedControl'
 ```
 
 ## How to use
-For complete documentation, [visit CocoaPods' auto-generated doc](http://cocoadocs.org/docsets/DZNCountSegmentedControl/)
+For complete documentation, [visit CocoaPods' auto-generated doc](http://cocoadocs.org/docsets/DZNSegmentedControl/)
 
 ### Step 1
 
 ```
-Import "DZNCountSegmentedControl.h"
+Import "DZNSegmentedControl.h"
 ```
 
 ### Step 2
-Creating a new instance of DZNPhotoPickerController is very similar to what you would do with UIImagePickerController:
+Creating a new instance of DZNSegmentedControl is very similar to what you would do with UISegmentedControl:
 ```
 NSArray *items = @[@"Tweets", @"Following", @"Followers"];
     
