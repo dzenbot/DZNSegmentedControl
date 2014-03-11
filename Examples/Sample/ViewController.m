@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "DZNSegmentedControl.h"
 
+#define twitterColor [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0]
+
 @interface ViewController () <DZNSegmentedControlDelegate> {
     DZNSegmentedControl *control;
 }
@@ -21,16 +23,21 @@
     [super loadView];
     
     self.title = @"DZNSegmentedControl";
+
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor], NSFontAttributeName: [UIFont systemFontOfSize:18.0]}];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addSegment:)];
     
     self.tableView.tableFooterView = [UIView new];
-    self.tableView.scrollEnabled = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barTintColor = twitterColor;
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -79,7 +86,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 56.0;
+    return 74.0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -89,7 +96,7 @@
         NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
         
         control = [[DZNSegmentedControl alloc] initWithItems:items];
-        control.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
+        control.tintColor = twitterColor;
         control.delegate = self;
         control.selectedSegmentIndex = 1;
         
