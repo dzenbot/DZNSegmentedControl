@@ -51,28 +51,31 @@
     self.frame = rect;
 }
 
-- (void)didMoveToWindow
+- (void)layoutSubviews
 {
     [self sizeToFit];
     
-    for (int i = 0; i < [self buttons].count; i++) {
+    [super layoutSubviews];
+    
+    for (int i = 0; i < [self buttons].count; i++)
+    {
         UIButton *button = [[self buttons] objectAtIndex:i];
         [button setFrame:CGRectMake(roundf(self.frame.size.width/self.numberOfSegments)*i, 0, roundf(self.frame.size.width/self.numberOfSegments), self.frame.size.height)];
-    }
-    
-    if (_selectedSegmentIndex < 0) {
-        self.selectedSegmentIndex = 0;
+        
+        CGFloat topInset = (_barPosition > UIBarPositionBottom) ? -4.0 : 4.0;
+        [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
     }
     
     self.selectionIndicator.frame = [self selectionIndicatorRect];
+    self.hairline.frame = [self hairlineRect];
     
-    CGRect frame = CGRectMake(0, 0, self.frame.size.width, 0.5);
-    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0 : self.frame.size.height;
-    _hairline.frame = frame;
-    
-    for (UIButton *button in self.buttons) {
-        CGFloat topInset = (_barPosition > UIBarPositionBottom) ? -4.0 : 4.0;
-        [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
+    [self bringSubviewToFront:self.selectionIndicator];
+}
+
+- (void)didMoveToWindow
+{   
+    if (_selectedSegmentIndex < 0) {
+        self.selectedSegmentIndex = 0;
     }
 }
 
@@ -133,10 +136,18 @@
     UIButton *button = [self selectedButton];
     NSString *title = [self titleForSegmentAtIndex:button.tag];
     
-    CGRect frame = self.selectionIndicator.frame;
+    CGRect frame = _selectionIndicator.frame;
     frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
     frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-frame.size.height);
+    
+    return frame;
+}
+
+- (CGRect)hairlineRect
+{
+    CGRect frame = CGRectMake(0, 0, self.frame.size.width, 0.5);
+    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0 : self.frame.size.height;
     
     return frame;
 }
@@ -192,14 +203,22 @@
         return;
     }
     
-    NSAssert(segment < self.items.count, @"Cannot assign a title to non-existing segment.");
+    NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSMutableArray *__items = [NSMutableArray arrayWithArray:self.items];
-    [__items replaceObjectAtIndex:segment withObject:title];
+    NSMutableArray *items = [NSMutableArray arrayWithArray:self.items];
     
-    _items = __items;
-
-    [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
+    if (segment >= self.numberOfSegments) {
+        [items insertObject:title atIndex:self.numberOfSegments];
+        _items = items;
+        
+        [self addButtonForSegment:segment];
+    }
+    else {
+        [items replaceObjectAtIndex:segment withObject:title];
+        _items = items;
+        
+        [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
+    }
 }
 
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment
@@ -208,7 +227,8 @@
         return;
     }
     
-    NSAssert(segment < self.items.count, @"Cannot assign a count to non-existing segment.");
+    NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
+    NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
     NSString *title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
     
@@ -280,6 +300,8 @@
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.selectionIndicator.frame = [self selectionIndicatorRect];
+                         
+                         NSLog(@"selectionIndicatorRect : %@", NSStringFromCGRect([self selectionIndicatorRect]));
                      }
                      completion:^(BOOL finished) {
                          button.userInteractionEnabled = NO;
@@ -301,32 +323,40 @@
 
 - (void)configure
 {
-    self.backgroundColor = [UIColor whiteColor];
-    
     for (int i = 0; i < self.numberOfSegments; i++) {
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        
-        [button setTitle:[self.items objectAtIndex:i] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
-        [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-        
-        button.backgroundColor = self.backgroundColor;
-        button.titleLabel.font = [UIFont fontWithName:_font.fontName size:12.0];
-        button.titleLabel.numberOfLines = 2;
-        button.tag = i;
-        
-        [self addSubview:button];
-        
-        [self setCount:@(0) forSegmentAtIndex:i];
+        [self addButtonForSegment:i];
     }
     
-    self.selectionIndicator = [UIView new];
-    [self addSubview:self.selectionIndicator];
+    _selectionIndicator = [UIView new];
+    _selectionIndicator.backgroundColor = self.tintColor;
+    [self addSubview:_selectionIndicator];
     
     _hairline = [UIView new];
     _hairline.backgroundColor = [UIColor lightGrayColor];
     [self addSubview:_hairline];
+    
+    self.backgroundColor = [UIColor whiteColor];
+}
+
+- (void)addButtonForSegment:(NSUInteger)segment
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
+    [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+    
+    button.backgroundColor = self.backgroundColor;
+    button.opaque = YES;
+    button.clipsToBounds = YES;
+    button.titleLabel.font = [UIFont fontWithName:_font.fontName size:12.0];
+    button.titleLabel.numberOfLines = 2;
+    button.tag = segment;
+    
+    [self addSubview:button];
+    
+    [self setCount:@(0) forSegmentAtIndex:segment];
+    
+    [self layoutIfNeeded];
 }
 
 - (void)willSelectedButton:(id)sender

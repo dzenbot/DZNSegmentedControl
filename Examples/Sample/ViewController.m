@@ -30,6 +30,8 @@
     [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:0];
     [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:1];
     [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:2];
+    [segmentedControl setCount:@((arc4random() % 300)) forSegmentAtIndex:3];
+    
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -70,7 +72,7 @@
     NSArray *items = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
     
     segmentedControl = [[DZNSegmentedControl alloc] initWithItems:items];
-//    segmentedControl.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
+    segmentedControl.tintColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:239/255.0 alpha:1.0];
     segmentedControl.delegate = self;
     segmentedControl.selectedSegmentIndex = 1;
     
