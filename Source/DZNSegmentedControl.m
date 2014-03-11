@@ -186,6 +186,22 @@
     [self.selectionIndicator setBackgroundColor:color];
 }
 
+- (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
+{
+    if (!title) {
+        return;
+    }
+    
+    NSAssert(segment < self.items.count, @"Cannot assign a title to non-existing segment.");
+    
+    NSMutableArray *__items = [NSMutableArray arrayWithArray:self.items];
+    [__items replaceObjectAtIndex:segment withObject:title];
+    
+    _items = __items;
+
+    [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
+}
+
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment
 {
     if (!count) {
@@ -214,7 +230,6 @@
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
     for (UIButton *button in [self buttons]) {
-        
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[button attributedTitleForState:state]];
         

@@ -40,6 +40,14 @@
 - (id)initWithItems:(NSArray *)items;
 
 /**
+ * Sets the title of a segment.
+ *
+ * @param title A string to display in the segment as its title.
+ * @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
+ */
+- (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment;
+
+/**
  * Sets the count of a segment.
  *
  * @param count A number to display in the segment as its count.
