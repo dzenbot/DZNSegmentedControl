@@ -353,9 +353,8 @@
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    [button addTarget:self action:@selector(shouldSelectedButton:) forControlEvents:UIControlEventTouchDragInside|UIControlEventTouchDragOutside|UIControlEventTouchDragEnter|UIControlEventTouchCancel];
     [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+    [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchDragOutside|UIControlEventTouchDragInside|UIControlEventTouchDragEnter|UIControlEventTouchDragExit|UIControlEventTouchCancel|UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
     
     button.backgroundColor = self.backgroundColor;
     button.opaque = YES;
@@ -365,6 +364,7 @@
     button.titleLabel.adjustsFontSizeToFitWidth = NO;
     button.adjustsImageWhenHighlighted = NO;
     button.adjustsImageWhenDisabled = NO;
+    button.exclusiveTouch = YES;
     button.tag = segment;
     
     [self addSubview:button];
@@ -374,16 +374,10 @@
     [self layoutIfNeeded];
 }
 
-- (void)shouldSelectedButton:(id)sender
-{
-    UIButton *button = (UIButton *)sender;
-    button.highlighted = NO;
-}
-
 - (void)willSelectedButton:(id)sender
 {
     UIButton *button = (UIButton *)sender;
-    
+
     if (!self.isTransitioning) {
         self.selectedSegmentIndex = button.tag;
     }
@@ -393,10 +387,7 @@
 {
     UIButton *button = (UIButton *)sender;
     
-    if (button.tag != _selectedSegmentIndex) {
-        return;
-    }
-    
+    button.highlighted = NO;
     button.selected = YES;
 }
 
