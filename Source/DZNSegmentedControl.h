@@ -1,6 +1,7 @@
 //
 //  DZNSegmentedControl.h
 //  DZNSegmentedControl
+//  https://github.com/dzenbot/DZNSegmentedControl
 //
 //  Created by Ignacio Romero Zurbuchen on 3/4/14.
 //  Copyright (c) 2014 DZN Labs. All rights reserved.
@@ -11,6 +12,9 @@
 
 @protocol DZNSegmentedControlDelegate;
 
+/**
+ * A drop-in replacement for UISegmentedControl showing multiple segment counts, to be used typically on a user profile.
+ */
 @interface DZNSegmentedControl : UIControl <UIBarPositioning>
 
 /** The control's delegate object, conforming to the UIBarPositioning protocol. */

@@ -1,6 +1,7 @@
 //
 //  DZNSegmentedControl.m
 //  DZNSegmentedControl
+//  https://github.com/dzenbot/DZNSegmentedControl
 //
 //  Created by Ignacio Romero Zurbuchen on 3/4/14.
 //  Copyright (c) 2014 DZN Labs. All rights reserved.
@@ -366,7 +367,7 @@
     button.adjustsImageWhenDisabled = NO;
     button.exclusiveTouch = YES;
     button.tag = segment;
-    
+        
     [self addSubview:button];
     
     [self setCount:@(0) forSegmentAtIndex:segment];
