@@ -36,9 +36,10 @@
         _selectionIndicator.backgroundColor = self.tintColor;
         [self addSubview:_selectionIndicator];
         
-        _hairline = [UIView new];
-        _hairline.backgroundColor = [UIColor lightGrayColor];
-        [self addSubview:_hairline];
+        self.layer.shadowColor    = [[UIColor blackColor] CGColor];
+        self.layer.shadowOffset   = CGSizeMake(0, 1);
+        self.layer.shadowOpacity  = .3;
+        self.layer.shadowRadius   = 1.0;
         
         self.backgroundColor = [UIColor whiteColor];
     }
