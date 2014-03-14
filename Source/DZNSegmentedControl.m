@@ -154,10 +154,9 @@
 - (CGRect)selectionIndicatorRect
 {
     UIButton *button = [self selectedButton];
-    NSString *title = [self titleForSegmentAtIndex:button.tag];
     
     CGRect frame = _selectionIndicator.frame;
-    frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
+    frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
     frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-frame.size.height);
     
