@@ -27,7 +27,7 @@
 @property (nonatomic, retain) UIFont *font;
 /** The height of the control. Default is 56px. */
 @property (nonatomic, readonly) CGFloat height;
-/** The color or the hairline. Default is light gray. */
+/** The color of the hairline. Default is light gray. */
 @property (nonatomic, readwrite) UIColor *hairlineColor;
 /** The height of the selection indicator. Default is 2px . */
 @property (nonatomic, readwrite) CGFloat selectionIndicatorHeight;
