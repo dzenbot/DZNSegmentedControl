@@ -340,6 +340,15 @@
     button.enabled = enabled;
 }
 
+- (void)setHairlineColor:(UIColor *)hairlineColor
+{
+    self.hairline.backgroundColor = hairlineColor;
+}
+
+- (UIColor *)hairlineColor
+{
+    return self.hairline.backgroundColor;
+}
 
 #pragma mark - DZNSegmentedControl Methods
 
