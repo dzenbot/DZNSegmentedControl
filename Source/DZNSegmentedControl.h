@@ -32,7 +32,7 @@
 /** Returns the number of segments the receiver has. */
 @property (nonatomic, readonly) NSUInteger numberOfSegments;
 /** The duration of the indicator's animation. Default is 0.2 sec. */
-@property (nonatomic, readwrite) float animationDuration;
+@property (nonatomic, readwrite) CGFloat animationDuration;
 
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.
