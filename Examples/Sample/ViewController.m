@@ -90,7 +90,7 @@
         cell.textLabel.textColor = [UIColor darkGrayColor];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ #%d", [[self.control titleForSegmentAtIndex:self.control.selectedSegmentIndex] capitalizedString], indexPath.row+1];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ #%d", [[self.control titleForSegmentAtIndex:self.control.selectedSegmentIndex] capitalizedString], (int)indexPath.row+1];
     
     return cell;
 }
