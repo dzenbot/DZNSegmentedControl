@@ -15,26 +15,26 @@
 /**
  * A drop-in replacement for UISegmentedControl showing multiple segment counts, to be used typically on a user profile.
  */
-@interface DZNSegmentedControl : UIControl <UIBarPositioning>
+@interface DZNSegmentedControl : UIControl <UIBarPositioning, UIAppearance>
 
 /** The control's delegate object, conforming to the UIBarPositioning protocol. */
-@property (nonatomic, assign) id <DZNSegmentedControlDelegate> delegate;
+@property (nonatomic, weak) id <DZNSegmentedControlDelegate> delegate;
 /** The items displayed on the control. */
 @property (nonatomic, retain) NSArray *items;
 /** The index number identifying the selected segment (that is, the last segment touched). */
 @property (nonatomic) NSInteger selectedSegmentIndex;
-/** The font family to be used on labels. Default is system font (HelveticaNeue). */
-@property (nonatomic, retain) UIFont *font;
+/** Returns the number of segments the receiver has. */
+@property (nonatomic, readonly) NSUInteger numberOfSegments;
 /** The height of the control. Default is 56px. */
 @property (nonatomic, readonly) CGFloat height;
 /** The height of the selection indicator. Default is 2px . */
-@property (nonatomic, readwrite) CGFloat selectionIndicatorHeight;
-/** Returns the number of segments the receiver has. */
-@property (nonatomic, readonly) NSUInteger numberOfSegments;
+@property (nonatomic, readwrite) CGFloat selectionIndicatorHeight UI_APPEARANCE_SELECTOR;
 /** The duration of the indicator's animation. Default is 0.2 sec. */
-@property (nonatomic, readwrite) CGFloat animationDuration;
+@property (nonatomic, readwrite) CGFloat animationDuration UI_APPEARANCE_SELECTOR;
+/** The font family to be used on labels. Default is system font (HelveticaNeue). Font size is managed by the class. */
+@property (nonatomic, retain) UIFont *font UI_APPEARANCE_SELECTOR;
 /** The color of the hairline. Default is light gray. */
-@property (nonatomic, readwrite) UIColor *hairlineColor;
+@property (nonatomic, readwrite) UIColor *hairlineColor UI_APPEARANCE_SELECTOR;
 
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.

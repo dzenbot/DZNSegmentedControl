@@ -16,7 +16,9 @@
 @property (nonatomic, getter = isTransitioning) BOOL transitioning;
 @end
 
-@implementation DZNSegmentedControl
+@implementation DZNSegmentedControl {
+    BOOL _initializing;
+}
 @synthesize items = _items;
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize barPosition = _barPosition;
@@ -24,24 +26,27 @@
 
 - (id)init
 {
+    _initializing = YES;
+    
     if (self = [super init]) {
         
         _selectedSegmentIndex = -1;
-        _font = [UIFont fontWithName:@"HelveticaNeue" size:1];
+        _font = [UIFont systemFontOfSize:1];
         _height = 56.0;
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
         
         _selectionIndicator = [UIView new];
-        _selectionIndicator.backgroundColor = self.tintColor;
+//        _selectionIndicator.backgroundColor = self.tintColor;
         [self addSubview:_selectionIndicator];
         
         _hairline = [UIView new];
         _hairline.backgroundColor = [UIColor lightGrayColor];
         [self addSubview:_hairline];
-        
-        self.backgroundColor = [UIColor whiteColor];
     }
+    
+    _initializing = NO;
+    
     return self;
 }
 
@@ -98,6 +103,14 @@
     
     [self layoutIfNeeded];
 }
+
+- (void)didMoveToWindow
+{
+    if (!self.backgroundColor) {
+        self.backgroundColor = [UIColor whiteColor];
+    }
+}
+
 
 #pragma mark - Getter Methods
 
@@ -182,6 +195,18 @@
 
 #pragma mark - Setter Methods
 
+- (void)setTintColor:(UIColor *)color
+{
+    if (!color || !_items || _initializing) {
+        return;
+    }
+    
+    [super setTintColor:color];
+    
+    [self setTitleColor:color forState:UIControlStateHighlighted];
+    [self setTitleColor:color forState:UIControlStateSelected];
+}
+
 - (void)setItems:(NSArray *)items
 {
     if (_items) {
@@ -212,19 +237,6 @@
     
     UIButton *button = [self buttonAtIndex:segment];
     button.highlighted = YES;
-}
-
-- (void)setTintColor:(UIColor *)color
-{
-    if (!color || !_items) {
-        return;
-    }
-    
-    [super setTintColor:color];
-    
-    [self setTitleColor:color forState:UIControlStateHighlighted];
-    [self setTitleColor:color forState:UIControlStateSelected];
-    [_selectionIndicator setBackgroundColor:color];
 }
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
@@ -260,16 +272,15 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSString *title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
+    NSString *text = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
     
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:title];
-    [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     
     UIButton *button = [self buttonAtIndex:segment];
-    [button setAttributedTitle:string forState:UIControlStateNormal];
-    [button setAttributedTitle:string forState:UIControlStateHighlighted];
-    [button setAttributedTitle:string forState:UIControlStateSelected];
-    [button setAttributedTitle:string forState:UIControlStateDisabled];
+    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
+    [button setAttributedTitle:attributedString forState:UIControlStateHighlighted];
+    [button setAttributedTitle:attributedString forState:UIControlStateSelected];
+    [button setAttributedTitle:attributedString forState:UIControlStateDisabled];
     
     [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self setTitleColor:self.tintColor forState:UIControlStateHighlighted];
@@ -282,25 +293,31 @@
     for (UIButton *button in [self buttons]) {
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[button attributedTitleForState:state]];
-        
+        NSString *string = attributedString.string;
+
         NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
         style.alignment = NSTextAlignmentCenter;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         style.minimumLineHeight = 16.0;
         
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributedString.string.length)];
+        NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
+        NSString *count = [components objectAtIndex:0];
+        NSString *title = [components objectAtIndex:1];
+        
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[string rangeOfString:count]];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:12.0] range:[string rangeOfString:title]];
         
         if (state == UIControlStateNormal) {
-            
-            NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
-            NSString *count = [components objectAtIndex:0];
-            NSString *title = [components objectAtIndex:1];
-            
             [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
             [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
         }
         else {
-            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
+            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, string.length)];
+            
+            if (state == UIControlStateSelected) {
+                _selectionIndicator.backgroundColor = color;
+            }
         }
         
         [button setAttributedTitle:attributedString forState:state];
@@ -349,16 +366,11 @@
 
 - (void)setHairlineColor:(UIColor *)color
 {
-    _hairline.backgroundColor = color;
-}
-
-- (void)setBackgroundColor:(UIColor *)color
-{
-    [super setBackgroundColor:color];
-
-    for (UIButton *button in [self buttons]) {
-        button.backgroundColor = color;
+    if (_initializing) {
+        return;
     }
+    
+    _hairline.backgroundColor = color;
 }
 
 
@@ -378,12 +390,10 @@
     [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
     [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchDragOutside|UIControlEventTouchDragInside|UIControlEventTouchDragEnter|UIControlEventTouchDragExit|UIControlEventTouchCancel|UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
     
-    button.backgroundColor = self.backgroundColor;
+    button.backgroundColor = nil;
     button.opaque = YES;
     button.clipsToBounds = YES;
-    button.titleLabel.font = [UIFont fontWithName:_font.fontName size:12.0];
     button.titleLabel.numberOfLines = 2;
-    button.titleLabel.adjustsFontSizeToFitWidth = NO;
     button.adjustsImageWhenHighlighted = NO;
     button.adjustsImageWhenDisabled = NO;
     button.exclusiveTouch = YES;
