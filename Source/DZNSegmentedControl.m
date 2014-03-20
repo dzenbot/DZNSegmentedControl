@@ -37,7 +37,6 @@
         _animationDuration = 0.2;
         
         _selectionIndicator = [UIView new];
-//        _selectionIndicator.backgroundColor = self.tintColor;
         [self addSubview:_selectionIndicator];
         
         _hairline = [UIView new];
