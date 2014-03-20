@@ -82,10 +82,10 @@
         [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
     }
     
-    self.selectionIndicator.frame = [self selectionIndicatorRect];
-    self.hairline.frame = [self hairlineRect];
+    _selectionIndicator.frame = [self selectionIndicatorRect];
+    _hairline.frame = [self hairlineRect];
     
-    [self bringSubviewToFront:self.selectionIndicator];
+    [self bringSubviewToFront:_selectionIndicator];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
@@ -95,6 +95,8 @@
     if (_selectedSegmentIndex < 0) {
         self.selectedSegmentIndex = 0;
     }
+    
+    [self layoutIfNeeded];
 }
 
 #pragma mark - Getter Methods
@@ -164,6 +166,11 @@
     return frame;
 }
 
+- (UIColor *)hairlineColor
+{
+    return _hairline.backgroundColor;
+}
+
 - (CGRect)hairlineRect
 {
     CGRect frame = CGRectMake(0, 0, self.frame.size.width, 0.5);
@@ -217,7 +224,7 @@
     
     [self setTitleColor:color forState:UIControlStateHighlighted];
     [self setTitleColor:color forState:UIControlStateSelected];
-    [self.selectionIndicator setBackgroundColor:color];
+    [_selectionIndicator setBackgroundColor:color];
 }
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
@@ -323,11 +330,11 @@
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.selectionIndicator.frame = [self selectionIndicatorRect];
+                         _selectionIndicator.frame = [self selectionIndicatorRect];
                      }
                      completion:^(BOOL finished) {
                          button.userInteractionEnabled = NO;
-                         self.transitioning = NO;
+                         _transitioning = NO;
                      }];
     
     
@@ -340,25 +347,20 @@
     button.enabled = enabled;
 }
 
-- (void)setHairlineColor:(UIColor *)hairlineColor
+- (void)setHairlineColor:(UIColor *)color
 {
-    self.hairline.backgroundColor = hairlineColor;
+    _hairline.backgroundColor = color;
 }
 
-- (UIColor *)hairlineColor
+- (void)setBackgroundColor:(UIColor *)color
 {
-    return self.hairline.backgroundColor;
-}
+    [super setBackgroundColor:color];
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-
-    for (UIButton *button in [self buttons])
-    {
-	button.backgroundColor = backgroundColor;
+    for (UIButton *button in [self buttons]) {
+        button.backgroundColor = color;
     }
 }
+
 
 #pragma mark - DZNSegmentedControl Methods
 
