@@ -140,9 +140,10 @@
 
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment
 {
-    NSString *title = [self stringForSegmentAtIndex:segment];
-    NSArray *components = [title componentsSeparatedByString:@"\n"];
-    return [components objectAtIndex:1];
+    return [self stringForSegmentAtIndex:segment];
+//    NSString *title = [self stringForSegmentAtIndex:segment];
+//    NSArray *components = [title componentsSeparatedByString:@"\n"];
+//    return [components objectAtIndex:1];
 }
 
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment
@@ -253,7 +254,8 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSString *title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
+//    NSString *title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
+    NSString *title = [NSString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:title];
     [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
@@ -283,18 +285,18 @@
         
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributedString.string.length)];
         
-        if (state == UIControlStateNormal) {
-            
-            NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
-            NSString *count = [components objectAtIndex:0];
-            NSString *title = [components objectAtIndex:1];
-            
-            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
-            [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
-        }
-        else {
+//        if (state == UIControlStateNormal) {
+//            
+//            NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
+//            NSString *count = [components objectAtIndex:0];
+//            NSString *title = [components objectAtIndex:1];
+//            
+//            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
+//            [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
+//        }
+//        else {
             [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
-        }
+//        }
         
         [button setAttributedTitle:attributedString forState:state];
     }
