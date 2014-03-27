@@ -86,6 +86,11 @@
  */
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment;
 
+/**
+ * Removes all segments of the receiver
+ */
+- (void)removeAllSegments;
+
 @end
 
 @protocol DZNSegmentedControlDelegate <UIBarPositioningDelegate>

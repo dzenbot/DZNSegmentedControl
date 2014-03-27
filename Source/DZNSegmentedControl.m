@@ -77,15 +77,25 @@
     [super layoutSubviews];
     [self sizeToFit];
     
-    for (int i = 0; i < [self buttons].count; i++)
-    {
+    if ([self buttons].count == 0) {
+        _selectedSegmentIndex = -1;
+    }
+    else if (_selectedSegmentIndex < 0) {
+        _selectedSegmentIndex = 0;
+    }
+    
+    for (int i = 0; i < [self buttons].count; i++) {
         UIButton *button = [[self buttons] objectAtIndex:i];
         [button setFrame:CGRectMake(roundf(self.frame.size.width/self.numberOfSegments)*i, 0, roundf(self.frame.size.width/self.numberOfSegments), self.frame.size.height)];
         
         CGFloat topInset = (_barPosition > UIBarPositionBottom) ? -4.0 : 4.0;
         [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
+        
+        if (i == _selectedSegmentIndex) {
+            button.selected = YES;
+        }
     }
-    
+
     _selectionIndicator.frame = [self selectionIndicatorRect];
     _hairline.frame = [self hairlineRect];
     
@@ -95,11 +105,7 @@
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     [super willMoveToSuperview:newSuperview];
-    
-    if (_selectedSegmentIndex < 0) {
-        self.selectedSegmentIndex = 0;
-    }
-    
+
     [self layoutIfNeeded];
 }
 
@@ -120,13 +126,14 @@
 
 - (NSArray *)buttons
 {
-    NSMutableArray *buttons = [NSMutableArray new];
+    NSMutableArray *_buttons = [NSMutableArray new];
+    
     for (UIView *view in self.subviews) {
         if ([view isKindOfClass:[UIButton class]]) {
-            [buttons addObject:view];
+            [_buttons addObject:view];
         }
     }
-    return buttons;
+    return _buttons;
 }
 
 - (UIButton *)buttonAtIndex:(NSUInteger)segment
@@ -231,9 +238,6 @@
     }
     
     [self setSelected:YES forSegmentAtIndex:segment];
-    
-    UIButton *button = [self buttonAtIndex:segment];
-    button.highlighted = YES;
 }
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
@@ -323,14 +327,14 @@
 
 - (void)setSelected:(BOOL)selected forSegmentAtIndex:(NSUInteger)segment
 {
+    if (_selectedSegmentIndex == segment || self.isTransitioning) {
+        return;
+    }
+    
     for (UIButton *_button in [self buttons]) {
         _button.highlighted = NO;
         _button.selected = NO;
         _button.userInteractionEnabled = YES;
-    }
-    
-    if (_selectedSegmentIndex == segment || self.isTransitioning) {
-        return;
     }
     
     CGFloat duration = (_selectedSegmentIndex < 0) ? 0.0 : _animationDuration;
@@ -430,7 +434,6 @@
         [_button removeFromSuperview];
     }
     
-    _selectedSegmentIndex = -1;
     _items = nil;
 }
 
