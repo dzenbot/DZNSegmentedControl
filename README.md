@@ -6,11 +6,11 @@ A drop-in replacement for UISegmentedControl for showing counts, to be used typi
 ![gif](https://dl.dropboxusercontent.com/u/2452151/Permalink/DZNSegmentedControl.gif)
 
 ### Features
-* Customizable control with tint, font, and sizes.
-* Animated and auto-adjusting selection indicator.
+* Customizable control with tint color, font, sizes and animation duration.
+* Animated and width auto-adjusting selection indicator.
 * UIBarPositioning support.
-* iPhone support.
-* ARC & 64bits support.
+* UIAppearance support.
+* ARC & 64bits.
 <br>
 
 ## Installation
