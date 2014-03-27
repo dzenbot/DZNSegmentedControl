@@ -210,14 +210,12 @@
 {
     if (_items) {
         [self removeAllSegments];
-        [self setItems:nil];
     }
     
     if (items) {
         _items = [NSArray arrayWithArray:items];
+        [self configure];
     }
-    
-    [self configure];
 }
 
 - (void)setDelegate:(id<DZNSegmentedControlDelegate>)delegate
@@ -433,6 +431,7 @@
     }
     
     _selectedSegmentIndex = -1;
+    _items = nil;
 }
 
 @end

@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>A2E3F71C-4644-47E4-A003-0D2483D3A788</string>
+	<string>78601245-5263-47A6-B152-BD9A40E6FA0D</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Sample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>230CF0F0-208A-43C3-9C80-7A42DBCA0AC4</key>
-		<string>https://github.com/epiclist/ios.git</string>
+		<key>C3253FAC-76E1-4566-A33D-5D64FE3D5E05</key>
+		<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iphone-app/EpicList/Class/Controls/EPCSegmentedControl/Sample.xcodeproj/project.xcworkspace</string>
+	<string>Examples/Sample.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>230CF0F0-208A-43C3-9C80-7A42DBCA0AC4</key>
-		<string>../../../../../../..</string>
+		<key>C3253FAC-76E1-4566-A33D-5D64FE3D5E05</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/epiclist/ios.git</string>
+	<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>230CF0F0-208A-43C3-9C80-7A42DBCA0AC4</string>
+	<string>C3253FAC-76E1-4566-A33D-5D64FE3D5E05</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>230CF0F0-208A-43C3-9C80-7A42DBCA0AC4</string>
+			<string>C3253FAC-76E1-4566-A33D-5D64FE3D5E05</string>
 			<key>IDESourceControlWCCName</key>
-			<string>ios</string>
+			<string>DZNCountSegmentedControl</string>
 		</dict>
 	</array>
 </dict>
