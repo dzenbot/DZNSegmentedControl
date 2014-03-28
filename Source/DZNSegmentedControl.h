@@ -33,6 +33,12 @@
 @property (nonatomic, readonly) NSUInteger numberOfSegments;
 /** The duration of the indicator's animation. Default is 0.2 sec. */
 @property (nonatomic, readwrite) float animationDuration;
+/** Display count number. Default is YES.  */
+@property BOOL displayCount;
+/** Make the width of the selection indicator take the title space or all the segment space. Default is YES.  */
+@property BOOL selectionIndicatorWidthBasedOnTitleWidth;
+/** Display hairLine. Default is YES.   */
+@property (nonatomic) BOOL displayHairline;
 
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.

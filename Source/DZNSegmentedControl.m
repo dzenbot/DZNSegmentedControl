@@ -17,10 +17,8 @@
 @end
 
 @implementation DZNSegmentedControl
-@synthesize items = _items;
-@synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize barPosition = _barPosition;
-@synthesize font = _font;
+@synthesize displayHairline = _displayHairline;
 
 - (id)init
 {
@@ -31,16 +29,18 @@
         _height = 56.0;
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
+        _displayCount = YES;
+        _selectionIndicatorWidthBasedOnTitleWidth = YES;
+        _displayHairline = YES;
         
         _selectionIndicator = [UIView new];
         _selectionIndicator.backgroundColor = self.tintColor;
         [self addSubview:_selectionIndicator];
         
-        self.layer.shadowColor    = [[UIColor blackColor] CGColor];
-        self.layer.shadowOffset   = CGSizeMake(0, 1);
-        self.layer.shadowOpacity  = .3;
-        self.layer.shadowRadius   = 1.0;
-        
+        _hairline = [UIView new];
+        _hairline.backgroundColor = [UIColor lightGrayColor];
+        [self addSubview:_hairline];
+
         self.backgroundColor = [UIColor whiteColor];
     }
     return self;
@@ -140,10 +140,12 @@
 
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment
 {
+    if (_displayCount) {
+        NSString *title = [self stringForSegmentAtIndex:segment];
+        NSArray *components = [title componentsSeparatedByString:@"\n"];
+        return [components objectAtIndex:1];
+    }
     return [self stringForSegmentAtIndex:segment];
-//    NSString *title = [self stringForSegmentAtIndex:segment];
-//    NSArray *components = [title componentsSeparatedByString:@"\n"];
-//    return [components objectAtIndex:1];
 }
 
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment
@@ -156,11 +158,18 @@
 - (CGRect)selectionIndicatorRect
 {
     UIButton *button = [self selectedButton];
+    NSString *title = [self titleForSegmentAtIndex:button.tag];
     
     CGRect frame = _selectionIndicator.frame;
-    frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
-    frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-frame.size.height);
+    
+    if (_selectionIndicatorWidthBasedOnTitleWidth) {
+        frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
+        frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
+    } else {
+        frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
+        frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex));
+    }
     
     return frame;
 }
@@ -254,9 +263,14 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-//    NSString *title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
-    NSString *title = [NSString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
-    
+    NSString* title;
+    if (_displayCount) {
+        title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
+    }
+    else {
+        title = [NSString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
+    }
+
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:title];
     [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
     
@@ -285,18 +299,20 @@
         
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributedString.string.length)];
         
-//        if (state == UIControlStateNormal) {
-//            
-//            NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
-//            NSString *count = [components objectAtIndex:0];
-//            NSString *title = [components objectAtIndex:1];
-//            
-//            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
-//            [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
-//        }
-//        else {
+        if (_displayCount) {
+            if (state == UIControlStateNormal) {
+                NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
+                NSString *count = [components objectAtIndex:0];
+                NSString *title = [components objectAtIndex:1];
+                
+                [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
+            } else {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
+            }
+        } else {
             [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
-//        }
+        }
         
         [button setAttributedTitle:attributedString forState:state];
     }
@@ -342,6 +358,22 @@
     button.enabled = enabled;
 }
 
+- (void)setDisplayHairline:(BOOL)displayHairline {
+    if (_displayHairline == displayHairline) {
+        return;
+    }
+    else if (displayHairline) {
+        [self addSubview:_hairline];
+    }
+    else {
+        [_hairline removeFromSuperview];
+    }
+    _displayHairline = displayHairline;
+}
+
+- (BOOL)displayHairline {
+    return _displayHairline;
+}
 
 #pragma mark - DZNSegmentedControl Methods
 
