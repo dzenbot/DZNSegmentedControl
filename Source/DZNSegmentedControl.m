@@ -34,7 +34,7 @@
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
         _displayCount = YES;
-        _selectionIndicatorWidthBasedOnTitleWidth = YES;
+        _autoAdjustSelectionIndicatorWidth = YES;
         
         _selectionIndicator = [UIView new];
         [self addSubview:_selectionIndicator];
@@ -185,7 +185,7 @@
     CGRect frame = _selectionIndicator.frame;
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-frame.size.height);
     
-    if (_selectionIndicatorWidthBasedOnTitleWidth) {
+    if (_autoAdjustSelectionIndicatorWidth) {
         frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
         frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
     } else {

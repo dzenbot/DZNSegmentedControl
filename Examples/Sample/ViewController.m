@@ -74,7 +74,7 @@
         _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
-
+        
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
     }
     return _control;

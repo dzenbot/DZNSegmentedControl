@@ -33,12 +33,12 @@
 @property (nonatomic, readwrite) CGFloat animationDuration UI_APPEARANCE_SELECTOR;
 /** The font family to be used on labels. Default is system font (HelveticaNeue). Font size is managed by the class. */
 @property (nonatomic, retain) UIFont *font UI_APPEARANCE_SELECTOR;
-/** The color of the hairline. Default is light gray. */
+/** The color of the hairline. Default is light gray. To hide the hairline, just set clipsToBounds to YES, like you would do it for UIToolBar & UINavigationBar. */
 @property (nonatomic, readwrite) UIColor *hairlineColor UI_APPEARANCE_SELECTOR;
-/** Display count number. Default is YES.  */
-@property BOOL displayCount;
-/** Make the width of the selection indicator take the title space or all the segment space. Default is YES.  */
-@property BOOL selectionIndicatorWidthBasedOnTitleWidth;
+/** YES to display the count number on top of the titles. Default is YES.  */
+@property (nonatomic) BOOL displayCount;
+/** YES to adjust the width of the selection indicator on the title width. Default is YES.  */
+@property (nonatomic) BOOL autoAdjustSelectionIndicatorWidth;
 
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.
