@@ -35,6 +35,10 @@
 @property (nonatomic, retain) UIFont *font UI_APPEARANCE_SELECTOR;
 /** The color of the hairline. Default is light gray. */
 @property (nonatomic, readwrite) UIColor *hairlineColor UI_APPEARANCE_SELECTOR;
+/** Display count number. Default is YES.  */
+@property BOOL displayCount;
+/** Make the width of the selection indicator take the title space or all the segment space. Default is YES.  */
+@property BOOL selectionIndicatorWidthBasedOnTitleWidth;
 
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.

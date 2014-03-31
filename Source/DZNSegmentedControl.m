@@ -11,18 +11,16 @@
 #import "DZNSegmentedControl.h"
 
 @interface DZNSegmentedControl ()
+@property (nonatomic) BOOL initializing;
 @property (nonatomic, strong) UIView *selectionIndicator;
 @property (nonatomic, strong) UIView *hairline;
 @property (nonatomic, getter = isTransitioning) BOOL transitioning;
 @end
 
-@implementation DZNSegmentedControl {
-    BOOL _initializing;
-}
+@implementation DZNSegmentedControl
 @synthesize items = _items;
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize barPosition = _barPosition;
-@synthesize font = _font;
 
 - (id)init
 {
@@ -35,6 +33,8 @@
         _height = 56.0;
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
+        _displayCount = YES;
+        _selectionIndicatorWidthBasedOnTitleWidth = YES;
         
         _selectionIndicator = [UIView new];
         [self addSubview:_selectionIndicator];
@@ -42,6 +42,8 @@
         _hairline = [UIView new];
         _hairline.backgroundColor = [UIColor lightGrayColor];
         [self addSubview:_hairline];
+        
+        self.backgroundColor = [UIColor whiteColor];
     }
     
     _initializing = NO;
@@ -160,9 +162,12 @@
 
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment
 {
-    NSString *title = [self stringForSegmentAtIndex:segment];
-    NSArray *components = [title componentsSeparatedByString:@"\n"];
-    return [components objectAtIndex:1];
+    if (_displayCount) {
+        NSString *title = [self stringForSegmentAtIndex:segment];
+        NSArray *components = [title componentsSeparatedByString:@"\n"];
+        return [components objectAtIndex:1];
+    }
+    return [self stringForSegmentAtIndex:segment];
 }
 
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment
@@ -178,9 +183,15 @@
     NSString *title = [self titleForSegmentAtIndex:button.tag];
     
     CGRect frame = _selectionIndicator.frame;
-    frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
-    frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-frame.size.height);
+    
+    if (_selectionIndicatorWidthBasedOnTitleWidth) {
+        frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
+        frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
+    } else {
+        frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
+        frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex));
+    }
     
     return frame;
 }
@@ -276,6 +287,17 @@
     NSString *text = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
+
+    NSString* title;
+    if (_displayCount) {
+        title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
+    }
+    else {
+        title = [NSString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
+    }
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:title];
+    [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
     
     UIButton *button = [self buttonAtIndex:segment];
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
@@ -309,16 +331,20 @@
         [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[string rangeOfString:count]];
         [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:12.0] range:[string rangeOfString:title]];
         
-        if (state == UIControlStateNormal) {
-            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
-            [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
-        }
-        else {
-            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, string.length)];
-            
-            if (state == UIControlStateSelected) {
-                _selectionIndicator.backgroundColor = color;
+        if (_displayCount) {
+            if (state == UIControlStateNormal) {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
             }
+            else {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, string.length)];
+                
+                if (state == UIControlStateSelected) {
+                    _selectionIndicator.backgroundColor = color;
+                }
+            }
+        } else {
+            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
         }
         
         [button setAttributedTitle:attributedString forState:state];
