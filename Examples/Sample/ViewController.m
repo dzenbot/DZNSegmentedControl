@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "DZNSegmentedControl.h"
 
-#define allowAppearance NO
+#define allowAppearance YES
 
 @interface ViewController () <DZNSegmentedControlDelegate>
 @property (nonatomic, strong) DZNSegmentedControl *control;
@@ -73,7 +73,10 @@
     {
         _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
         _control.delegate = self;
-        _control.selectedSegmentIndex = 1;
+//        _control.selectedSegmentIndex = 1;
+        
+        _control.displayCount = NO;
+//        _control.autoAdjustSelectionIndicatorWidth = NO;
         
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
     }

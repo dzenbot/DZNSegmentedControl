@@ -165,9 +165,13 @@
     if (_displayCount) {
         NSString *title = [self stringForSegmentAtIndex:segment];
         NSArray *components = [title componentsSeparatedByString:@"\n"];
-        return [components objectAtIndex:1];
+        
+        if (components.count == 2) {
+            return [components objectAtIndex:1];
+        }
+        else return nil;
     }
-    return [self stringForSegmentAtIndex:segment];
+    return [_items objectAtIndex:segment];
 }
 
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment
@@ -192,7 +196,7 @@
         frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
         frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex));
     }
-    
+        
     return frame;
 }
 
@@ -284,11 +288,7 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSString *text = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
-    
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
-
-    NSString* title;
+    NSString *title;
     if (_displayCount) {
         title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
     }
@@ -296,9 +296,17 @@
         title = [NSString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
     }
 
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:title];
-    [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
     
+    if (_displayCount) {
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
+    }
+    
+    [self setAttributedTitle:attributedString forSegmentAtIndex:segment];
+}
+
+- (void)setAttributedTitle:(NSAttributedString *)attributedString forSegmentAtIndex:(NSUInteger)segment
+{
     UIButton *button = [self buttonAtIndex:segment];
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     [button setAttributedTitle:attributedString forState:UIControlStateHighlighted];
@@ -323,15 +331,22 @@
         style.lineBreakMode = NSLineBreakByWordWrapping;
         style.minimumLineHeight = 16.0;
         
-        NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
-        NSString *count = [components objectAtIndex:0];
-        NSString *title = [components objectAtIndex:1];
-        
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[string rangeOfString:count]];
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:12.0] range:[string rangeOfString:title]];
         
         if (_displayCount) {
+            
+            NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
+            
+            if (components.count < 2) {
+                return;
+            }
+            
+            NSString *count = [components objectAtIndex:0];
+            NSString *title = [components objectAtIndex:1];
+            
+            [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[string rangeOfString:count]];
+            [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:12.0] range:[string rangeOfString:title]];
+            
             if (state == UIControlStateNormal) {
                 [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
@@ -428,7 +443,7 @@
         
     [self addSubview:button];
     
-    [self setCount:@(0) forSegmentAtIndex:segment];
+    [self setTitle:[_items objectAtIndex:segment] forSegmentAtIndex:segment];
     
     [self layoutIfNeeded];
 }
