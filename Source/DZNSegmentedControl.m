@@ -300,6 +300,7 @@
 - (void)setAttributedTitle:(NSAttributedString *)attributedString forSegmentAtIndex:(NSUInteger)segment
 {
     UIButton *button = [self buttonAtIndex:segment];
+    
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     [button setAttributedTitle:attributedString forState:UIControlStateHighlighted];
     [button setAttributedTitle:attributedString forState:UIControlStateSelected];
@@ -313,6 +314,10 @@
 
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
+    NSAssert([color isKindOfClass:[UIColor class]], @"Cannot assign a title color with an unvalid color object.");
+    
+    NSLog(@"%s",__FUNCTION__);
+    
     for (UIButton *button in [self buttons]) {
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[button attributedTitleForState:state]];

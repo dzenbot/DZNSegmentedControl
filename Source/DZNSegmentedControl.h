@@ -59,6 +59,14 @@
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment;
 
 /**
+ * Sets the title color for a particular state.
+ *
+ * @param color A color to be rendered for each the segment's state.
+ * @param state The state that uses the styled title. The possible values are described in UIControlState.
+ */
+- (void)setTitleColor:(UIColor *)color forState:(UIControlState)state;
+
+/**
  * Sets the count of a segment.
  *
  * @param count A number to display in the segment as its count.
