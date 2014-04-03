@@ -288,20 +288,12 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSString *title;
+    NSMutableString *title = [NSMutableString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
     if (_displayCount) {
-        title = [NSString stringWithFormat:@"%@\n%@", count ,[_items objectAtIndex:segment]];
-    }
-    else {
-        title = [NSString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
+        [title insertString:[NSString stringWithFormat:@"%@\n", count] atIndex:0];
     }
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
-    
-    if (_displayCount) {
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[title rangeOfString:[count stringValue]]];
-    }
-    
     [self setAttributedTitle:attributedString forSegmentAtIndex:segment];
 }
 
