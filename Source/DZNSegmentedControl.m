@@ -186,8 +186,8 @@
     UIButton *button = [self selectedButton];
     NSString *title = [self titleForSegmentAtIndex:button.tag];
     
-    CGRect frame = _selectionIndicator.frame;
-    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-frame.size.height);
+    CGRect frame = CGRectZero;
+    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-_selectionIndicatorHeight);
     
     if (_autoAdjustSelectionIndicatorWidth) {
         frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
