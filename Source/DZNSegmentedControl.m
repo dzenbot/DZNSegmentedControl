@@ -76,6 +76,8 @@
 
 - (void)layoutSubviews
 {
+    NSLog(@"%s",__FUNCTION__);
+    
     [super layoutSubviews];
     [self sizeToFit];
     
@@ -116,6 +118,8 @@
     if (!self.backgroundColor) {
         self.backgroundColor = [UIColor whiteColor];
     }
+    
+    [self configureAllSegments];
 }
 
 
@@ -190,9 +194,20 @@
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-_selectionIndicatorHeight);
     
     if (_autoAdjustSelectionIndicatorWidth) {
-        frame.size = CGSizeMake([title sizeWithAttributes:nil].width, _selectionIndicatorHeight);
+        
+        id attributes = nil;
+        
+        if (!_displayCount) {
+            
+            NSAttributedString *attributedString = [button attributedTitleForState:UIControlStateSelected];
+            NSRangePointer range = nil;
+            attributes = [attributedString attributesAtIndex:0 effectiveRange:range];
+        }
+        
+        frame.size = CGSizeMake([title sizeWithAttributes:attributes].width, _selectionIndicatorHeight);
         frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex))+(button.frame.size.width-frame.size.width)/2;
-    } else {
+    }
+    else {
         frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
         frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex));
     }
@@ -236,7 +251,7 @@
     
     if (items) {
         _items = [NSArray arrayWithArray:items];
-        [self configure];
+        [self insertAllSegments];
     }
 }
 
@@ -300,6 +315,7 @@
 - (void)setAttributedTitle:(NSAttributedString *)attributedString forSegmentAtIndex:(NSUInteger)segment
 {
     UIButton *button = [self buttonAtIndex:segment];
+    button.titleLabel.numberOfLines = (_displayCount) ? 2 : 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     [button setAttributedTitle:attributedString forState:UIControlStateHighlighted];
@@ -310,6 +326,8 @@
     [self setTitleColor:self.tintColor forState:UIControlStateHighlighted];
     [self setTitleColor:self.tintColor forState:UIControlStateSelected];
     [self setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    
+    _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
@@ -325,9 +343,10 @@
 
         NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
         style.alignment = NSTextAlignmentCenter;
+        style.lineBreakMode = (_displayCount) ? NSLineBreakByWordWrapping : NSLineBreakByTruncatingTail;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         style.minimumLineHeight = 16.0;
-        
+
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
         
         if (_displayCount) {
@@ -394,8 +413,23 @@
                          _transitioning = NO;
                      }];
     
-    
+
     [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+- (void)setDisplayCount:(BOOL)count
+{
+    if (_displayCount == count) {
+        return;
+    }
+    
+    _displayCount = count;
+    
+    for (int i = 0; i < [self buttons].count; i++) {
+        [self configureButtonForSegment:i];
+    }
+    
+    _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment
@@ -416,7 +450,7 @@
 
 #pragma mark - DZNSegmentedControl Methods
 
-- (void)configure
+- (void)insertAllSegments
 {
     for (int i = 0; i < self.numberOfSegments; i++) {
         [self addButtonForSegment:i];
@@ -433,17 +467,38 @@
     button.backgroundColor = nil;
     button.opaque = YES;
     button.clipsToBounds = YES;
-    button.titleLabel.numberOfLines = 2;
     button.adjustsImageWhenHighlighted = NO;
     button.adjustsImageWhenDisabled = NO;
     button.exclusiveTouch = YES;
     button.tag = segment;
         
     [self addSubview:button];
+}
+
+- (void)configureAllSegments
+{
+    for (UIButton *button in [self buttons]) {
+        
+        NSAttributedString *attributedString = [button attributedTitleForState:UIControlStateNormal];
+        
+        if (attributedString.string.length > 0) {
+            continue;
+        }
+        
+        [self configureButtonForSegment:button.tag];
+    }
     
-    [self setTitle:[_items objectAtIndex:segment] forSegmentAtIndex:segment];
-    
-    [self layoutIfNeeded];
+    _selectionIndicator.frame = [self selectionIndicatorRect];
+}
+
+- (void)configureButtonForSegment:(NSUInteger)segment
+{
+    if (_displayCount) {
+        [self setCount:@(0) forSegmentAtIndex:segment];
+    }
+    else {
+        [self setTitle:[_items objectAtIndex:segment] forSegmentAtIndex:segment];
+    }
 }
 
 - (void)willSelectedButton:(id)sender
