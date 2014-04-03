@@ -29,7 +29,7 @@
     if (self = [super init]) {
         
         _selectedSegmentIndex = -1;
-        _font = [UIFont systemFontOfSize:1];
+        _font = [UIFont systemFontOfSize:15.0];
         _height = 56.0;
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
@@ -359,6 +359,7 @@
                 }
             }
         } else {
+            [attributedString addAttribute:NSFontAttributeName value:_font range:NSMakeRange(0, attributedString.string.length)];
             [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
         }
         
