@@ -14,6 +14,7 @@
 @property (nonatomic) BOOL initializing;
 @property (nonatomic, strong) UIView *selectionIndicator;
 @property (nonatomic, strong) UIView *hairline;
+@property (nonatomic, strong) NSMutableDictionary *colors;
 @property (nonatomic, getter = isTransitioning) BOOL transitioning;
 @end
 
@@ -43,6 +44,8 @@
         _hairline = [UIView new];
         _hairline.backgroundColor = [UIColor lightGrayColor];
         [self addSubview:_hairline];
+        
+        _colors = [NSMutableDictionary new];
     }
     
     _initializing = NO;
@@ -190,16 +193,18 @@
 
 - (UIColor *)titleColorForState:(UIControlState)state
 {
-    UIButton *button = [self selectedButton];
-    NSAttributedString *attributedString = [button attributedTitleForState:state];
-    
-    NSRangePointer range = nil;
-    UIColor *color = [attributedString attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:range];
+    UIColor *color = [_colors objectForKey:[NSString stringWithFormat:@"UIControlState%d", (int)state]];
     
     if (!color) {
-        return [UIColor lightGrayColor];
+        switch (state) {
+            case UIControlStateNormal:              color = [UIColor darkGrayColor];
+            case UIControlStateHighlighted:         color = self.tintColor;
+            case UIControlStateSelected:            color = self.tintColor;
+            case UIControlStateDisabled:            color = [UIColor lightGrayColor];
+            default:                                color = [UIColor darkGrayColor];
+        }
     }
-    
+
     return color;
 }
 
@@ -303,6 +308,7 @@
         return;
     }
     
+    NSAssert(segment < self.numberOfSegments, @"Cannot assign a title to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
     NSMutableArray *items = [NSMutableArray arrayWithArray:self.items];
@@ -349,10 +355,10 @@
     [button setAttributedTitle:attributedString forState:UIControlStateSelected];
     [button setAttributedTitle:attributedString forState:UIControlStateDisabled];
     
-    [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    [self setTitleColor:self.tintColor forState:UIControlStateHighlighted];
-    [self setTitleColor:self.tintColor forState:UIControlStateSelected];
-    [self setTitleColor:[[self titleColorForState:UIControlStateNormal] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+    [self setTitleColor:[self titleColorForState:UIControlStateNormal] forState:UIControlStateNormal];
+    [self setTitleColor:[self titleColorForState:UIControlStateHighlighted] forState:UIControlStateHighlighted];
+    [self setTitleColor:[self titleColorForState:UIControlStateDisabled] forState:UIControlStateDisabled];
+    [self setTitleColor:[self titleColorForState:UIControlStateSelected] forState:UIControlStateSelected];
 
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
@@ -360,7 +366,7 @@
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
     NSAssert([color isKindOfClass:[UIColor class]], @"Cannot assign a title color with an unvalid color object.");
-    
+        
     for (UIButton *button in [self buttons]) {
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[button attributedTitleForState:state]];
@@ -406,6 +412,7 @@
         
         [button setAttributedTitle:attributedString forState:state];
     }
+    
 }
 
 - (void)setSelected:(BOOL)selected forSegmentAtIndex:(NSUInteger)segment
