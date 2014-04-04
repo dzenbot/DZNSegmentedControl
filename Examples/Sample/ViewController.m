@@ -26,13 +26,20 @@
         return;
     }
     
-    [[DZNSegmentedControl appearance] setBackgroundColor:[UIColor colorWithRed:226/255.0 green:241/255.0 blue:243/255.0 alpha:1.0]];
-    [[DZNSegmentedControl appearance] setTintColor:[UIColor colorWithRed:18/255.0 green:130/255.0 blue:138/255.0 alpha:1.0]];
-    [[DZNSegmentedControl appearance] setHairlineColor:[UIColor colorWithRed:129/255.0 green:180/255.0 blue:188/255.0 alpha:1.0]];
-    [[DZNSegmentedControl appearance] setFont:[UIFont fontWithName:@"Times" size:19.0]];
-    [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:3];
-    [[DZNSegmentedControl appearance] setAnimationDuration:0.5];
+    UIColor *bakgroundColor = [UIColor colorWithRed:0/255.0 green:87/255.0 blue:173/255.0 alpha:1.0];
+    UIColor *tintColor = [UIColor colorWithRed:73/255.0 green:233/255.0 blue:255/255.0 alpha:1.0];
+    UIColor *hairlineColor = [UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0];
     
+    [[DZNSegmentedControl appearance] setBackgroundColor:bakgroundColor];
+    [[DZNSegmentedControl appearance] setTintColor:tintColor];
+    [[DZNSegmentedControl appearance] setHairlineColor:hairlineColor];
+    
+    [[DZNSegmentedControl appearance] setFont:[UIFont fontWithName:@"EuphemiaUCAS" size:15.0]];
+    [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:2.5];
+    [[DZNSegmentedControl appearance] setAnimationDuration:0.125];
+    
+    
+
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor darkGrayColor], NSFontAttributeName: [UIFont systemFontOfSize:18.0]}];
 }
 
@@ -58,13 +65,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self updateControlCounts];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [self updateControlCounts];
 }
 
 - (DZNSegmentedControl *)control
@@ -73,11 +80,11 @@
     {
         _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
         _control.delegate = self;
-//        _control.selectedSegmentIndex = 1;
+        _control.selectedSegmentIndex = 1;
         
-        _control.displayCount = NO;
-//        _control.autoAdjustSelectionIndicatorWidth = NO;
-        
+//        _control.displayCount = NO;
+        _control.autoAdjustSelectionIndicatorWidth = YES;
+
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
     }
     return _control;
@@ -134,6 +141,10 @@
 
 - (void)addSegment:(id)sender
 {
+    [self.control setTitleColor:self.control.hairlineColor forState:UIControlStateNormal];
+
+    return;
+    
     NSUInteger newSegment = self.control.numberOfSegments;
 
     [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:self.control.numberOfSegments];
@@ -156,6 +167,8 @@
     [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:0];
     [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:1];
     [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:2];
+    
+    [self.control setTitleColor:[UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0] forState:UIControlStateNormal];
 }
 
 - (void)selectedSegment:(DZNSegmentedControl *)control
