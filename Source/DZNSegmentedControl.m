@@ -34,7 +34,7 @@
         _height = 56.0;
         _selectionIndicatorHeight = 2.0;
         _animationDuration = 0.2;
-        _displayCount = YES;
+        _showsCount = YES;
         _autoAdjustSelectionIndicatorWidth = YES;
         
         _selectionIndicator = [UIView new];
@@ -168,7 +168,7 @@
 
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment
 {
-    if (_displayCount) {
+    if (_showsCount) {
         NSString *title = [self stringForSegmentAtIndex:segment];
         NSArray *components = [title componentsSeparatedByString:@"\n"];
         
@@ -225,7 +225,7 @@
         
         id attributes = nil;
         
-        if (!_displayCount) {
+        if (!_showsCount) {
             
             NSAttributedString *attributedString = [button attributedTitleForState:UIControlStateSelected];
             
@@ -338,7 +338,7 @@
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
     NSMutableString *title = [NSMutableString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
-    if (_displayCount) {
+    if (_showsCount) {
         [title insertString:[NSString stringWithFormat:@"%@\n", count] atIndex:0];
     }
 
@@ -349,7 +349,7 @@
 - (void)setAttributedTitle:(NSAttributedString *)attributedString forSegmentAtIndex:(NSUInteger)segment
 {
     UIButton *button = [self buttonAtIndex:segment];
-    button.titleLabel.numberOfLines = (_displayCount) ? 2 : 1;
+    button.titleLabel.numberOfLines = (_showsCount) ? 2 : 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     [button setAttributedTitle:attributedString forState:UIControlStateHighlighted];
@@ -375,13 +375,13 @@
 
         NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
         style.alignment = NSTextAlignmentCenter;
-        style.lineBreakMode = (_displayCount) ? NSLineBreakByWordWrapping : NSLineBreakByTruncatingTail;
+        style.lineBreakMode = (_showsCount) ? NSLineBreakByWordWrapping : NSLineBreakByTruncatingTail;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         style.minimumLineHeight = 16.0;
 
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
         
-        if (_displayCount) {
+        if (_showsCount) {
             
             NSArray *components = [attributedString.string componentsSeparatedByString:@"\n"];
             
@@ -454,11 +454,11 @@
 
 - (void)setDisplayCount:(BOOL)count
 {
-    if (_displayCount == count) {
+    if (_showsCount == count) {
         return;
     }
     
-    _displayCount = count;
+    _showsCount = count;
     
     for (int i = 0; i < [self buttons].count; i++) {
         [self configureButtonForSegment:i];
@@ -543,7 +543,7 @@
 
 - (void)configureButtonForSegment:(NSUInteger)segment
 {
-    if (_displayCount) {
+    if (_showsCount) {
         [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
     }
     else {

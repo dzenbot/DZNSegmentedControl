@@ -79,7 +79,7 @@
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
         
-//        _control.displayCount = NO;
+//        _control.showsCount = NO;
 //        _control.autoAdjustSelectionIndicatorWidth = YES;
 
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
