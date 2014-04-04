@@ -37,13 +37,12 @@
         _autoAdjustSelectionIndicatorWidth = YES;
         
         _selectionIndicator = [UIView new];
+        _selectionIndicator.backgroundColor = self.tintColor;
         [self addSubview:_selectionIndicator];
         
         _hairline = [UIView new];
         _hairline.backgroundColor = [UIColor lightGrayColor];
         [self addSubview:_hairline];
-        
-        self.backgroundColor = [UIColor whiteColor];
     }
     
     _initializing = NO;
@@ -182,15 +181,38 @@
 {
     NSString *title = [self stringForSegmentAtIndex:segment];
     NSArray *components = [title componentsSeparatedByString:@"\n"];
-    return @([[components firstObject] intValue]);
+    
+    if (components.count == 2) {
+        return @([[components firstObject] intValue]);
+    }
+    else return @(0);
+}
+
+- (UIColor *)titleColorForState:(UIControlState)state
+{
+    UIButton *button = [self selectedButton];
+    NSAttributedString *attributedString = [button attributedTitleForState:state];
+    
+    NSRangePointer range = nil;
+    UIColor *color = [attributedString attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:range];
+    
+    if (!color) {
+        return [UIColor lightGrayColor];
+    }
+    
+    return color;
 }
 
 - (CGRect)selectionIndicatorRect
 {
+    CGRect frame = CGRectZero;
     UIButton *button = [self selectedButton];
     NSString *title = [self titleForSegmentAtIndex:button.tag];
+        
+    if (title.length == 0) {
+        return frame;
+    }
     
-    CGRect frame = CGRectZero;
     frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-_selectionIndicatorHeight);
     
     if (_autoAdjustSelectionIndicatorWidth) {
@@ -200,6 +222,11 @@
         if (!_displayCount) {
             
             NSAttributedString *attributedString = [button attributedTitleForState:UIControlStateSelected];
+            
+            if (attributedString.string.length == 0) {
+                return CGRectZero;
+            }
+            
             NSRangePointer range = nil;
             attributes = [attributedString attributesAtIndex:0 effectiveRange:range];
         }
@@ -211,7 +238,7 @@
         frame.size = CGSizeMake(button.frame.size.width, _selectionIndicatorHeight);
         frame.origin.x = (button.frame.size.width*(_selectedSegmentIndex));
     }
-        
+    
     return frame;
 }
 
@@ -325,16 +352,14 @@
     [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self setTitleColor:self.tintColor forState:UIControlStateHighlighted];
     [self setTitleColor:self.tintColor forState:UIControlStateSelected];
-    [self setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-    
+    [self setTitleColor:[[self titleColorForState:UIControlStateNormal] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
     NSAssert([color isKindOfClass:[UIColor class]], @"Cannot assign a title color with an unvalid color object.");
-    
-    NSLog(@"%s",__FUNCTION__);
     
     for (UIButton *button in [self buttons]) {
         
@@ -432,6 +457,21 @@
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
+- (void)setFont:(UIFont *)font
+{
+    if ([_font.fontName isEqualToString:font.fontName]) {
+        return;
+    }
+    
+    _font = font;
+    
+    for (int i = 0; i < [self buttons].count; i++) {
+        [self configureButtonForSegment:i];
+    }
+    
+    _selectionIndicator.frame = [self selectionIndicatorRect];
+}
+
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment
 {
     UIButton *button = [self buttonAtIndex:segment];
@@ -494,7 +534,7 @@
 - (void)configureButtonForSegment:(NSUInteger)segment
 {
     if (_displayCount) {
-        [self setCount:@(0) forSegmentAtIndex:segment];
+        [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
     }
     else {
         [self setTitle:[_items objectAtIndex:segment] forSegmentAtIndex:segment];
