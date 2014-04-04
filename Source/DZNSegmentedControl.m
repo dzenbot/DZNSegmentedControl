@@ -77,9 +77,7 @@
 }
 
 - (void)layoutSubviews
-{
-    NSLog(@"%s",__FUNCTION__);
-    
+{    
     [super layoutSubviews];
     [self sizeToFit];
     
@@ -122,6 +120,8 @@
     }
     
     [self configureAllSegments];
+    
+    [self layoutIfNeeded];
 }
 
 
@@ -193,15 +193,16 @@
 
 - (UIColor *)titleColorForState:(UIControlState)state
 {
-    UIColor *color = [_colors objectForKey:[NSString stringWithFormat:@"UIControlState%d", (int)state]];
+    NSString *key = [NSString stringWithFormat:@"UIControlState%d", (int)state];
+    UIColor *color = [self.colors objectForKey:key];
     
     if (!color) {
         switch (state) {
-            case UIControlStateNormal:              color = [UIColor darkGrayColor];
-            case UIControlStateHighlighted:         color = self.tintColor;
-            case UIControlStateSelected:            color = self.tintColor;
-            case UIControlStateDisabled:            color = [UIColor lightGrayColor];
-            default:                                color = [UIColor darkGrayColor];
+            case UIControlStateNormal:              return [UIColor darkGrayColor];
+            case UIControlStateHighlighted:         return self.tintColor;
+            case UIControlStateDisabled:            return [UIColor lightGrayColor];
+            case UIControlStateSelected:            return self.tintColor;
+            default:                                return self.tintColor;
         }
     }
 
@@ -413,6 +414,8 @@
         [button setAttributedTitle:attributedString forState:state];
     }
     
+    NSString *key = [NSString stringWithFormat:@"UIControlState%d", (int)state];
+    [self.colors setObject:color forKey:key];
 }
 
 - (void)setSelected:(BOOL)selected forSegmentAtIndex:(NSUInteger)segment

@@ -20,14 +20,12 @@
 
 + (void)load
 {
-    [super load];
-    
     if (!allowAppearance) {
         return;
     }
     
     UIColor *bakgroundColor = [UIColor colorWithRed:0/255.0 green:87/255.0 blue:173/255.0 alpha:1.0];
-    UIColor *tintColor = [UIColor colorWithRed:73/255.0 green:233/255.0 blue:255/255.0 alpha:1.0];
+    UIColor *tintColor = [UIColor colorWithRed:20/255.0 green:200/255.0 blue:255/255.0 alpha:1.0];
     UIColor *hairlineColor = [UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0];
     
     [[DZNSegmentedControl appearance] setBackgroundColor:bakgroundColor];
@@ -38,8 +36,6 @@
     [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:2.5];
     [[DZNSegmentedControl appearance] setAnimationDuration:0.125];
     
-    
-
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor darkGrayColor], NSFontAttributeName: [UIFont systemFontOfSize:18.0]}];
 }
 
@@ -60,6 +56,7 @@
 
     self.tableView.tableHeaderView = self.control;
     self.tableView.tableFooterView = [UIView new];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,7 +80,7 @@
         _control.selectedSegmentIndex = 1;
         
 //        _control.displayCount = NO;
-        _control.autoAdjustSelectionIndicatorWidth = YES;
+//        _control.autoAdjustSelectionIndicatorWidth = YES;
 
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
     }
@@ -141,10 +138,6 @@
 
 - (void)addSegment:(id)sender
 {
-    [self.control setTitleColor:self.control.hairlineColor forState:UIControlStateNormal];
-
-    return;
-    
     NSUInteger newSegment = self.control.numberOfSegments;
 
     [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:self.control.numberOfSegments];
