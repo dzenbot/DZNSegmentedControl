@@ -66,7 +66,7 @@
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    return CGSizeMake(self.superview.frame.size.width, _height);
+    return CGSizeMake(self.superview.bounds.size.width, _height);
 }
 
 - (void)sizeToFit
@@ -90,7 +90,7 @@
     
     for (int i = 0; i < [self buttons].count; i++) {
         UIButton *button = [[self buttons] objectAtIndex:i];
-        [button setFrame:CGRectMake(roundf(self.frame.size.width/self.numberOfSegments)*i, 0, roundf(self.frame.size.width/self.numberOfSegments), self.frame.size.height)];
+        [button setFrame:CGRectMake(roundf(self.bounds.size.width/self.numberOfSegments)*i, 0, roundf(self.bounds.size.width/self.numberOfSegments), self.bounds.size.height)];
         
         CGFloat topInset = (_barPosition > UIBarPositionBottom) ? -4.0 : 4.0;
         [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
