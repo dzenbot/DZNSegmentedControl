@@ -105,5 +105,8 @@
 
 @end
 
+/**
+ * The DZNSegmentedControlDelegate protocol defines the interface that DZNSegmentedControl delegate objects implement to manage the segmented control behavior. This protocol declares no methods of its own but conforms to the UIBarPositioningDelegate protocol to support the positioning of a segmented control when it is moved to a window.
+ */
 @protocol DZNSegmentedControlDelegate <UIBarPositioningDelegate>
 @end
