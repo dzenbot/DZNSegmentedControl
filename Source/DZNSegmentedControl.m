@@ -29,6 +29,8 @@
     
     if (self = [super init]) {
         
+        self.clipsToBounds = NO;
+        
         _selectedSegmentIndex = -1;
         _font = [UIFont systemFontOfSize:15.0];
         _height = 56.0;
@@ -264,18 +266,6 @@
 
 #pragma mark - Setter Methods
 
-- (void)setTintColor:(UIColor *)color
-{
-    if (!color || !_items || _initializing) {
-        return;
-    }
-    
-    [super setTintColor:color];
-    
-    [self setTitleColor:color forState:UIControlStateHighlighted];
-    [self setTitleColor:color forState:UIControlStateSelected];
-}
-
 - (void)setItems:(NSArray *)items
 {
     if (_items) {
@@ -293,6 +283,37 @@
     _delegate = delegate;
     _barPosition = [delegate positionForBar:self];
 }
+
+- (void)setTintColor:(UIColor *)color
+{
+    if (!color || !_items || _initializing) {
+        return;
+    }
+    
+    [super setTintColor:color];
+    
+    [self setTitleColor:color forState:UIControlStateHighlighted];
+    [self setTitleColor:color forState:UIControlStateSelected];
+}
+
+- (void)setBackgroundColor:(UIColor *)color
+{
+    if (!color || _initializing) {
+        return;
+    }
+    
+    [super setBackgroundColor:color];
+}
+
+- (void)setHairlineColor:(UIColor *)color
+{
+    if (!color || _initializing) {
+        return;
+    }
+    
+    _hairline.backgroundColor = color;
+}
+
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment
 {
@@ -486,15 +507,6 @@
 {
     UIButton *button = [self buttonAtIndex:segment];
     button.enabled = enabled;
-}
-
-- (void)setHairlineColor:(UIColor *)color
-{
-    if (_initializing) {
-        return;
-    }
-    
-    _hairline.backgroundColor = color;
 }
 
 

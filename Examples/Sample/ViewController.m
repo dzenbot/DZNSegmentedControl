@@ -9,7 +9,10 @@
 #import "ViewController.h"
 #import "DZNSegmentedControl.h"
 
-#define allowAppearance YES
+#define _allowAppearance    NO
+#define _bakgroundColor     [UIColor colorWithRed:0/255.0 green:87/255.0 blue:173/255.0 alpha:1.0]
+#define _tintColor          [UIColor colorWithRed:20/255.0 green:200/255.0 blue:255/255.0 alpha:1.0]
+#define _hairlineColor      [UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0]
 
 @interface ViewController () <DZNSegmentedControlDelegate>
 @property (nonatomic, strong) DZNSegmentedControl *control;
@@ -20,17 +23,13 @@
 
 + (void)load
 {
-    if (!allowAppearance) {
+    if (!_allowAppearance) {
         return;
     }
     
-    UIColor *bakgroundColor = [UIColor colorWithRed:0/255.0 green:87/255.0 blue:173/255.0 alpha:1.0];
-    UIColor *tintColor = [UIColor colorWithRed:20/255.0 green:200/255.0 blue:255/255.0 alpha:1.0];
-    UIColor *hairlineColor = [UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0];
-    
-    [[DZNSegmentedControl appearance] setBackgroundColor:bakgroundColor];
-    [[DZNSegmentedControl appearance] setTintColor:tintColor];
-    [[DZNSegmentedControl appearance] setHairlineColor:hairlineColor];
+    [[DZNSegmentedControl appearance] setBackgroundColor:_bakgroundColor];
+    [[DZNSegmentedControl appearance] setTintColor:_tintColor];
+    [[DZNSegmentedControl appearance] setHairlineColor:_hairlineColor];
     
     [[DZNSegmentedControl appearance] setFont:[UIFont fontWithName:@"EuphemiaUCAS" size:15.0]];
     [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:2.5];
@@ -79,6 +78,10 @@
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
         
+//        _control.backgroundColor = [UIColor lightGrayColor];
+//        _control.tintColor = [UIColor purpleColor];
+//        _control.hairlineColor = [UIColor purpleColor];
+//        _control.hairlineColor = self.view.tintColor;
 //        _control.showsCount = NO;
 //        _control.autoAdjustSelectionIndicatorWidth = YES;
 
@@ -161,7 +164,9 @@
     [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:1];
     [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:2];
     
-    [self.control setTitleColor:[UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0] forState:UIControlStateNormal];
+    if (_allowAppearance) {
+        [self.control setTitleColor:_hairlineColor forState:UIControlStateNormal];
+    }
 }
 
 - (void)selectedSegment:(DZNSegmentedControl *)control

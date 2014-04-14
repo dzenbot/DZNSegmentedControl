@@ -15,7 +15,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    ViewController *viewController = [[ViewController alloc] initWithStyle:UITableViewStylePlain];
+    ViewController *viewController = [[ViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     self.window.rootViewController = navigationController;
