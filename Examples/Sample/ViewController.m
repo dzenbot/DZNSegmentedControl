@@ -30,7 +30,7 @@
     [[DZNSegmentedControl appearance] setBackgroundColor:_bakgroundColor];
     [[DZNSegmentedControl appearance] setTintColor:_tintColor];
     [[DZNSegmentedControl appearance] setHairlineColor:_hairlineColor];
-    
+
     [[DZNSegmentedControl appearance] setFont:[UIFont fontWithName:@"EuphemiaUCAS" size:15.0]];
     [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:2.5];
     [[DZNSegmentedControl appearance] setAnimationDuration:0.125];

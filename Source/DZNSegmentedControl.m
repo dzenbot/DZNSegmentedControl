@@ -29,8 +29,6 @@
     
     if (self = [super init]) {
         
-        self.clipsToBounds = NO;
-        
         _selectedSegmentIndex = -1;
         _font = [UIFont systemFontOfSize:15.0];
         _height = 56.0;
@@ -79,7 +77,7 @@
 }
 
 - (void)layoutSubviews
-{    
+{
     [super layoutSubviews];
     [self sizeToFit];
     
@@ -101,7 +99,7 @@
             button.selected = YES;
         }
     }
-
+    
     _selectionIndicator.frame = [self selectionIndicatorRect];
     _hairline.frame = [self hairlineRect];
     
@@ -111,7 +109,7 @@
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     [super willMoveToSuperview:newSuperview];
-
+    
     [self layoutIfNeeded];
 }
 
@@ -207,7 +205,7 @@
             default:                                return self.tintColor;
         }
     }
-
+    
     return color;
 }
 
@@ -216,7 +214,7 @@
     CGRect frame = CGRectZero;
     UIButton *button = [self selectedButton];
     NSString *title = [self titleForSegmentAtIndex:button.tag];
-        
+    
     if (title.length == 0) {
         return frame;
     }
@@ -266,6 +264,18 @@
 
 #pragma mark - Setter Methods
 
+- (void)setTintColor:(UIColor *)color
+{
+    if (!color || !_items || _initializing) {
+        return;
+    }
+    
+    [super setTintColor:color];
+    
+    [self setTitleColor:color forState:UIControlStateHighlighted];
+    [self setTitleColor:color forState:UIControlStateSelected];
+}
+
 - (void)setItems:(NSArray *)items
 {
     if (_items) {
@@ -283,37 +293,6 @@
     _delegate = delegate;
     _barPosition = [delegate positionForBar:self];
 }
-
-- (void)setTintColor:(UIColor *)color
-{
-    if (!color || !_items || _initializing) {
-        return;
-    }
-    
-    [super setTintColor:color];
-    
-    [self setTitleColor:color forState:UIControlStateHighlighted];
-    [self setTitleColor:color forState:UIControlStateSelected];
-}
-
-- (void)setBackgroundColor:(UIColor *)color
-{
-    if (!color || _initializing) {
-        return;
-    }
-    
-    [super setBackgroundColor:color];
-}
-
-- (void)setHairlineColor:(UIColor *)color
-{
-    if (!color || _initializing) {
-        return;
-    }
-    
-    _hairline.backgroundColor = color;
-}
-
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment
 {
@@ -362,7 +341,7 @@
     if (_showsCount) {
         [title insertString:[NSString stringWithFormat:@"%@\n", count] atIndex:0];
     }
-
+    
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
     [self setAttributedTitle:attributedString forSegmentAtIndex:segment];
 }
@@ -381,25 +360,25 @@
     [self setTitleColor:[self titleColorForState:UIControlStateHighlighted] forState:UIControlStateHighlighted];
     [self setTitleColor:[self titleColorForState:UIControlStateDisabled] forState:UIControlStateDisabled];
     [self setTitleColor:[self titleColorForState:UIControlStateSelected] forState:UIControlStateSelected];
-
+    
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
     NSAssert([color isKindOfClass:[UIColor class]], @"Cannot assign a title color with an unvalid color object.");
-        
+    
     for (UIButton *button in [self buttons]) {
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[button attributedTitleForState:state]];
         NSString *string = attributedString.string;
-
+        
         NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
         style.alignment = NSTextAlignmentCenter;
         style.lineBreakMode = (_showsCount) ? NSLineBreakByWordWrapping : NSLineBreakByTruncatingTail;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         style.minimumLineHeight = 16.0;
-
+        
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
         
         if (_showsCount) {
@@ -469,7 +448,6 @@
                          _transitioning = NO;
                      }];
     
-
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
@@ -509,6 +487,15 @@
     button.enabled = enabled;
 }
 
+- (void)setHairlineColor:(UIColor *)color
+{
+    if (_initializing) {
+        return;
+    }
+    
+    _hairline.backgroundColor = color;
+}
+
 
 #pragma mark - DZNSegmentedControl Methods
 
@@ -533,7 +520,7 @@
     button.adjustsImageWhenDisabled = NO;
     button.exclusiveTouch = YES;
     button.tag = segment;
-        
+    
     [self addSubview:button];
 }
 
@@ -551,6 +538,7 @@
     }
     
     _selectionIndicator.frame = [self selectionIndicatorRect];
+    _selectionIndicator.backgroundColor = self.tintColor;
 }
 
 - (void)configureButtonForSegment:(NSUInteger)segment
@@ -566,7 +554,7 @@
 - (void)willSelectedButton:(id)sender
 {
     UIButton *button = (UIButton *)sender;
-
+    
     if (!self.isTransitioning) {
         self.selectedSegmentIndex = button.tag;
     }
