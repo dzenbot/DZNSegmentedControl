@@ -173,7 +173,7 @@
         NSArray *components = [title componentsSeparatedByString:@"\n"];
         
         if (components.count == 2) {
-            return [components objectAtIndex:1];
+            return [components objectAtIndex:_inverseTitles ? 0 : 1];
         }
         else return nil;
     }
@@ -186,7 +186,7 @@
     NSArray *components = [title componentsSeparatedByString:@"\n"];
     
     if (components.count == 2) {
-        return @([[components firstObject] intValue]);
+        return @([[components objectAtIndex:_inverseTitles ? 1 : 0] intValue]);
     }
     else return @(0);
 }
@@ -339,7 +339,11 @@
     
     NSMutableString *title = [NSMutableString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
     if (_showsCount) {
-        [title insertString:[NSString stringWithFormat:@"%@\n", count] atIndex:0];
+        NSString *breakString = @"\n";
+        NSString *countString = [NSString stringWithFormat:@"%@", count];
+        NSString *resultString = _inverseTitles ? [breakString stringByAppendingString:countString] : [countString stringByAppendingString:breakString];
+        
+        [title insertString:resultString atIndex:_inverseTitles ? title.length : 0];
     }
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
@@ -388,16 +392,23 @@
             if (components.count < 2) {
                 return;
             }
-            
-            NSString *count = [components objectAtIndex:0];
-            NSString *title = [components objectAtIndex:1];
+
+            NSString *count = [components objectAtIndex:_inverseTitles ? 1 : 0];
+            NSString *title = [components objectAtIndex:_inverseTitles ? 0 : 1];
             
             [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:19.0] range:[string rangeOfString:count]];
             [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:_font.fontName size:12.0] range:[string rangeOfString:title]];
             
             if (state == UIControlStateNormal) {
-                [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, count.length)];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[color colorWithAlphaComponent:0.5] range:NSMakeRange(count.length, title.length+1)];
+                
+                UIColor *topColor = _inverseTitles ? [color colorWithAlphaComponent:0.5] : color;
+                UIColor *bottomColor = _inverseTitles ? color : [color colorWithAlphaComponent:0.5];
+
+                NSUInteger topLength = _inverseTitles ? title.length : count.length;
+                NSUInteger bottomLength = _inverseTitles ? count.length : title.length;
+                
+                [attributedString addAttribute:NSForegroundColorAttributeName value:topColor range:NSMakeRange(0, topLength)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:bottomColor range:NSMakeRange(topLength, bottomLength+1)];
             }
             else {
                 [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, string.length)];

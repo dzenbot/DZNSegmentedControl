@@ -77,6 +77,7 @@
         _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
+        _control.inverseTitles = YES;
         
 //        _control.backgroundColor = [UIColor lightGrayColor];
 //        _control.tintColor = [UIColor purpleColor];
