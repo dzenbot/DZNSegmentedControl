@@ -23,44 +23,51 @@
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize barPosition = _barPosition;
 
-- (id)init
+- (void)initialize
 {
     _initializing = YES;
     
-    if (self = [super init]) {
-        
-        _selectedSegmentIndex = -1;
-        _font = [UIFont systemFontOfSize:15.0];
-        _height = 56.0;
-        _selectionIndicatorHeight = 2.0;
-        _animationDuration = 0.2;
-        _showsCount = YES;
-        _autoAdjustSelectionIndicatorWidth = YES;
-        
-        _selectionIndicator = [UIView new];
-        _selectionIndicator.backgroundColor = self.tintColor;
-        [self addSubview:_selectionIndicator];
-        
-        _hairline = [UIView new];
-        _hairline.backgroundColor = [UIColor lightGrayColor];
-        [self addSubview:_hairline];
-        
-        _colors = [NSMutableDictionary new];
-    }
+    _selectedSegmentIndex = -1;
+    _font = [UIFont systemFontOfSize:15.0];
+    _height = 56.0;
+    _selectionIndicatorHeight = 2.0;
+    _animationDuration = 0.2;
+    _showsCount = YES;
+    _autoAdjustSelectionIndicatorWidth = YES;
+    
+    _selectionIndicator = [UIView new];
+    _selectionIndicator.backgroundColor = self.tintColor;
+    [self addSubview:_selectionIndicator];
+    
+    _hairline = [UIView new];
+    _hairline.backgroundColor = [UIColor lightGrayColor];
+    [self addSubview:_hairline];
+    
+    _colors = [NSMutableDictionary new];
     
     _initializing = NO;
-    
-    return self;
 }
+
 
 - (id)initWithItems:(NSArray *)items
 {
-    if (self = [self init]) {
+    if (self = [super init]) {
+        [self initialize];
         self.items = items;
     }
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        [self initialize];
+    }
+    
+    return self;
+}
 
 #pragma mark - UIView Methods
 
