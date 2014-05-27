@@ -23,6 +23,8 @@
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize barPosition = _barPosition;
 
+#pragma mark - Initialize Methods
+
 - (void)initialize
 {
     _initializing = YES;
@@ -48,6 +50,29 @@
     _initializing = NO;
 }
 
+- (id)init
+{
+    if (self = [super init]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    if (self = [super init]) {
+        [self initialize];
+    }
+    return self;
+}
 
 - (id)initWithItems:(NSArray *)items
 {
@@ -58,16 +83,6 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    
-    if (self) {
-        [self initialize];
-    }
-    
-    return self;
-}
 
 #pragma mark - UIView Methods
 
@@ -126,7 +141,7 @@
         self.backgroundColor = [UIColor whiteColor];
     }
     
-    [self configureAllSegments];
+    [self configureSegments];
     
     [self layoutIfNeeded];
 }
@@ -542,7 +557,7 @@
     [self addSubview:button];
 }
 
-- (void)configureAllSegments
+- (void)configureSegments
 {
     for (UIButton *button in [self buttons]) {
         

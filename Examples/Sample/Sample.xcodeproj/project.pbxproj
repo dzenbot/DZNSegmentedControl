@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4FAD79331934546A009808D5 /* DZNSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD79321934546A009808D5 /* DZNSegmentedControl.m */; };
 		4FFE32C718C56B5100C3A85F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFE32C618C56B5100C3A85F /* Foundation.framework */; };
 		4FFE32C918C56B5100C3A85F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFE32C818C56B5100C3A85F /* CoreGraphics.framework */; };
 		4FFE32CB18C56B5100C3A85F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFE32CA18C56B5100C3A85F /* UIKit.framework */; };
@@ -15,10 +16,11 @@
 		4FFE32D718C56B5100C3A85F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE32D618C56B5100C3A85F /* AppDelegate.m */; };
 		4FFE32D918C56B5100C3A85F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FFE32D818C56B5100C3A85F /* Images.xcassets */; };
 		4FFE32FA18C59A9E00C3A85F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE32F918C59A9E00C3A85F /* ViewController.m */; };
-		4FFF8D3218CF5A9F00300D35 /* DZNSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFF8D3118CF5A9F00300D35 /* DZNSegmentedControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4FAD79311934546A009808D5 /* DZNSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DZNSegmentedControl.h; path = ../../Source/DZNSegmentedControl.h; sourceTree = "<group>"; };
+		4FAD79321934546A009808D5 /* DZNSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DZNSegmentedControl.m; path = ../../Source/DZNSegmentedControl.m; sourceTree = "<group>"; };
 		4FFE32C318C56B5100C3A85F /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FFE32C618C56B5100C3A85F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4FFE32C818C56B5100C3A85F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -33,8 +35,6 @@
 		4FFE32DF18C56B5100C3A85F /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4FFE32F818C59A9E00C3A85F /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4FFE32F918C59A9E00C3A85F /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		4FFF8D3018CF5A9F00300D35 /* DZNSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZNSegmentedControl.h; sourceTree = "<group>"; };
-		4FFF8D3118CF5A9F00300D35 /* DZNSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZNSegmentedControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,10 +51,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4FAD793019345460009808D5 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4FAD79311934546A009808D5 /* DZNSegmentedControl.h */,
+				4FAD79321934546A009808D5 /* DZNSegmentedControl.m */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
 		4FFE32BA18C56B5100C3A85F = {
 			isa = PBXGroup;
 			children = (
-				4FFF8D2F18CF5A9F00300D35 /* Source */,
+				4FAD793019345460009808D5 /* Source */,
 				4FFE32CC18C56B5100C3A85F /* Sample */,
 				4FFE32C518C56B5100C3A85F /* Frameworks */,
 				4FFE32C418C56B5100C3A85F /* Products */,
@@ -102,16 +111,6 @@
 				4FFE32D418C56B5100C3A85F /* Sample-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4FFF8D2F18CF5A9F00300D35 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				4FFF8D3018CF5A9F00300D35 /* DZNSegmentedControl.h */,
-				4FFF8D3118CF5A9F00300D35 /* DZNSegmentedControl.m */,
-			);
-			name = Source;
-			path = ../Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,9 +178,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FFE32FA18C59A9E00C3A85F /* ViewController.m in Sources */,
+				4FAD79331934546A009808D5 /* DZNSegmentedControl.m in Sources */,
 				4FFE32D318C56B5100C3A85F /* main.m in Sources */,
 				4FFE32D718C56B5100C3A85F /* AppDelegate.m in Sources */,
-				4FFF8D3218CF5A9F00300D35 /* DZNSegmentedControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
