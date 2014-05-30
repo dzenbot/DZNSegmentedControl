@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>5FFE0098-D71D-45CC-A88C-D807CA2042F0</string>
+	<string>A230009B-D8C0-4819-800B-DD738DD1C69E</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Sample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,11 +14,11 @@
 		<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Examples/Sample.xcodeproj/project.xcworkspace</string>
+	<string>Examples/Sample/Sample.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D4E1B1FD-0638-45F2-AF36-920AD4E011D3</key>
-		<string>../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
