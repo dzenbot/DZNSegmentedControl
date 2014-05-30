@@ -60,7 +60,8 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder]) {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
         [self initialize];
     }
     return self;
@@ -68,7 +69,8 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (self = [super init]) {
+    self = [super initWithFrame:frame];
+    if (self) {
         [self initialize];
     }
     return self;
@@ -76,7 +78,8 @@
 
 - (id)initWithItems:(NSArray *)items
 {
-    if (self = [super init]) {
+    self = [super init];
+    if (self) {
         [self initialize];
         self.items = items;
     }
