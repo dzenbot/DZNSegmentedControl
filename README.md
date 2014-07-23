@@ -4,7 +4,7 @@ DZNSegmentedControl
 A drop-in replacement for UISegmentedControl for showing counts, to be used typically on a user profile.
 
 [![Pod Version - Thanks to https://github.com/badges/cocoapod-badges](https://cocoapod-badges.herokuapp.com/v/DZNSegmentedControl/badge.png)](https://cocoadocs.org/docsets/DZNSegmentedControl)
-[![Gittip      ](http://img.shields.io/gittip/dzenbot.svg)                      ](https://www.gittip.com/dzenbot/)
+[![Gittip](http://img.shields.io/gittip/dzenbot.svg)](https://www.gittip.com/dzenbot/)
 ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
 ![gif](https://dl.dropboxusercontent.com/u/2452151/Permalink/DZNSegmentedControl.gif)
