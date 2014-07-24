@@ -1,6 +1,6 @@
 DZNSegmentedControl
 ========================
-[![Pod Version](https://betabadges.herokuapp.com/v/DZNSegmentedControl/badge.svg)](https://cocoadocs.org/docsets/DZNSegmentedControl)
+[![Pod Version](http://img.shields.io/cocoapods/v/DZNSegmentedControl.svg)](https://cocoadocs.org/docsets/DZNSegmentedControl)
 [![Gittip](http://img.shields.io/gittip/dzenbot.svg)](https://www.gittip.com/dzenbot/)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
