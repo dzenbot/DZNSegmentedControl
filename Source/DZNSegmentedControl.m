@@ -473,7 +473,16 @@
     
     UIButton *button = [self buttonAtIndex:segment];
     
-    [UIView animateWithDuration:duration
+    if (_bouncySelectionIndicator) {
+        [UIView animateWithDuration:duration delay:0.0 usingSpringWithDamping:0.65 initialSpringVelocity:0.5 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+            _selectionIndicator.frame = [self selectionIndicatorRect];
+        } completion:^(BOOL finished) {
+            button.userInteractionEnabled = NO;
+            _transitioning = NO;
+        }];
+        
+    } else {
+        [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -483,6 +492,7 @@
                          button.userInteractionEnabled = NO;
                          _transitioning = NO;
                      }];
+    }
     
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
