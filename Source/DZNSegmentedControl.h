@@ -42,6 +42,9 @@
 
 @property (nonatomic) BOOL inverseTitles;
 
+/** YES to make the selection indicator animation bouncy. Default is NO.  */
+@property (nonatomic) BOOL bouncySelectionIndicator;
+
 /**
  * Initializes and returns a segmented control with segments having the given titles or images.
  * The returned segmented control is automatically sized to fit its content within the width of its superview.
