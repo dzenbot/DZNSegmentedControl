@@ -462,11 +462,8 @@
         return;
     }
     
-    for (UIButton *_button in [self buttons]) {
-        _button.highlighted = NO;
-        _button.selected = NO;
-        _button.userInteractionEnabled = YES;
-    }
+    [self disableAllButtonsSelection];
+    [self enableAllButtonsInteraction:NO];
     
     CGFloat duration = (_selectedSegmentIndex < 0) ? 0.0 : _animationDuration;
     
@@ -487,6 +484,7 @@
                          _selectionIndicator.frame = [self selectionIndicatorRect];
                      }
                      completion:^(BOOL finished) {
+                         [self enableAllButtonsInteraction:YES];
                          button.userInteractionEnabled = NO;
                          _transitioning = NO;
                      }];
@@ -609,6 +607,21 @@
     
     button.highlighted = NO;
     button.selected = YES;
+}
+
+- (void)disableAllButtonsSelection
+{
+    for (UIButton *button in [self buttons]) {
+        button.highlighted = NO;
+        button.selected = NO;
+    }
+}
+
+- (void)enableAllButtonsInteraction:(BOOL)enable
+{
+    for (UIButton *button in [self buttons]) {
+        button.userInteractionEnabled = enable;
+    }
 }
 
 - (void)removeAllSegments
