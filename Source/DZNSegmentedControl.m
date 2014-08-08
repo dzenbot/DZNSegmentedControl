@@ -113,17 +113,19 @@
         _selectedSegmentIndex = 0;
     }
     
-    for (int i = 0; i < [self buttons].count; i++) {
-        UIButton *button = [[self buttons] objectAtIndex:i];
-        [button setFrame:CGRectMake(roundf(self.bounds.size.width/self.numberOfSegments)*i, 0, roundf(self.bounds.size.width/self.numberOfSegments), self.bounds.size.height)];
+    [[self buttons] enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL *stop) {
+        
+        CGRect rect = CGRectMake(roundf(self.bounds.size.width/self.numberOfSegments)*idx, 0, roundf(self.bounds.size.width/self.numberOfSegments),
+                                 self.bounds.size.height);
+        [button setFrame:rect];
         
         CGFloat topInset = (_barPosition > UIBarPositionBottom) ? -4.0 : 4.0;
         [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
         
-        if (i == _selectedSegmentIndex) {
+        if (idx == _selectedSegmentIndex) {
             button.selected = YES;
         }
-    }
+    }];
     
     _selectionIndicator.frame = [self selectionIndicatorRect];
     _hairline.frame = [self hairlineRect];
@@ -159,14 +161,14 @@
 
 - (NSArray *)buttons
 {
-    NSMutableArray *_buttons = [NSMutableArray new];
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:_items.count];
     
     for (UIView *view in self.subviews) {
         if ([view isKindOfClass:[UIButton class]]) {
-            [_buttons addObject:view];
+            [buttons addObject:view];
         }
     }
-    return _buttons;
+    return buttons;
 }
 
 - (UIButton *)buttonAtIndex:(NSUInteger)segment
@@ -473,17 +475,13 @@
     
     UIButton *button = [self buttonAtIndex:segment];
     
-    if (_bouncySelectionIndicator) {
-        [UIView animateWithDuration:duration delay:0.0 usingSpringWithDamping:0.65 initialSpringVelocity:0.5 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            _selectionIndicator.frame = [self selectionIndicatorRect];
-        } completion:^(BOOL finished) {
-            button.userInteractionEnabled = NO;
-            _transitioning = NO;
-        }];
-        
-    } else {
-        [UIView animateWithDuration:duration
-                          delay:0
+    CGFloat damping = !_bouncySelectionIndicator ? : 0.65;
+    CGFloat velocity = !_bouncySelectionIndicator ? : 0.5;
+
+    [UIView animateWithDuration:duration
+                          delay:0.0
+         usingSpringWithDamping:damping
+          initialSpringVelocity:velocity
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          _selectionIndicator.frame = [self selectionIndicatorRect];
@@ -492,7 +490,6 @@
                          button.userInteractionEnabled = NO;
                          _transitioning = NO;
                      }];
-    }
     
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
@@ -620,9 +617,8 @@
         return;
     }
     
-    for (UIButton *_button in [self buttons]) {
-        [_button removeFromSuperview];
-    }
+    // Removes all the buttons
+    [[self buttons] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     _items = nil;
 }
