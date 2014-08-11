@@ -213,7 +213,10 @@
     NSArray *components = [title componentsSeparatedByString:@"\n"];
     
     if (components.count == 2) {
-        return @([[components objectAtIndex:_inverseTitles ? 1 : 0] intValue]);
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        formatter.numberStyle = NSNumberFormatterDecimalStyle;
+        NSString *countString = [components objectAtIndex:_inverseTitles ? 1 : 0];
+        return [formatter numberFromString:countString];
     }
     else return @(0);
 }
