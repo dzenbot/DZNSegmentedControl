@@ -367,10 +367,20 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSMutableString *title = [NSMutableString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
+    NSMutableString *title = [NSMutableString stringWithFormat:@"%@", [_items objectAtIndex:segment]];
     if (_showsCount) {
         NSString *breakString = @"\n";
-        NSString *countString = [NSString stringWithFormat:@"%@", count];
+        NSString *countString;
+        
+        if (_showsGroupingSeparators) {
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            formatter.numberStyle = NSNumberFormatterDecimalStyle;
+            countString = [formatter stringFromNumber:count];
+        }
+        else {
+            countString = [NSString stringWithFormat:@"%@", count];
+        }
+        
         NSString *resultString = _inverseTitles ? [breakString stringByAppendingString:countString] : [countString stringByAppendingString:breakString];
         
         [title insertString:resultString atIndex:_inverseTitles ? title.length : 0];
