@@ -79,6 +79,15 @@
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment;
 
 /**
+ * Sets the count of a segment with the option to add grouping seperators to the number.
+ *
+ * @param count A number to display in the segment as its count.
+ * @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
+ * @param groupingSeparators YES to enable the grouping separators or NO to disable the grouping separators. By default, grouping separators are disabled.
+ */
+- (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment withGroupingSeparators:(BOOL)groupingSeparators;
+
+/**
  Enables the specified segment.
  
  @param enabled YES to enable the specified segment or NO to disable the segment. By default, segments are enabled.
