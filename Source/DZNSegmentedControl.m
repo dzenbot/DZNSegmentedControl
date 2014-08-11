@@ -213,10 +213,8 @@
     NSArray *components = [title componentsSeparatedByString:@"\n"];
     
     if (components.count == 2) {
-        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-        formatter.numberStyle = NSNumberFormatterDecimalStyle;
         NSString *countString = [components objectAtIndex:_inverseTitles ? 1 : 0];
-        return [formatter numberFromString:countString];
+        return [[self class] defaultFormatter] numberFromString:countString];
     }
     else return @(0);
 }
@@ -373,9 +371,7 @@
         NSString *countString;
         
         if (_showsGroupingSeparators) {
-            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-            formatter.numberStyle = NSNumberFormatterDecimalStyle;
-            countString = [formatter stringFromNumber:count];
+            countString = [[self class] defaultFormatter] stringFromNumber:count];
         }
         else {
             countString = [NSString stringWithFormat:@"%@", count];
