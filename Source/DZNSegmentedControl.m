@@ -664,4 +664,20 @@
     _items = nil;
 }
 
+#pragma mark - Class Methods
+
++ (NSNumberFormatter *)defaultFormatter
+{
+    static NSNumberFormatter *defaultFormatter;
+
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        defaultFormatter = [[NSNumberFormatter alloc] init];
+        defaultFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        [defaultFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+    });
+
+    return defaultFormatter;
+}
+
 @end
