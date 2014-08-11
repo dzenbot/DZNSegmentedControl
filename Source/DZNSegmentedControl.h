@@ -43,6 +43,8 @@
 @property (nonatomic) BOOL inverseTitles;
 /** YES to make the selection indicator animation bouncy. Default is NO.  */
 @property (nonatomic) BOOL bouncySelectionIndicator;
+/** YES to format the counts with grouping separators. Default is NO.  */
+@property (nonatomic) BOOL showsGroupingSeparators;
 
 /**
  Initializes and returns a segmented control with segments having the given titles or images.

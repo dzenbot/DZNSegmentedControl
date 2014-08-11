@@ -213,7 +213,8 @@
     NSArray *components = [title componentsSeparatedByString:@"\n"];
     
     if (components.count == 2) {
-        return @([[components objectAtIndex:_inverseTitles ? 1 : 0] intValue]);
+        NSString *countString = [components objectAtIndex:_inverseTitles ? 1 : 0];
+        return [[self class] defaultFormatter] numberFromString:countString];
     }
     else return @(0);
 }
@@ -364,10 +365,18 @@
     NSAssert(segment < self.numberOfSegments, @"Cannot assign a count to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
-    NSMutableString *title = [NSMutableString stringWithFormat:@"%@",[_items objectAtIndex:segment]];
+    NSMutableString *title = [NSMutableString stringWithFormat:@"%@", [_items objectAtIndex:segment]];
     if (_showsCount) {
         NSString *breakString = @"\n";
-        NSString *countString = [NSString stringWithFormat:@"%@", count];
+        NSString *countString;
+        
+        if (_showsGroupingSeparators) {
+            countString = [[self class] defaultFormatter] stringFromNumber:count];
+        }
+        else {
+            countString = [NSString stringWithFormat:@"%@", count];
+        }
+        
         NSString *resultString = _inverseTitles ? [breakString stringByAppendingString:countString] : [countString stringByAppendingString:breakString];
         
         [title insertString:resultString atIndex:_inverseTitles ? title.length : 0];
@@ -522,6 +531,21 @@
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
+- (void)setShowsGroupingSeparators:(BOOL)showsGroupingSeparators
+{
+    if (_showsGroupingSeparators == showsGroupingSeparators) {
+        return;
+    }
+    
+    _showsGroupingSeparators = showsGroupingSeparators;
+    
+    for (int i = 0; i < [self buttons].count; i++) {
+        [self configureButtonForSegment:i];
+    }
+    
+    _selectionIndicator.frame = [self selectionIndicatorRect];
+}
+
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment
 {
     UIButton *button = [self buttonAtIndex:segment];
@@ -634,6 +658,22 @@
     [[self buttons] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     _items = nil;
+}
+
+#pragma mark - Class Methods
+
++ (NSNumberFormatter *)defaultFormatter
+{
+    static NSNumberFormatter *defaultFormatter;
+
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        defaultFormatter = [[NSNumberFormatter alloc] init];
+        defaultFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        [defaultFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+    });
+
+    return defaultFormatter;
 }
 
 @end
