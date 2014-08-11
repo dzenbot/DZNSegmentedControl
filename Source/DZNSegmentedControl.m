@@ -535,6 +535,21 @@
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
+- (void)setShowsGroupingSeparators:(BOOL)showsGroupingSeparators
+{
+    if (_showsGroupingSeparators == showsGroupingSeparators) {
+        return;
+    }
+    
+    _showsGroupingSeparators = showsGroupingSeparators;
+    
+    for (int i = 0; i < [self buttons].count; i++) {
+        [self configureButtonForSegment:i];
+    }
+    
+    _selectionIndicator.frame = [self selectionIndicatorRect];
+}
+
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment
 {
     UIButton *button = [self buttonAtIndex:segment];
