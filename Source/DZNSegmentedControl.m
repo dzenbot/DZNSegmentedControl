@@ -404,6 +404,21 @@
     _selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
+- (void)setTintColor:(UIColor *)tintColor forSegmentAtIndex:(NSUInteger)segment
+{
+    if (!tintColor) {
+        return;
+    }
+    
+    NSAssert(segment < self.numberOfSegments, @"Cannot assign a tint color to non-existing segment.");
+    NSAssert(segment >= 0, @"Cannot assign a tint color to a negative segment.");
+    
+    NSAssert([tintColor isKindOfClass:[UIColor class]], @"Cannot assign a tint color with an unvalid color object.");
+    
+    UIButton *button = [self buttonAtIndex:segment];
+    button.backgroundColor = tintColor;
+}
+
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
     NSAssert([color isKindOfClass:[UIColor class]], @"Cannot assign a title color with an unvalid color object.");
