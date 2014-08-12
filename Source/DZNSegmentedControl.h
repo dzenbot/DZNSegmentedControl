@@ -57,6 +57,14 @@
 - (id)initWithItems:(NSArray *)items;
 
 /**
+ Sets the tint color of a segment.
+ 
+ @param tintColor A color to rendered for the segment's background color.
+ @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
+ */
+- (void)setTintColor:(UIColor *)tintColor forSegmentAtIndex:(NSUInteger)segment;
+
+/**
  Sets the title of a segment.
  
  @param title A string to display in the segment as its title.
