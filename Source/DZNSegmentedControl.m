@@ -201,11 +201,11 @@
         NSArray *components = [title componentsSeparatedByString:@"\n"];
         
         if (components.count == 2) {
-            return [components objectAtIndex:_inverseTitles ? 0 : 1];
+            return components[_inverseTitles ? 0 : 1];
         }
         else return nil;
     }
-    return [_items objectAtIndex:segment];
+    return _items[segment];
 }
 
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment
@@ -633,12 +633,34 @@
 
 - (void)configureButtonForSegment:(NSUInteger)segment
 {
+    NSAssert(segment < self.numberOfSegments, @"Cannot configure a button for a non-existing segment.");
+    NSAssert(segment >= 0, @"Cannot configure a button for a negative segment.");
+    
+    NSMutableString *title = [NSMutableString stringWithFormat:@"%@", _items[segment]];
+    
     if (_showsCount) {
-        [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
+        NSNumber *count = [self countForSegmentAtIndex:segment];
+        
+        NSString *breakString = @"\n";
+        NSString *countString;
+        
+        if (self.numberFormatter) {
+            countString = [self.numberFormatter stringFromNumber:count];
+        }
+        else if (!self.numberFormatter && _showsGroupingSeparators) {
+            countString = [[[self class] defaultFormatter] stringFromNumber:count];
+        }
+        else {
+            countString = [NSString stringWithFormat:@"%@", count];
+        }
+        
+        NSString *resultString = _inverseTitles ? [breakString stringByAppendingString:countString] : [countString stringByAppendingString:breakString];
+        
+        [title insertString:resultString atIndex:_inverseTitles ? title.length : 0];
     }
-    else {
-        [self setTitle:[_items objectAtIndex:segment] forSegmentAtIndex:segment];
-    }
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
+    [self setAttributedTitle:attributedString forSegmentAtIndex:segment];
 }
 
 - (void)willSelectedButton:(id)sender
