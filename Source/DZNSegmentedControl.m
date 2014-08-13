@@ -584,7 +584,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     
     [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(didSelectedButton:) forControlEvents:UIControlEventTouchDragOutside|UIControlEventTouchDragInside|UIControlEventTouchDragEnter|UIControlEventTouchDragExit|UIControlEventTouchCancel|UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+    [button addTarget:self action:@selector(didSelectButton:) forControlEvents:UIControlEventTouchDragOutside|UIControlEventTouchDragInside|UIControlEventTouchDragEnter|UIControlEventTouchDragExit|UIControlEventTouchCancel|UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
     
     button.backgroundColor = nil;
     button.opaque = YES;
@@ -655,7 +655,7 @@
     }
 }
 
-- (void)didSelectedButton:(id)sender
+- (void)didSelectButton:(id)sender
 {
     UIButton *button = (UIButton *)sender;
     
