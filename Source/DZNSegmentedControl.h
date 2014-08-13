@@ -56,7 +56,7 @@
  @params items An array of NSString objects only.
  @returns A DZNSegmentedControl object or nil if there was a problem in initializing the object.
  */
-- (id)initWithItems:(NSArray *)items;
+- (instancetype)initWithItems:(NSArray *)items;
 
 /**
  Sets the tint color of a segment.
