@@ -214,7 +214,8 @@
     
     if (components.count == 2) {
         NSString *countString = [components objectAtIndex:_inverseTitles ? 1 : 0];
-        return [[self class] defaultFormatter] numberFromString:countString];
+        NSNumberFormatter *formatter = self.numberFormatter ? self.numberFormatter : [[self class] defaultFormatter];
+        return [formatter numberFromString:countString];
     }
     else return @(0);
 }
