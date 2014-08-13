@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIView *selectionIndicator;
 @property (nonatomic, strong) UIView *hairline;
 @property (nonatomic, strong) NSMutableDictionary *colors;
+@property (nonatomic, strong) NSMutableArray *counts; // of NSNumber
 @property (nonatomic, getter = isTransitioning) BOOL transitioning;
 @end
 
