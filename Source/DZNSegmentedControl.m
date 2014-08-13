@@ -46,6 +46,8 @@
     
     _colors = [NSMutableDictionary new];
     
+    _counts = [NSMutableArray array];
+    
     _initializing = NO;
 }
 
