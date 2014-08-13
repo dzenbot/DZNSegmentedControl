@@ -372,7 +372,8 @@
         NSString *countString;
         
         if (_showsGroupingSeparators) {
-            countString = [[self class] defaultFormatter] stringFromNumber:count];
+            NSNumberFormatter *formatter = self.numberFormatter ? self.numberFormatter : [[self class] defaultFormatter];
+            countString = [formatter stringFromNumber:count];
         }
         else {
             countString = [NSString stringWithFormat:@"%@", count];
