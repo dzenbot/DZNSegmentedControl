@@ -27,7 +27,7 @@
 @property (nonatomic, readonly) NSUInteger numberOfSegments;
 /** The height of the control. Default is 56px. */
 @property (nonatomic, readonly) CGFloat height;
-/** The height of the selection indicator. Default is 2px . */
+/** The height of the selection indicator. Default is 2px. */
 @property (nonatomic, readwrite) CGFloat selectionIndicatorHeight UI_APPEARANCE_SELECTOR;
 /** The duration of the indicator's animation. Default is 0.2 sec. */
 @property (nonatomic, readwrite) CGFloat animationDuration UI_APPEARANCE_SELECTOR;
@@ -35,15 +35,17 @@
 @property (nonatomic, retain) UIFont *font UI_APPEARANCE_SELECTOR;
 /** The color of the hairline. Default is light gray. To hide the hairline, just set clipsToBounds to YES, like you would do it for UIToolBar & UINavigationBar. */
 @property (nonatomic, readwrite) UIColor *hairlineColor UI_APPEARANCE_SELECTOR;
-/** YES to display the count number on top of the titles. Default is YES.  */
+/** The custom number formatter used to format the count values. A default number formatter will be used if this property is nil. */
+@property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+/** YES to display the count number on top of the titles. Default is YES. */
 @property (nonatomic) BOOL showsCount;
-/** YES to adjust the width of the selection indicator on the title width. Default is YES.  */
+/** YES to adjust the width of the selection indicator on the title width. Default is YES. */
 @property (nonatomic) BOOL autoAdjustSelectionIndicatorWidth;
-/** YES if the title should display on top of the count. Default is NO.  */
+/** YES if the title should display on top of the count. Default is NO. */
 @property (nonatomic) BOOL inverseTitles;
-/** YES to make the selection indicator animation bouncy. Default is NO.  */
+/** YES to make the selection indicator animation bouncy. Default is NO. */
 @property (nonatomic) BOOL bouncySelectionIndicator;
-/** YES to format the counts with grouping separators. Default is NO.  */
+/** YES to format the counts with grouping separators. Default is NO. */
 @property (nonatomic) BOOL showsGroupingSeparators;
 
 /**
