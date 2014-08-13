@@ -210,15 +210,7 @@
 
 - (NSNumber *)countForSegmentAtIndex:(NSUInteger)segment
 {
-    NSString *title = [self stringForSegmentAtIndex:segment];
-    NSArray *components = [title componentsSeparatedByString:@"\n"];
-    
-    if (components.count == 2) {
-        NSString *countString = [components objectAtIndex:_inverseTitles ? 1 : 0];
-        NSNumberFormatter *formatter = self.numberFormatter ? self.numberFormatter : [[self class] defaultFormatter];
-        return [formatter numberFromString:countString];
-    }
-    else return @(0);
+    return segment < self.counts.count ? self.counts[segment] : @(0);
 }
 
 - (UIColor *)titleColorForState:(UIControlState)state
