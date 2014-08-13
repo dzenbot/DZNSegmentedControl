@@ -20,8 +20,6 @@
 @end
 
 @implementation DZNSegmentedControl
-@synthesize items = _items;
-@synthesize selectedSegmentIndex = _selectedSegmentIndex;
 @synthesize barPosition = _barPosition;
 
 #pragma mark - Initialize Methods
