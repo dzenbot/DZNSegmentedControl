@@ -87,7 +87,7 @@
 //        _control.hairlineColor = self.view.tintColor;
 //        _control.showsCount = NO;
 //        _control.autoAdjustSelectionIndicatorWidth = NO;
-//        _control.selectionIndicatorHeight = 2;
+//        _control.selectionIndicatorHeight = _control.intrinsicContentSize.height;
         
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
     }
