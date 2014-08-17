@@ -77,7 +77,7 @@
     return self;
 }
 
-- (id)initWithItems:(NSArray *)items
+- (instancetype)initWithItems:(NSArray *)items
 {
     self = [super init];
     if (self) {
@@ -331,23 +331,21 @@
         return;
     }
     
-    NSAssert(segment < self.numberOfSegments, @"Cannot assign a title to non-existing segment.");
+    NSAssert(segment <= self.numberOfSegments, @"Cannot assign a title to non-existing segment.");
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
     NSMutableArray *items = [NSMutableArray arrayWithArray:self.items];
     
     if (segment >= self.numberOfSegments) {
         [items insertObject:title atIndex:self.numberOfSegments];
-        _items = items;
-        
         [self addButtonForSegment:segment];
     }
     else {
         [items replaceObjectAtIndex:segment withObject:title];
-        _items = items;
-        
         [self setCount:[self countForSegmentAtIndex:segment] forSegmentAtIndex:segment];
     }
+    
+    _items = items;
 }
 
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment
@@ -360,7 +358,7 @@
     NSAssert(segment >= 0, @"Cannot assign a title to a negative segment.");
     
     self.counts[segment] = count;
-    
+        
     [self configureSegments];
 }
 
@@ -541,7 +539,7 @@
 
 - (void)setNumberFormatter:(NSNumberFormatter *)numberFormatter
 {
-    if (_numberFormatter == numberFormatter) {
+    if ([_numberFormatter isEqual:numberFormatter]) {
         return;
     }
     
@@ -600,13 +598,6 @@
 - (void)configureSegments
 {
     for (UIButton *button in [self buttons]) {
-        
-        NSAttributedString *attributedString = [button attributedTitleForState:UIControlStateNormal];
-        
-        if (attributedString.string.length > 0) {
-            continue;
-        }
-        
         [self configureButtonForSegment:button.tag];
     }
     

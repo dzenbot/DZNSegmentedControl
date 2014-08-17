@@ -77,16 +77,18 @@
         _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
-//        _control.bouncySelectionIndicator = YES;
+        _control.bouncySelectionIndicator = YES;
         
-//        _control.inverseTitles = NO;
+//        _control.showsGroupingSeparators = YES;
+//        _control.inverseTitles = YES;
 //        _control.backgroundColor = [UIColor lightGrayColor];
 //        _control.tintColor = [UIColor purpleColor];
 //        _control.hairlineColor = [UIColor purpleColor];
 //        _control.hairlineColor = self.view.tintColor;
 //        _control.showsCount = NO;
-//        _control.autoAdjustSelectionIndicatorWidth = YES;
-
+//        _control.autoAdjustSelectionIndicatorWidth = NO;
+//        _control.selectionIndicatorHeight = 2;
+        
         [_control addTarget:self action:@selector(selectedSegment:) forControlEvents:UIControlEventValueChanged];
     }
     return _control;
@@ -146,7 +148,7 @@
     NSUInteger newSegment = self.control.numberOfSegments;
 
     [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:self.control.numberOfSegments];
-    [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:newSegment];
+    [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:newSegment];
 }
 
 - (void)refreshSegments:(id)sender
@@ -162,9 +164,9 @@
 
 - (void)updateControlCounts
 {
-    [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:0];
-    [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:1];
-    [self.control setCount:@((arc4random()%300)) forSegmentAtIndex:2];
+    [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:0];
+    [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:1];
+    [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:2];
     
     if (_allowAppearance) {
         [self.control setTitleColor:_hairlineColor forState:UIControlStateNormal];
