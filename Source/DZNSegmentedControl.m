@@ -131,7 +131,7 @@
     _selectionIndicator.frame = [self selectionIndicatorRect];
     _hairline.frame = [self hairlineRect];
     
-    [self bringSubviewToFront:_selectionIndicator];
+    [self sendSubviewToBack:_selectionIndicator];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
@@ -150,6 +150,11 @@
     [self configureSegments];
     
     [self layoutIfNeeded];
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(0.0, self.height);
 }
 
 
