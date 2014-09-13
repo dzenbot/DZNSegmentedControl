@@ -153,13 +153,10 @@
 
 - (void)refreshSegments:(id)sender
 {
-    if (self.control.selectedSegmentIndex >= 0) {
-        [self.control removeAllSegments];
-    }
-    else {
-        [self.control setItems:self.menuItems];
-        [self updateControlCounts];
-    }
+    [self.control removeAllSegments];
+
+    [self.control setItems:self.menuItems];
+    [self updateControlCounts];
 }
 
 - (void)updateControlCounts

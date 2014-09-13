@@ -10,29 +10,29 @@
 	<string>Sample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D4E1B1FD-0638-45F2-AF36-920AD4E011D3</key>
+		<key>CAB1A95A20AF99448747D5A9E798E276164BDEE0</key>
 		<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Examples/Sample/Sample.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D4E1B1FD-0638-45F2-AF36-920AD4E011D3</key>
+		<key>CAB1A95A20AF99448747D5A9E798E276164BDEE0</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D4E1B1FD-0638-45F2-AF36-920AD4E011D3</string>
+	<string>CAB1A95A20AF99448747D5A9E798E276164BDEE0</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D4E1B1FD-0638-45F2-AF36-920AD4E011D3</string>
+			<string>CAB1A95A20AF99448747D5A9E798E276164BDEE0</string>
 			<key>IDESourceControlWCCName</key>
 			<string>DZNSegmentedControl</string>
 		</dict>

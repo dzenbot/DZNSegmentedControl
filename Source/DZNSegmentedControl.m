@@ -308,9 +308,15 @@
     if (_items) {
         [self removeAllSegments];
     }
-    
+
     if (items) {
         _items = [NSArray arrayWithArray:items];
+        _counts = [NSMutableArray arrayWithCapacity:items.count];
+        
+        for (int i = 0; i < items.count; i++) {
+            [self.counts addObject:@0];
+        }
+        
         [self insertAllSegments];
     }
 }
@@ -684,6 +690,7 @@
     [[self buttons] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     _items = nil;
+    _counts = nil;
 }
 
 #pragma mark - Class Methods
