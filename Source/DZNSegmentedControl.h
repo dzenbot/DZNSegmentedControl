@@ -47,6 +47,8 @@
 @property (nonatomic) BOOL bouncySelectionIndicator;
 /** YES to format the counts with grouping separators. Default is NO. */
 @property (nonatomic) BOOL showsGroupingSeparators;
+/** YES if the font size should be reduced in order to fit the title string into the segment's width. Default is NO. */
+@property (nonatomic) BOOL adjustsFontSizeToFitWidth;
 
 /**
  Initializes and returns a segmented control with segments having the given titles or images.
