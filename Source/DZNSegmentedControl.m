@@ -568,6 +568,13 @@
     self.selectionIndicator.frame = [self selectionIndicatorRect];
 }
 
+- (void)setShowsCount:(BOOL)showsCount {
+    _showsCount = showsCount;
+    if (!_showsCount) {
+        _height = 30.0f;
+    }
+}
+
 - (void)setShowsGroupingSeparators:(BOOL)showsGroupingSeparators
 {
     if (self.showsGroupingSeparators == showsGroupingSeparators) {
