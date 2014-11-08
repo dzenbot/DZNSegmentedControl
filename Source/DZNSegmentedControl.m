@@ -90,9 +90,13 @@
 
 #pragma mark - UIView Methods
 
+- (void)setCustomWidth:(CGFloat)width {
+    self.width = width;
+}
+
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    return CGSizeMake(self.superview.bounds.size.width, self.height);
+    return CGSizeMake((self.width ? self.width : self.superview.bounds.size.width), self.height);
 }
 
 - (void)sizeToFit
