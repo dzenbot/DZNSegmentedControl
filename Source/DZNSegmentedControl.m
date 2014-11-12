@@ -87,12 +87,7 @@
     return self;
 }
 
-
 #pragma mark - UIView Methods
-
-- (void)setCustomWidth:(CGFloat)width {
-    self.width = width;
-}
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
