@@ -87,12 +87,11 @@
     return self;
 }
 
-
 #pragma mark - UIView Methods
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    return CGSizeMake(self.superview.bounds.size.width, self.height);
+    return CGSizeMake((self.width ? self.width : self.superview.bounds.size.width), self.height);
 }
 
 - (void)sizeToFit
