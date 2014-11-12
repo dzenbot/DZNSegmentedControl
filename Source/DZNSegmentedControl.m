@@ -24,16 +24,15 @@
 
 #pragma mark - Initialize Methods
 
-- (void)initialize
+- (void)commonInit
 {
     _initializing = YES;
     
-    _selectedSegmentIndex = -1;
-    _font = [UIFont systemFontOfSize:15.0];
-    _height = 56.0;
-    _selectionIndicatorHeight = 2.0;
-    _animationDuration = 0.2;
     _showsCount = YES;
+    _selectedSegmentIndex = -1;
+    _font = [UIFont systemFontOfSize:15.0f];
+    _selectionIndicatorHeight = 2.0f;
+    _animationDuration = 0.2;
     _autoAdjustSelectionIndicatorWidth = YES;
     
     _selectionIndicator = [UIView new];
@@ -54,7 +53,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        [self initialize];
+        [self commonInit];
     }
     return self;
 }
@@ -63,7 +62,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self initialize];
+        [self commonInit];
     }
     return self;
 }
@@ -72,7 +71,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initialize];
+        [self commonInit];
     }
     return self;
 }
@@ -81,7 +80,7 @@
 {
     self = [super init];
     if (self) {
-        [self initialize];
+        [self commonInit];
         self.items = items;
     }
     return self;
@@ -115,12 +114,12 @@
     
     [[self buttons] enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL *stop) {
         
-        CGRect rect = CGRectMake(roundf(self.bounds.size.width/self.numberOfSegments)*idx, 0, roundf(self.bounds.size.width/self.numberOfSegments),
+        CGRect rect = CGRectMake(roundf(self.bounds.size.width/self.numberOfSegments)*idx, 0.0f, roundf(self.bounds.size.width/self.numberOfSegments),
                                  self.bounds.size.height);
         [button setFrame:rect];
         
-        CGFloat topInset = (self.barPosition > UIBarPositionBottom) ? -4.0 : 4.0;
-        [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, topInset, 0)];
+        CGFloat topInset = (self.barPosition > UIBarPositionBottom) ? -4.0f : 4.0f;
+        [button setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, topInset, 0.0f)];
         
         if (idx == self.selectedSegmentIndex) {
             button.selected = YES;
@@ -153,11 +152,21 @@
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(0.0, self.height);
+    return CGSizeMake(self.width, self.height);
 }
 
 
 #pragma mark - Getter Methods
+
+- (CGFloat)height
+{
+    return (_height ? : self.showsCount ? 56.0f : 30.0f);
+}
+
+- (CGFloat)width
+{
+    return (_width ? : self.superview.bounds.size.width);
+}
 
 - (NSUInteger)numberOfSegments
 {
@@ -245,7 +254,7 @@
         return frame;
     }
     
-    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0 : (button.frame.size.height-self.selectionIndicatorHeight);
+    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0f : (button.frame.size.height-self.selectionIndicatorHeight);
     
     if (self.autoAdjustSelectionIndicatorWidth) {
         
@@ -281,8 +290,8 @@
 
 - (CGRect)hairlineRect
 {
-    CGRect frame = CGRectMake(0, 0, self.frame.size.width, 0.5);
-    frame.origin.y = (self.barPosition > UIBarPositionBottom) ? 0 : self.frame.size.height;
+    CGRect frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 0.5f);
+    frame.origin.y = (self.barPosition > UIBarPositionBottom) ? 0.0f : self.frame.size.height;
     
     return frame;
 }
@@ -290,8 +299,8 @@
 // Calculate the most appropriate font size for a button title
 - (CGFloat)appropriateFontSizeForTitle:(NSString *)title
 {
-    CGFloat fontSize = 14.0;
-    CGFloat minFontSize = 8.0;
+    CGFloat fontSize = 14.0f;
+    CGFloat minFontSize = 8.0f;
     
     if (!self.adjustsFontSizeToFitWidth) {
         return fontSize;
@@ -313,7 +322,7 @@
         }
         
         // Decreases the font size and tries again
-        fontSize -= 1.0;
+        fontSize -= 1.0f;
         
     } while (fontSize > minFontSize);
     
@@ -451,7 +460,7 @@
         style.alignment = NSTextAlignmentCenter;
         style.lineBreakMode = (self.showsCount) ? NSLineBreakByWordWrapping : NSLineBreakByTruncatingTail;
         style.lineBreakMode = NSLineBreakByWordWrapping;
-        style.minimumLineHeight = 20.0;
+        style.minimumLineHeight = 20.0f;
         
         [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
         
@@ -468,13 +477,13 @@
             
             CGFloat fontSizeForTitle = [self appropriateFontSizeForTitle:title];
             
-            [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:self.font.fontName size:19.0] range:[string rangeOfString:count]];
+            [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:self.font.fontName size:19.0f] range:[string rangeOfString:count]];
             [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:self.font.fontName size:fontSizeForTitle] range:[string rangeOfString:title]];
             
             if (state == UIControlStateNormal) {
                 
-                UIColor *topColor = self.inverseTitles ? [color colorWithAlphaComponent:0.5] : color;
-                UIColor *bottomColor = self.inverseTitles ? color : [color colorWithAlphaComponent:0.5];
+                UIColor *topColor = self.inverseTitles ? [color colorWithAlphaComponent:0.5f] : color;
+                UIColor *bottomColor = self.inverseTitles ? color : [color colorWithAlphaComponent:0.5f];
 
                 NSUInteger topLength = self.inverseTitles ? title.length : count.length;
                 NSUInteger bottomLength = self.inverseTitles ? count.length : title.length;
@@ -510,18 +519,18 @@
     [self disableAllButtonsSelection];
     [self enableAllButtonsInteraction:NO];
     
-    CGFloat duration = (self.selectedSegmentIndex < 0) ? 0.0 : self.animationDuration;
+    CGFloat duration = (self.selectedSegmentIndex < 0.0f) ? 0.0f : self.animationDuration;
     
     _selectedSegmentIndex = segment;
     _transitioning = YES;
     
     UIButton *button = [self buttonAtIndex:segment];
     
-    CGFloat damping = !self.bouncySelectionIndicator ? : 0.65;
-    CGFloat velocity = !self.bouncySelectionIndicator ? : 0.5;
+    CGFloat damping = !self.bouncySelectionIndicator ? : 0.65f;
+    CGFloat velocity = !self.bouncySelectionIndicator ? : 0.5f;
 
     [UIView animateWithDuration:duration
-                          delay:0.0
+                          delay:0.0f
          usingSpringWithDamping:damping
           initialSpringVelocity:velocity
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
@@ -565,13 +574,6 @@
     }
     
     self.selectionIndicator.frame = [self selectionIndicatorRect];
-}
-
-- (void)setShowsCount:(BOOL)showsCount {
-    _showsCount = showsCount;
-    if (!_showsCount) {
-        _height = 30.0f;
-    }
 }
 
 - (void)setShowsGroupingSeparators:(BOOL)showsGroupingSeparators

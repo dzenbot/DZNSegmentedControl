@@ -14,7 +14,7 @@
 		<string>https://github.com/dzenbot/DZNSegmentedControl.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Examples/Sample/Sample.xcodeproj/project.xcworkspace</string>
+	<string>Examples/Sample/Sample.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>CAB1A95A20AF99448747D5A9E798E276164BDEE0</key>

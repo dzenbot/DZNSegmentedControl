@@ -79,6 +79,8 @@
         _control.selectedSegmentIndex = 1;
         _control.bouncySelectionIndicator = YES;
         
+//        _control.height = 120.0f;
+//        _control.width = 300.0f;
 //        _control.showsGroupingSeparators = YES;
 //        _control.inverseTitles = YES;
 //        _control.backgroundColor = [UIColor lightGrayColor];
