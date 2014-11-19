@@ -21,6 +21,8 @@
 
 @implementation DZNSegmentedControl
 @synthesize barPosition = _barPosition;
+@synthesize height = _height;
+@synthesize width = _width;
 
 #pragma mark - Initialize Methods
 
@@ -102,6 +104,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    
     [self sizeToFit];
     
     if ([self buttons].count == 0) {
@@ -335,7 +338,22 @@
 {
     _width = CGRectGetWidth(frame);
     _height = CGRectGetHeight(frame);
+    
     [super setFrame:frame];
+}
+
+- (void)setHeight:(CGFloat)height
+{
+    _height = height;
+    
+    [self layoutSubviews];
+}
+
+- (void)setWidth:(CGFloat)width
+{
+    _width = width;
+    
+    [self layoutSubviews];
 }
 
 - (void)setTintColor:(UIColor *)color
