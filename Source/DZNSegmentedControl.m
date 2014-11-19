@@ -332,6 +332,13 @@
 
 #pragma mark - Setter Methods
 
+- (void)setFrame:(CGRect)frame
+{
+    _width = CGRectGetWidth(frame);
+    _height = CGRectGetHeight(frame);
+    [super setFrame:frame];
+}
+
 - (void)setTintColor:(UIColor *)color
 {
     if (!color || !self.items || self.initializing) {
