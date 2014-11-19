@@ -30,11 +30,11 @@
     
     _showsCount = YES;
     _selectedSegmentIndex = -1;
-    _font = [UIFont systemFontOfSize:15.0f];
     _selectionIndicatorHeight = 2.0f;
     _animationDuration = 0.2;
     _autoAdjustSelectionIndicatorWidth = YES;
-    
+    _font = [UIFont systemFontOfSize:15.0f];
+
     _selectionIndicator = [UIView new];
     _selectionIndicator.backgroundColor = self.tintColor;
     [self addSubview:_selectionIndicator];
@@ -44,7 +44,6 @@
     [self addSubview:_hairline];
     
     _colors = [NSMutableDictionary new];
-    
     _counts = [NSMutableArray array];
     
     _initializing = NO;
