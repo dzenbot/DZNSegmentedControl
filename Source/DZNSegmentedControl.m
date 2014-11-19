@@ -340,6 +340,8 @@
     _height = CGRectGetHeight(frame);
     
     [super setFrame:frame];
+    
+    [self layoutSubviews];
 }
 
 - (void)setHeight:(CGFloat)height
