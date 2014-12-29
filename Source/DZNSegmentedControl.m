@@ -341,7 +341,7 @@
     
     [super setFrame:frame];
     
-    [self layoutSubviews];
+    [self layoutIfNeeded];
 }
 
 - (void)setHeight:(CGFloat)height
