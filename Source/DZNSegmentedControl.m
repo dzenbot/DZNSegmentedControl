@@ -341,7 +341,7 @@
     
     [super setFrame:frame];
     
-    [self layoutSubviews];
+    [self layoutIfNeeded];
 }
 
 - (void)setHeight:(CGFloat)height
@@ -392,6 +392,34 @@
 {
     _delegate = delegate;
     _barPosition = [delegate positionForBar:self];
+}
+
+- (void)setScrollOffset:(CGPoint)scrollOffset
+{
+    _scrollOffset = scrollOffset;
+    
+    self.autoAdjustSelectionIndicatorWidth = NO;
+    self.bouncySelectionIndicator = NO;
+    
+    CGFloat offset = scrollOffset.x/self.width;
+    NSUInteger index = (NSUInteger)offset;
+    
+    CGFloat buttonWidth = roundf(self.width/self.numberOfSegments);
+    CGFloat originX = buttonWidth * offset;
+
+    CGRect indicatorRect = self.selectionIndicator.frame;
+    indicatorRect.origin.x = originX;
+    self.selectionIndicator.frame = indicatorRect;
+    
+    if (offset == truncf(offset) && self.selectedSegmentIndex != index) {
+        
+        [self disableAllButtonsSelection];
+        [self.buttons[index] setSelected:YES];
+        
+        _selectedSegmentIndex = index;
+        
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
 }
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment
@@ -736,17 +764,13 @@
 
 - (void)disableAllButtonsSelection
 {
-    for (UIButton *button in [self buttons]) {
-        button.highlighted = NO;
-        button.selected = NO;
-    }
+    [self.buttons setValue:@NO forKey:@"selected"];
+    [self.buttons setValue:@NO forKey:@"highlighted"];
 }
 
 - (void)enableAllButtonsInteraction:(BOOL)enable
 {
-    for (UIButton *button in [self buttons]) {
-        button.userInteractionEnabled = enable;
-    }
+    [self.buttons setValue:@(enable) forKey:@"userInteractionEnabled"];
 }
 
 - (void)removeAllSegments
