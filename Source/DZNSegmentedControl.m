@@ -136,6 +136,10 @@
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
+    if (!newSuperview) {
+        return;
+    }
+    
     [super willMoveToSuperview:newSuperview];
     
     [self layoutIfNeeded];
@@ -150,6 +154,15 @@
     [self configureSegments];
     
     [self layoutIfNeeded];
+}
+
+- (void)layoutIfNeeded
+{
+    if (!self.superview) {
+        return;
+    }
+    
+    [super layoutIfNeeded];
 }
 
 - (CGSize)intrinsicContentSize
