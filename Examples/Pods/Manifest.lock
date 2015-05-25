@@ -1,0 +1,14 @@
+PODS:
+  - DZNSegmentedControl (1.2.2)
+
+DEPENDENCIES:
+  - DZNSegmentedControl (from `../DZNSegmentedControl.podspec`)
+
+EXTERNAL SOURCES:
+  DZNSegmentedControl:
+    :path: ../DZNSegmentedControl.podspec
+
+SPEC CHECKSUMS:
+  DZNSegmentedControl: 46701d4434f43b45354634ed2989a4b21965e2de
+
+COCOAPODS: 0.35.0
