@@ -136,17 +136,18 @@
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
-    if (!newSuperview) {
-        return;
-    }
-    
     [super willMoveToSuperview:newSuperview];
     
-    [self layoutIfNeeded];
+    // Only lay out its subviews if a superview is available
+    if (newSuperview) {
+        [self layoutIfNeeded];
+    }
 }
 
 - (void)didMoveToWindow
 {
+    [super didMoveToWindow];
+    
     if (!self.backgroundColor) {
         self.backgroundColor = [UIColor whiteColor];
     }
@@ -158,6 +159,7 @@
 
 - (void)layoutIfNeeded
 {
+    // Only lay out its subviews if a superview is available
     if (!self.superview) {
         return;
     }
