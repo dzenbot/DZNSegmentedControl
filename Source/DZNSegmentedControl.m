@@ -35,6 +35,7 @@
     _selectionIndicatorHeight = 2.0f;
     _animationDuration = 0.2;
     _autoAdjustSelectionIndicatorWidth = YES;
+    _adjustsButtonTopInset = YES;
     _font = [UIFont systemFontOfSize:15.0f];
 
     _selectionIndicator = [UIView new];
@@ -120,8 +121,13 @@
                                  self.bounds.size.height);
         [button setFrame:rect];
         
-        CGFloat topInset = (self.barPosition > UIBarPositionBottom) ? -4.0f : 4.0f;
-        [button setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, topInset, 0.0f)];
+        if (_adjustsButtonTopInset) {
+            CGFloat topInset = (self.barPosition > UIBarPositionBottom) ? -4.0f : 4.0f;
+            button.titleEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, topInset, 0.0f);
+        }
+        else {
+            button.titleEdgeInsets = UIEdgeInsetsZero;
+        }
         
         if (idx == self.selectedSegmentIndex) {
             button.selected = YES;
@@ -688,6 +694,13 @@
     }
     
     self.hairline.backgroundColor = color;
+}
+
+- (void)setAdjustsButtonTopInset:(BOOL)adjustsButtonTopInset
+{
+    _adjustsButtonTopInset = adjustsButtonTopInset;
+    
+    [self layoutSubviews];
 }
 
 

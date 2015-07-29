@@ -51,6 +51,8 @@
 @property (nonatomic) BOOL showsGroupingSeparators;
 /** YES if the font size should be reduced in order to fit the title string into the segment's width. Default is NO. */
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;
+/** YES if the button top inset should be adjusted based on bar position (top or bottom). Default is YES. */
+@property (nonatomic) BOOL adjustsButtonTopInset;
 
 /** */
 @property (nonatomic, assign) CGPoint scrollOffset;
