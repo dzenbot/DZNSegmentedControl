@@ -18,7 +18,7 @@
 @interface DZNSegmentedControl : UIControl <UIBarPositioning, UIAppearance>
 
 /** The control's delegate object, conforming to the UIBarPositioning protocol. */
-@property (nonatomic, weak) id <DZNSegmentedControlDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <DZNSegmentedControlDelegate> delegate;
 /** The items displayed on the control. */
 @property (nonatomic, retain) NSArray *items;
 /** The index number identifying the selected segment (that is, the last segment touched). */

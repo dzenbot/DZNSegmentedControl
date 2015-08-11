@@ -1,7 +1,6 @@
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-workspace 'Sample.xcworkspace'
 platform :ios, '7.0'
 
 pod 'DZNSegmentedControl', :path => '../DZNSegmentedControl.podspec'
