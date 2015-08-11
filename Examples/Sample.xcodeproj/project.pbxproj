@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4FB285621A75E94C00B573DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285611A75E94C00B573DE /* AppDelegate.m */; };
-		4FB285871A75E9F700B573DE /* TableView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285841A75E9F700B573DE /* TableView-Example.storyboard */; };
 		4FB285881A75E9F700B573DE /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285861A75E9F700B573DE /* TableViewController.m */; };
 		4FB285C51A766CEC00B573DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285C31A766CEC00B573DE /* main.m */; };
 		4FB285C71A766CEC00B573DE /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285C41A766CEC00B573DE /* Storyboard.storyboard */; };
@@ -20,8 +19,9 @@
 		4FB285D71A7671A400B573DE /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285C41A766CEC00B573DE /* Storyboard.storyboard */; };
 		4FB285D81A7671A400B573DE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285C91A766D0300B573DE /* Default-568h@2x.png */; };
 		4FB285DF1A7672FE00B573DE /* ScrollView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285BD1A76671D00B573DE /* ScrollView-Example.storyboard */; };
-		4FB285E01A76730000B573DE /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285BC1A76671D00B573DE /* Info.plist */; };
 		4FB285E11A76730300B573DE /* ScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285C11A76674400B573DE /* ScrollViewController.m */; };
+		4FEFACCB1B7989C700D905B8 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEFACCA1B7989C700D905B8 /* images.xcassets */; };
+		4FEFACCC1B798CA800D905B8 /* TableView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285841A75E9F700B573DE /* TableView-Example.storyboard */; };
 		C46F97D4245BDD7548E1F345 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 336F7DD8CF855E383EFF085A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +42,7 @@
 		4FB285C41A766CEC00B573DE /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard.storyboard; path = "Supporting Files/Storyboard.storyboard"; sourceTree = "<group>"; };
 		4FB285C91A766D0300B573DE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Supporting Files/Default-568h@2x.png"; sourceTree = "<group>"; };
 		4FB285DD1A7671A400B573DE /* TableView-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TableView-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FEFACCA1B7989C700D905B8 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		6D1B7A53DF3E7887603E7DB1 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		EBC31919615717889044CEB4 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,6 +112,7 @@
 				4FB285C31A766CEC00B573DE /* main.m */,
 				4FB285C41A766CEC00B573DE /* Storyboard.storyboard */,
 				4FB285C91A766D0300B573DE /* Default-568h@2x.png */,
+				4FEFACCA1B7989C700D905B8 /* images.xcassets */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -209,7 +211,7 @@
 		4FB285511A75E94C00B573DE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "DZN Labs";
 				TargetAttributes = {
 					4FB285581A75E94C00B573DE = {
@@ -241,9 +243,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FB285871A75E9F700B573DE /* TableView-Example.storyboard in Resources */,
+				4FEFACCB1B7989C700D905B8 /* images.xcassets in Resources */,
 				4FB285C71A766CEC00B573DE /* Storyboard.storyboard in Resources */,
 				4FB285CA1A766D0300B573DE /* Default-568h@2x.png in Resources */,
+				4FEFACCC1B798CA800D905B8 /* TableView-Example.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,7 +256,6 @@
 			files = (
 				4FB285D71A7671A400B573DE /* Storyboard.storyboard in Resources */,
 				4FB285D81A7671A400B573DE /* Default-568h@2x.png in Resources */,
-				4FB285E01A76730000B573DE /* Info.plist in Resources */,
 				4FB285DF1A7672FE00B573DE /* ScrollView-Example.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

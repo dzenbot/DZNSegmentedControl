@@ -60,7 +60,7 @@
 /**
  Initializes and returns a segmented control with segments having the given titles or images.
  The returned segmented control is automatically sized to fit its content within the width of its superview.
- If items is nil, the control will still be created but expecting titles and counts to be assigned.
+ If items is nil, the control will still be created but expecting titles and counts or images to be assigned.
  
  @params items An array of NSString objects only.
  @returns A DZNSegmentedControl object or nil if there was a problem in initializing the object.
@@ -77,6 +77,7 @@
 
 /**
  Sets the title of a segment.
+ A segment can only have an image or a title; it can’t have both. There is no default title.
  
  @param title A string to display in the segment as its title.
  @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
@@ -98,6 +99,15 @@
  @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
  */
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ Sets the content of a segment to a given image.
+ A segment can only have an image or a title; it can’t have both. There is no default image.
+
+ @param image An image object to display in the segment.
+ @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
+ */
+- (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment;
 
 /**
  Enables the specified segment.

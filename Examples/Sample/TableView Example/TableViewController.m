@@ -9,7 +9,9 @@
 #import "TableViewController.h"
 #import "DZNSegmentedControl.h"
 
-#define DEBUG_APPERANCE     NO
+#define DEBUG_APPERANCE     0
+#define DEBUG_IMAGE         0
+
 #define kBakgroundColor     [UIColor colorWithRed:0/255.0 green:87/255.0 blue:173/255.0 alpha:1.0]
 #define kTintColor          [UIColor colorWithRed:20/255.0 green:200/255.0 blue:255/255.0 alpha:1.0]
 #define kHairlineColor      [UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0]
@@ -51,7 +53,11 @@
 {
     [super viewDidLoad];
     
+#if DEBUG_IMAGE
+    _menuItems = @[[UIImage imageNamed:@"icn_clock"], [UIImage imageNamed:@"icn_emoji"], [UIImage imageNamed:@"icn_gift"]];
+#else
     _menuItems = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
+#endif
     
     self.tableView.tableHeaderView = self.control;
     self.tableView.tableFooterView = [UIView new];
@@ -80,20 +86,20 @@
         _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
-        _control.bouncySelectionIndicator = YES;
-        _control.height = 64.0f;
+        _control.bouncySelectionIndicator = NO;
+        _control.height = 60.0f;
         
-        //        _control.height = 120.0f;
-        //        _control.width = 300.0f;
-        //        _control.showsGroupingSeparators = YES;
-        //        _control.inverseTitles = YES;
-        //        _control.backgroundColor = [UIColor lightGrayColor];
-        //        _control.tintColor = [UIColor purpleColor];
-        //        _control.hairlineColor = [UIColor purpleColor];
-        //        _control.showsCount = NO;
-        //        _control.autoAdjustSelectionIndicatorWidth = NO;
-        //        _control.selectionIndicatorHeight = _control.intrinsicContentSize.height;
-        //        _control.adjustsFontSizeToFitWidth = YES;
+//                _control.height = 120.0f;
+//                _control.width = 300.0f;
+//                _control.showsGroupingSeparators = YES;
+//                _control.inverseTitles = YES;
+//                _control.backgroundColor = [UIColor lightGrayColor];
+//                _control.tintColor = [UIColor purpleColor];
+//                _control.hairlineColor = [UIColor purpleColor];
+//                _control.showsCount = NO;
+//                _control.autoAdjustSelectionIndicatorWidth = NO;
+//                _control.selectionIndicatorHeight = 4.0;
+//                _control.adjustsFontSizeToFitWidth = YES;
         
         [_control addTarget:self action:@selector(didChangeSegment:) forControlEvents:UIControlEventValueChanged];
     }
@@ -123,8 +129,11 @@
         cell.textLabel.textColor = [UIColor darkGrayColor];
     }
     
+#if DEBUG_IMAGE
+    cell.textLabel.text = [NSString stringWithFormat:@"cell #%d", (int)indexPath.row+1];
+#else
     cell.textLabel.text = [NSString stringWithFormat:@"%@ #%d", [[self.control titleForSegmentAtIndex:self.control.selectedSegmentIndex] capitalizedString], (int)indexPath.row+1];
-    
+#endif
     return cell;
 }
 
@@ -153,8 +162,13 @@
 {
     NSUInteger newSegment = self.control.numberOfSegments;
     
-    [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:self.control.numberOfSegments];
+#if DEBUG_IMAGE
+    [self.control setImage:[UIImage imageNamed:@"icn_clock"] forSegmentAtIndex:newSegment];
+#else
+    [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:newSegment];
     [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:newSegment];
+#endif
+    
 }
 
 - (void)refreshSegments:(id)sender
