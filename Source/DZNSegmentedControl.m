@@ -17,8 +17,10 @@
 @property (nonatomic, strong) UIView *hairline;
 @property (nonatomic, strong) NSMutableDictionary *colors;
 @property (nonatomic, strong) NSMutableArray *counts; // of NSNumber
-@property (nonatomic, getter = isTransitioning) BOOL transitioning;
 
+@property (nonatomic, assign) CGPoint scrollOffset;
+
+@property (nonatomic, getter = isTransitioning) BOOL transitioning;
 @property (nonatomic, getter = isImageMode) BOOL imageMode; // Default NO
 
 @end
@@ -462,22 +464,33 @@
     _barPosition = [delegate positionForBar:self];
 }
 
-- (void)setScrollOffset:(CGPoint)scrollOffset
+- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
 {
-    _scrollOffset = scrollOffset;
-    
     self.autoAdjustSelectionIndicatorWidth = NO;
     self.bouncySelectionIndicator = NO;
     
-    CGFloat offset = scrollOffset.x/self.width;
-    NSUInteger index = (NSUInteger)offset;
+    CGFloat offset = 0.0;
+    
+    // Horizontal scroll
+    if (self.scrollOffset.x != scrollOffset.x) {
+        offset = scrollOffset.x/(contentSize.width/self.numberOfSegments);
+    }
+    // Vertical scroll
+    else if (self.scrollOffset.y != scrollOffset.y) {
+        offset = scrollOffset.y/(contentSize.height/self.numberOfSegments);
+    }
+    // Skip
+    else {
+        return;
+    }
     
     CGFloat buttonWidth = roundf(self.width/self.numberOfSegments);
-    CGFloat originX = buttonWidth * offset;
     
     CGRect indicatorRect = self.selectionIndicator.frame;
-    indicatorRect.origin.x = originX;
+    indicatorRect.origin.x = (buttonWidth * offset);
     self.selectionIndicator.frame = indicatorRect;
+    
+    NSUInteger index = (NSUInteger)offset;
     
     if (offset == truncf(offset) && self.selectedSegmentIndex != index) {
         
@@ -488,6 +501,8 @@
         
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
+    
+    _scrollOffset = scrollOffset;
 }
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment

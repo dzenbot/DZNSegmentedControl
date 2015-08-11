@@ -31,8 +31,11 @@
     self.segmentedControl.items = @[@"Page #1", @"Page #2", @"Page #3"];
     self.segmentedControl.showsCount = NO;
     self.segmentedControl.autoAdjustSelectionIndicatorWidth = NO;
+    self.segmentedControl.height = 30;
     
     self.scrollView.segmentedControl = self.segmentedControl;
+    self.scrollView.scrollDirection = DZNScrollDirectionVertical;
+    self.scrollView.scrollOnSegmentChange = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -66,25 +69,47 @@
     self.scrollView.frame = [UIScreen mainScreen].bounds;
     self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     
-    __block CGFloat originX = 0.0;
+    __block CGFloat offsetValue = 0.0;
+    __block CGSize contentSize = CGSizeZero;
+
+    if (self.scrollView.scrollDirection == DZNScrollDirectionHorizontal) {
+        [self.segmentedControl.items enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL *stop) {
+            CGRect frame = [UIScreen mainScreen].bounds;
+            frame.origin.x = offsetValue;
+            
+            [self addLabel:idx withFrame:frame];
+            
+            offsetValue += CGRectGetWidth(frame);
+        }];
+        
+        contentSize = CGSizeMake(offsetValue, self.scrollView.frame.size.height);
+    }
+    else {
+        [self.segmentedControl.items enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL *stop) {
+            CGRect frame = [UIScreen mainScreen].bounds;
+            frame.origin.y = offsetValue;
+            
+            [self addLabel:idx withFrame:frame];
+            
+            offsetValue += CGRectGetHeight(frame);
+        }];
+        
+        contentSize = CGSizeMake(self.scrollView.frame.size.width, offsetValue);
+    }
     
-    [self.segmentedControl.items enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL *stop) {
-        CGRect frame = [UIScreen mainScreen].bounds;
-        frame.origin.x = originX;
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:frame];
-        label.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        label.backgroundColor = (idx%2 == 0) ? [UIColor redColor] : [UIColor blueColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont systemFontOfSize:40];
-        label.text = name;
-        
-        [self.scrollView addSubview:label];
-        
-        originX += CGRectGetWidth(frame);
-    }];
+    self.scrollView.contentSize = contentSize;
+}
+
+- (void)addLabel:(NSInteger)idx withFrame:(CGRect)frame
+{
+    UILabel *label = [[UILabel alloc] initWithFrame:frame];
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    label.backgroundColor = (idx%2 == 0) ? [UIColor redColor] : [UIColor blueColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:40];
+    label.text = self.segmentedControl.items[idx];
     
-    self.scrollView.contentSize = CGSizeMake(originX, self.scrollView.frame.size.height);
+    [self.scrollView addSubview:label];
 }
 
 

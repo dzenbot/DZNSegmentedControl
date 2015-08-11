@@ -55,7 +55,7 @@
 @property (nonatomic) BOOL adjustsButtonTopInset;
 
 /** */
-@property (nonatomic, assign) CGPoint scrollOffset;
+- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize;
 
 /**
  Initializes and returns a segmented control with segments having the given titles or images.
