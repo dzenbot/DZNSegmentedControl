@@ -12,13 +12,18 @@
 
 @protocol DZNSegmentedControlDelegate;
 
+enum {
+    // segment index for no selected segment
+    DZNSegmentedControlNoSegment = -1
+};
+
 /**
  A drop-in replacement for UISegmentedControl showing multiple segment counts, to be used typically on a user profile.
  */
 @interface DZNSegmentedControl : UIControl <UIBarPositioning, UIAppearance>
 
 /** The control's delegate object, conforming to the UIBarPositioning protocol. */
-@property (nonatomic, weak) id <DZNSegmentedControlDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <DZNSegmentedControlDelegate> delegate;
 /** The items displayed on the control. */
 @property (nonatomic, retain) NSArray *items;
 /** The index number identifying the selected segment (that is, the last segment touched). */
@@ -54,18 +59,23 @@
 /** YES if the button top inset should be adjusted based on bar position (top or bottom). Default is YES. */
 @property (nonatomic) BOOL adjustsButtonTopInset;
 
-/** */
-@property (nonatomic, assign) CGPoint scrollOffset;
-
 /**
  Initializes and returns a segmented control with segments having the given titles or images.
  The returned segmented control is automatically sized to fit its content within the width of its superview.
- If items is nil, the control will still be created but expecting titles and counts to be assigned.
+ If items is nil, the control will still be created but expecting titles and counts or images to be assigned.
  
  @params items An array of NSString objects only.
  @returns A DZNSegmentedControl object or nil if there was a problem in initializing the object.
  */
 - (instancetype)initWithItems:(NSArray *)items;
+
+/**
+ Sets the selected segment index programatically, optionally animated.
+ 
+ @param segment The new segment to select.
+ @param animated YES if the selection should animate the selection indicator's position.
+ */
+- (void)setSelectedSegmentIndex:(NSInteger)segment animated:(BOOL)animated;
 
 /**
  Sets the tint color of a segment.
@@ -77,6 +87,7 @@
 
 /**
  Sets the title of a segment.
+ A segment can only have an image or a title; it can’t have both. There is no default title.
  
  @param title A string to display in the segment as its title.
  @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
@@ -100,12 +111,30 @@
 - (void)setCount:(NSNumber *)count forSegmentAtIndex:(NSUInteger)segment;
 
 /**
+ Sets the content of a segment to a given image.
+ A segment can only have an image or a title; it can’t have both. There is no default image.
+
+ @param image An image object to display in the segment.
+ @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
+ */
+- (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment;
+
+/**
  Enables the specified segment.
  
  @param enabled YES to enable the specified segment or NO to disable the segment. By default, segments are enabled.
  @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
  */
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ Sets a contentOffset and contentSize to enable scrollView tracking.
+ To be used in combination with UIScrollView+DZNSegmentedControl.
+ 
+ @param scrollOffset The tracking scrollView's contentOffset
+ @param contentSize The tracking scrollView's contentSize
+ */
+- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize;
 
 /**
  Returns the title of the specified segment.

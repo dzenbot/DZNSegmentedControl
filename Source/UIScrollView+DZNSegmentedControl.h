@@ -10,10 +10,22 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, DZNScrollDirection) {
+    DZNScrollDirectionHorizontal,
+    DZNScrollDirectionVertical
+};
+
 @class DZNSegmentedControl;
 
 @interface UIScrollView (DZNSegmentedControl)
 
+/** The scrolling direction of the scrollView. Default is Horizontal. */
+@property (nonatomic) DZNScrollDirection scrollDirection;
+
+/** YES if the scrollview should scroll automatically when a segment changes. Default is YES. */
+@property (nonatomic) BOOL scrollOnSegmentChange;
+
+/** The scrollView reference to observe the content offset updates and interact with. */
 @property (nonatomic, weak) DZNSegmentedControl *segmentedControl;
 
 @end

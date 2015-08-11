@@ -13,6 +13,9 @@
 #import <objc/runtime.h>
 
 const char * segmentedControlKey;
+const char * scrollDirectionKey;
+const char * scrollOnSegmentChangeKey;
+
 const char * observerContext;
 
 static NSString *contentOffsetKey = @"contentOffset";
@@ -25,6 +28,16 @@ static NSString *contentOffsetKey = @"contentOffset";
 - (DZNSegmentedControl *)segmentedControl
 {
     return objc_getAssociatedObject(self, &segmentedControlKey);
+}
+
+- (DZNScrollDirection)scrollDirection
+{
+    return [objc_getAssociatedObject(self, &scrollDirectionKey) integerValue];
+}
+
+- (BOOL)scrollOnSegmentChange
+{
+    return [objc_getAssociatedObject(self, &scrollOnSegmentChangeKey) boolValue];
 }
 
 
@@ -42,6 +55,18 @@ static NSString *contentOffsetKey = @"contentOffset";
         [self removeObserver:self forKeyPath:contentOffsetKey context:&observerContext];
         [segmentedControl removeTarget:self action:@selector(dzn_didChangeSegement:) forControlEvents:UIControlEventValueChanged];
     }
+    
+    self.scrollOnSegmentChange = YES;
+}
+
+- (void)setScrollDirection:(DZNScrollDirection)scrollDirection
+{
+    objc_setAssociatedObject(self, &scrollDirectionKey, @(scrollDirection), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)setScrollOnSegmentChange:(BOOL)scrollOnSegmentChange
+{
+    objc_setAssociatedObject(self, &scrollOnSegmentChangeKey, @(scrollOnSegmentChange), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 
@@ -49,10 +74,24 @@ static NSString *contentOffsetKey = @"contentOffset";
 
 - (void)dzn_didChangeSegement:(id)sender
 {
-    NSInteger index = self.segmentedControl.selectedSegmentIndex;
-    CGFloat pageWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
+    if (!self.scrollOnSegmentChange) {
+        return;
+    }
     
-    [self setContentOffset:CGPointMake(pageWidth*index, 0.0) animated:YES];
+    NSInteger index = self.segmentedControl.selectedSegmentIndex;
+    
+    CGPoint offset = CGPointZero;
+    
+    if (self.scrollDirection == DZNScrollDirectionHorizontal) {
+        CGFloat pageWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
+        offset.x = pageWidth*index;
+    }
+    else {
+        CGFloat pageHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
+        offset.y = pageHeight*index;
+    }
+    
+    [self setContentOffset:offset animated:YES];
 }
 
 
@@ -65,7 +104,7 @@ static NSString *contentOffsetKey = @"contentOffset";
         CGPoint contentOffset = [change[NSKeyValueChangeNewKey] CGPointValue];
         
         if (self.isDragging || self.isDecelerating) {
-            self.segmentedControl.scrollOffset = contentOffset;
+            [self.segmentedControl setScrollOffset:contentOffset contentSize:self.contentSize];
         }
     }
 }
