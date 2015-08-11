@@ -30,7 +30,7 @@
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <action selector="didChangeSegment:" destination="6lh-Md-jCk" eventType="valueChanged" id="dUz-6i-sIL"/>
+                                    <action selector="didChangeSegment:" destination="6lh-Md-jCk" eventType="valueChanged" id="kbp-DM-CyC"/>
                                     <outlet property="delegate" destination="6lh-Md-jCk" id="DRH-M4-Htz"/>
                                 </connections>
                             </view>

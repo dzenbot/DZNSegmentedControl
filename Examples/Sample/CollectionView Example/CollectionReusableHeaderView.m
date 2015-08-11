@@ -39,7 +39,7 @@
 {
     if (!_backgroundView) {
         _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
-        _backgroundView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        _backgroundView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
     }
     return _backgroundView;
 }

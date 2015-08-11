@@ -10,11 +10,6 @@
 
 @interface CollectionViewLayout : UICollectionViewFlowLayout
 
-@property (nonatomic) CGFloat cellHeight;
-@property (nonatomic) CGFloat headerHeight;
-
-@property (nonatomic) NSUInteger columnCount;
-
 + (instancetype)layoutFittingWidth:(CGFloat)width columnCount:(NSUInteger)columnCount;
 
 @end

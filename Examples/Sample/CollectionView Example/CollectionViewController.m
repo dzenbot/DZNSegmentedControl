@@ -12,10 +12,12 @@
 #import "CollectionViewCell.h"
 #import "CollectionReusableHeaderView.h"
 
+#import "UICollectionView+SupplementaryElementScrolling.h"
+
 static NSString *kCellViewIdentifier = @"cellIdentifier";
 static NSString *kHeaderViewIdentifier = @"headerIdentifier";
 
-static NSUInteger kSectionCount = 8;
+static NSUInteger kSectionCount = 9;
 
 @interface CollectionViewController ()
 @end
@@ -38,14 +40,11 @@ static NSUInteger kSectionCount = 8;
     
     self.segmentedControl.items = items;
     self.segmentedControl.delegate = self;
-    self.segmentedControl.selectedSegmentIndex = 0;
     self.segmentedControl.bouncySelectionIndicator = NO;
     self.segmentedControl.backgroundColor = [UIColor whiteColor];
     self.segmentedControl.tintColor = [UIColor colorWithRed:42/255.0 green:178/255.0 blue:123/255.0 alpha:1.0];
     self.segmentedControl.selectionIndicatorHeight = 4.0;
-    
-    self.collectionView.segmentedControl = self.segmentedControl;
-    self.collectionView.scrollDirection = DZNScrollDirectionVertical;
+
     
     [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:kCellViewIdentifier];
     [self.collectionView registerClass:[CollectionReusableHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewIdentifier];
@@ -77,6 +76,11 @@ static NSUInteger kSectionCount = 8;
 - (IBAction)didChangeSegment:(id)sender
 {
     // Do something
+    NSLog(@"%s",__FUNCTION__);
+    
+    NSInteger section = self.segmentedControl.selectedSegmentIndex;
+    
+    [self.collectionView scrollToSection:section forSupplementaryElementOfKind:UICollectionElementKindSectionHeader animated:YES];
 }
 
 
@@ -92,7 +96,7 @@ static NSUInteger kSectionCount = 8;
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 10;
+    return kSectionCount;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -118,10 +122,30 @@ static NSUInteger kSectionCount = 8;
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     CollectionReusableHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewIdentifier forIndexPath:indexPath];
-    header.titleLabel.text = @"Section Title";
+    header.titleLabel.text = [NSString stringWithFormat:@"Section Title %ld", indexPath.section+1];
     
     return header;
 }
 
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSUInteger section = [self.collectionView sectionForVisibleSupplementaryElementOfKind:UICollectionElementKindSectionHeader];
+    
+    if (section != NSNotFound && (scrollView.isDecelerating || scrollView.isDragging)) {
+        [self.segmentedControl setSelectedSegmentIndex:section animated:YES];
+    }
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
+{
+    NSUInteger section = [self.collectionView sectionForVisibleSupplementaryElementOfKind:UICollectionElementKindSectionHeader];
+    
+    if (section != NSNotFound) {
+        [self.segmentedControl setSelectedSegmentIndex:section animated:YES];
+    }
+}
 
 @end

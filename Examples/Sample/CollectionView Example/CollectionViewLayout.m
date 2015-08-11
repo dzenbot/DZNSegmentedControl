@@ -10,8 +10,6 @@
 #import "CollectionReusableHeaderView.h"
 
 @interface CollectionViewLayout ()
-@property (nonatomic, strong) NSMutableArray *itemAttributes;
-@property (nonatomic) CGSize contentSize;
 @end
 
 @implementation CollectionViewLayout
@@ -42,10 +40,6 @@
     
     CGFloat cellHeight = roundf(width/columnCount);
     
-    self.columnCount = columnCount;
-    self.cellHeight = cellHeight;
-    self.headerHeight = [CollectionReusableHeaderView height];
-    
     self.itemSize = CGSizeMake(cellHeight, cellHeight);
     self.headerReferenceSize = CGSizeMake(width, cellHeight);
 }
@@ -61,102 +55,81 @@
 
 #pragma mark - UICollectionViewLayout Methods
 
-//- (void)prepareLayout
-//{
-//    _itemAttributes = nil;
-//    _itemAttributes = [[NSMutableArray alloc] init];
-//    
-//    NSUInteger numberOfSections = [self.collectionView numberOfSections];
-//    BOOL enableHeader = (numberOfSections > 1) ? YES : NO;
-//    
-//    CGFloat cellHeight = self.cellHeight;
-//    CGFloat headerHeight = self.headerHeight;
-//    CGFloat lineSepacing = self.minimumLineSpacing;
-//    NSUInteger columnCount = self.columnCount;
-//    
-//    CGFloat contentWidth = self.collectionView.bounds.size.width;
-//    CGFloat contentHeight = 0;
-//    
-//    NSUInteger row = 0.0;
-//    NSUInteger column = 0.0;
-//    CGFloat xOffset = 0.0;
-//    CGFloat yOffset = enableHeader ? headerHeight : 0.0;
-//    
-//    for (int sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++)
-//    {
-//        NSUInteger numberOfItems = [self.collectionView numberOfItemsInSection:sectionIndex];
-//        
-//        for (int rowIndex = 0; rowIndex < numberOfItems; rowIndex++)
-//        {
-//            if (rowIndex > 0 && (rowIndex%(columnCount)) == 0) {
-//                row++;
-//                column = 0;
-//                
-//                xOffset = 0;
-//                yOffset += cellHeight;
-//                
-//                if (row > 0) yOffset+=lineSepacing;
-//                column++;
-//            }
-//            else {
-//                xOffset = cellHeight*column;
-//                column++;
-//            }
-//            
-//            CGFloat itemWidth = cellHeight;
-//            if (column > 0 && column < columnCount) itemWidth = cellHeight-lineSepacing;
-//            
-//            // Create the actual UICollectionViewLayoutAttributes and add it to your array. We'll use this later in layoutAttributesForItemAtIndexPath:
-//            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:rowIndex inSection:sectionIndex];
-//            UICollectionViewLayoutAttributes *itemAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-//            itemAttributes.frame = CGRectIntegral(CGRectMake(xOffset, yOffset, itemWidth, cellHeight));
-//            [self.itemAttributes addObject:itemAttributes];
-//        }
-//        
-//        if (enableHeader) {
-//            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:sectionIndex];
-//            UICollectionViewLayoutAttributes *headerAttribute = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:indexPath];
-//            headerAttribute.frame = CGRectIntegral(CGRectMake(0, contentHeight, self.collectionView.bounds.size.width, headerHeight));
-//            [self.itemAttributes addObject:headerAttribute];
-//        }
-//        
-//        contentHeight += (cellHeight*(row+lineSepacing))+(row+lineSepacing);
-//        
-//        if (enableHeader) {
-//            contentHeight += headerHeight-lineSepacing;
-//            yOffset += headerHeight-lineSepacing;
-//        }
-//        
-//        yOffset += cellHeight+lineSepacing;
-//        xOffset = 0;
-//        column = 0;
-//        row = 0;
-//    }
-//    
-////    if (contentHeight < self.collectionView.bounds.size.height) {
-////        contentHeight = self.collectionView.bounds.size.height+1;
-////    }
-//    
-//    // Return this in collectionViewContentSize
-//    _contentSize = CGSizeMake(contentWidth, contentHeight);
-//}
-//
-//- (CGSize)collectionViewContentSize
-//{
-//    return self.contentSize;
-//}
-//
-//- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return [self.itemAttributes objectAtIndex:indexPath.row];
-//}
-//
-//- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
-//{
-//    return [self.itemAttributes filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(UICollectionViewLayoutAttributes *evaluatedObject, NSDictionary *bindings) {
-//        return CGRectIntersectsRect(rect, [evaluatedObject frame]);
-//    }]];
-//}
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
+{
+    NSMutableArray *visibleLayoutAttributes = [[super layoutAttributesForElementsInRect:rect] mutableCopy];
+    
+    UICollectionView * const cv = self.collectionView;
+    CGPoint const contentOffset = cv.contentOffset;
+    
+    NSMutableIndexSet *missingSections = [NSMutableIndexSet indexSet];
+    
+    for (UICollectionViewLayoutAttributes *layoutAttributes in visibleLayoutAttributes) {
+        if (layoutAttributes.representedElementCategory == UICollectionElementCategoryCell) {
+            [missingSections addIndex:layoutAttributes.indexPath.section];
+        }
+    }
+    
+    for (UICollectionViewLayoutAttributes *layoutAttributes in visibleLayoutAttributes) {
+        if ([layoutAttributes.representedElementKind isEqualToString:UICollectionElementKindSectionHeader]) {
+            [missingSections removeIndex:layoutAttributes.indexPath.section];
+        }
+    }
+    
+    [missingSections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:idx];
+        UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath];
+        [visibleLayoutAttributes addObject:layoutAttributes];
+    }];
+    
+    for (UICollectionViewLayoutAttributes *layoutAttributes in visibleLayoutAttributes) {
+        
+        if ([layoutAttributes.representedElementKind isEqualToString:UICollectionElementKindSectionHeader]) {
+            
+            NSInteger section = layoutAttributes.indexPath.section;
+            NSInteger numberOfItemsInSection = [cv numberOfItemsInSection:section];
+            
+            NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
+            NSIndexPath *lastObjectIndexPath = [NSIndexPath indexPathForItem:MAX(0, (numberOfItemsInSection - 1)) inSection:section];
+            
+            BOOL isCell = NO;
+            
+            UICollectionViewLayoutAttributes *firstObjectAttrs;
+            UICollectionViewLayoutAttributes *lastObjectAttrs;
+            
+            if (numberOfItemsInSection > 0) { // use cell data if items exist
+                isCell = YES;
+                firstObjectAttrs = [self layoutAttributesForItemAtIndexPath:firstObjectIndexPath];
+                lastObjectAttrs = [self layoutAttributesForItemAtIndexPath:lastObjectIndexPath];
+            }
+            else { // else use the header and footer
+                firstObjectAttrs = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:firstObjectIndexPath];
+                lastObjectAttrs = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:lastObjectIndexPath];
+            }
+            
+            CGFloat topHeaderHeight = (isCell) ? CGRectGetHeight(layoutAttributes.frame) : 0.0;
+            CGFloat bottomHeaderHeight = CGRectGetHeight(layoutAttributes.frame);
+            CGRect frameWithEdgeInsets = UIEdgeInsetsInsetRect(layoutAttributes.frame,
+                                                               cv.contentInset);
+            
+            CGPoint origin = frameWithEdgeInsets.origin;
+            
+            origin.y = MIN(MAX(contentOffset.y + cv.contentInset.top, (CGRectGetMinY(firstObjectAttrs.frame) - topHeaderHeight)),
+                           (CGRectGetMaxY(lastObjectAttrs.frame) - bottomHeaderHeight));
+            
+            layoutAttributes.zIndex = 1024;
+            layoutAttributes.frame = (CGRect){
+                .origin = origin,
+                .size = layoutAttributes.frame.size
+            };
+            
+        }
+        
+    }
+    
+    return visibleLayoutAttributes;
+    
+}
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
