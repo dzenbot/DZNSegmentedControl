@@ -12,6 +12,11 @@
 
 @protocol DZNSegmentedControlDelegate;
 
+enum {
+    // segment index for no selected segment
+    DZNSegmentedControlNoSegment = -1
+};
+
 /**
  A drop-in replacement for UISegmentedControl showing multiple segment counts, to be used typically on a user profile.
  */
@@ -54,9 +59,6 @@
 /** YES if the button top inset should be adjusted based on bar position (top or bottom). Default is YES. */
 @property (nonatomic) BOOL adjustsButtonTopInset;
 
-/** */
-- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize;
-
 /**
  Initializes and returns a segmented control with segments having the given titles or images.
  The returned segmented control is automatically sized to fit its content within the width of its superview.
@@ -66,6 +68,14 @@
  @returns A DZNSegmentedControl object or nil if there was a problem in initializing the object.
  */
 - (instancetype)initWithItems:(NSArray *)items;
+
+/**
+ Sets the selected segment index programatically, optionally animated.
+ 
+ @param segment The new segment to select.
+ @param animated YES if the selection should animate the selection indicator's position.
+ */
+- (void)setSelectedSegmentIndex:(NSInteger)segment animated:(BOOL)animated;
 
 /**
  Sets the tint color of a segment.
@@ -116,6 +126,15 @@
  @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
  */
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ Sets a contentOffset and contentSize to enable scrollView tracking.
+ To be used in combination with UIScrollView+DZNSegmentedControl.
+ 
+ @param scrollOffset The tracking scrollView's contentOffset
+ @param contentSize The tracking scrollView's contentSize
+ */
+- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize;
 
 /**
  Returns the title of the specified segment.

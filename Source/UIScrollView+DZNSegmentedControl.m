@@ -99,7 +99,7 @@ static NSString *contentOffsetKey = @"contentOffset";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:contentOffsetKey] && context == &observerContext)
+    if ([keyPath isEqualToString:contentOffsetKey] && context == &observerContext && self.pagingEnabled)
     {
         CGPoint contentOffset = [change[NSKeyValueChangeNewKey] CGPointValue];
         

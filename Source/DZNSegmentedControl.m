@@ -507,11 +507,51 @@
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment
 {
-    if (segment > self.numberOfSegments-1) {
-        segment = 0;
+    [self setSelectedSegmentIndex:segment animated:NO];
+}
+
+- (void)setSelectedSegmentIndex:(NSInteger)segment animated:(BOOL)animated
+{
+    if (self.selectedSegmentIndex == segment || self.isTransitioning) {
+        return;
     }
     
-    [self setSelected:YES forSegmentAtIndex:segment];
+    [self disableAllButtonsSelection];
+    [self enableAllButtonsInteraction:NO];
+    
+    CGFloat duration = (self.selectedSegmentIndex < 0.0f) ? 0.0f : self.animationDuration;
+    
+    _selectedSegmentIndex = segment;
+    _transitioning = YES;
+    
+    UIButton *button = [self buttonAtIndex:segment];
+    
+    void (^animations)() = ^void(){
+        self.selectionIndicator.frame = [self selectionIndicatorRect];
+    };
+    
+    void (^completion)(BOOL finished) = ^void(BOOL finished){
+        [self enableAllButtonsInteraction:YES];
+        button.userInteractionEnabled = NO;
+        _transitioning = NO;
+    };
+    
+    if (animated) {
+        CGFloat damping = !self.bouncySelectionIndicator ? : 0.65f;
+        CGFloat velocity = !self.bouncySelectionIndicator ? : 0.5f;
+        
+        [UIView animateWithDuration:duration
+                              delay:0.0f
+             usingSpringWithDamping:damping
+              initialSpringVelocity:velocity
+                            options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
+                         animations:animations
+                         completion:completion];
+    }
+    else {
+        animations();
+        completion(NO);
+    }
 }
 
 - (void)setTintColor:(UIColor *)tintColor forSegmentAtIndex:(NSUInteger)segment
@@ -674,42 +714,6 @@
     
     NSString *key = [NSString stringWithFormat:@"UIControlState%d", (int)state];
     [self.colors setObject:color forKey:key];
-}
-
-- (void)setSelected:(BOOL)selected forSegmentAtIndex:(NSUInteger)segment
-{
-    if (self.selectedSegmentIndex == segment || self.isTransitioning) {
-        return;
-    }
-    
-    [self disableAllButtonsSelection];
-    [self enableAllButtonsInteraction:NO];
-    
-    CGFloat duration = (self.selectedSegmentIndex < 0.0f) ? 0.0f : self.animationDuration;
-    
-    _selectedSegmentIndex = segment;
-    _transitioning = YES;
-    
-    UIButton *button = [self buttonAtIndex:segment];
-    
-    CGFloat damping = !self.bouncySelectionIndicator ? : 0.65f;
-    CGFloat velocity = !self.bouncySelectionIndicator ? : 0.5f;
-    
-    [UIView animateWithDuration:duration
-                          delay:0.0f
-         usingSpringWithDamping:damping
-          initialSpringVelocity:velocity
-                        options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.selectionIndicator.frame = [self selectionIndicatorRect];
-                     }
-                     completion:^(BOOL finished) {
-                         [self enableAllButtonsInteraction:YES];
-                         button.userInteractionEnabled = NO;
-                         _transitioning = NO;
-                     }];
-    
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 - (void)setDisplayCount:(BOOL)count
@@ -883,8 +887,11 @@
 {
     UIButton *button = (UIButton *)sender;
     
-    if (!self.isTransitioning) {
-        self.selectedSegmentIndex = button.tag;
+    if (self.selectedSegmentIndex != button.tag && !self.isTransitioning) {
+        
+        [self setSelectedSegmentIndex:button.tag animated:YES];
+        
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }
 
