@@ -791,7 +791,7 @@
         [self addButtonForSegment:i];
     }
     
-    if (self.isImageMode) {
+    if (self.isImageMode || self.window) {
         [self configureSegments];
     }
 }

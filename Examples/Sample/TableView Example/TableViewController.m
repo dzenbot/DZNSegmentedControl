@@ -173,7 +173,17 @@
 
 - (void)refreshSegments:(id)sender
 {
-    [self.control removeAllSegments];
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.menuItems];
+    NSUInteger count = [array count];
+    
+    for (NSUInteger i = 0; i < count; ++i) {
+        // Select a random element between i and end of array to swap with.
+        NSUInteger nElements = count - i;
+        NSUInteger n = (arc4random() % nElements) + i;
+        [array exchangeObjectAtIndex:i withObjectAtIndex:n];
+    }
+    
+    _menuItems = array;
     
     [self.control setItems:self.menuItems];
     [self updateControlCounts];
