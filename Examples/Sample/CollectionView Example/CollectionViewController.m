@@ -75,9 +75,6 @@ static NSUInteger kSectionCount = 9;
 
 - (IBAction)didChangeSegment:(id)sender
 {
-    // Do something
-    NSLog(@"%s",__FUNCTION__);
-    
     NSInteger section = self.segmentedControl.selectedSegmentIndex;
     
     [self.collectionView scrollToSection:section forSupplementaryElementOfKind:UICollectionElementKindSectionHeader animated:YES];
