@@ -33,6 +33,9 @@
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftPadding-[label]|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:metrics views:views]];
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapHeaderView:)];
+    [self addGestureRecognizer:tapGestureRecognizer];
 }
 
 - (UIView *)backgroundView
@@ -61,6 +64,13 @@
 + (CGFloat)height
 {
     return 38.0;
+}
+
+- (void)didTapHeaderView:(id)sender
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(collectionReusableHeaderView:didTapHeader:)]) {
+        [self.delegate collectionReusableHeaderView:self didTapHeader:sender];
+    }
 }
 
 - (void)prepareForReuse

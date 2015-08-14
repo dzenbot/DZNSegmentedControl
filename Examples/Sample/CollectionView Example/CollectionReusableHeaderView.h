@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CollectionReusableHeaderViewDelegate;
+
 @interface CollectionReusableHeaderView : UICollectionReusableView
 
+@property (nonatomic, weak) id<CollectionReusableHeaderViewDelegate>delegate;
 @property (nonatomic, strong) UILabel *titleLabel;
 
 + (CGFloat)height;
 
 @end
+
+@protocol CollectionReusableHeaderViewDelegate <NSObject>
+
+- (void)collectionReusableHeaderView:(CollectionReusableHeaderView *)headerView didTapHeader:(id)sender;
+
+@end
+

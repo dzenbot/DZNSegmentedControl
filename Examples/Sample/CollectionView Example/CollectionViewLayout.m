@@ -18,7 +18,7 @@
 {
     self = [super init];
     if (self) {
-        [self configureFittingWidth:CGRectGetWidth([UIScreen mainScreen].bounds) columnCount:8];
+        [self configureFittingWidth:CGRectGetWidth([UIScreen mainScreen].bounds) columnCount:7];
     }
     return self;
 }
@@ -27,7 +27,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self configureFittingWidth:CGRectGetWidth([UIScreen mainScreen].bounds) columnCount:8];
+        [self configureFittingWidth:CGRectGetWidth([UIScreen mainScreen].bounds) columnCount:7];
     }
     return self;
 }
@@ -38,7 +38,7 @@
     self.minimumInteritemSpacing = 0.0;
     self.minimumLineSpacing = 0.0;
     
-    CGFloat cellHeight = roundf(width/columnCount);
+    CGFloat cellHeight = width/columnCount;
     
     self.itemSize = CGSizeMake(cellHeight, cellHeight);
     self.headerReferenceSize = CGSizeMake(width, cellHeight);
