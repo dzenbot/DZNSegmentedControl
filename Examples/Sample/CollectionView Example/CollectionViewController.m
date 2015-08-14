@@ -19,7 +19,7 @@ static NSString *kHeaderViewIdentifier = @"headerIdentifier";
 
 static NSUInteger kSectionCount = 9;
 
-@interface CollectionViewController ()
+@interface CollectionViewController () <CollectionReusableHeaderViewDelegate>
 @end
 
 @implementation CollectionViewController
@@ -44,7 +44,7 @@ static NSUInteger kSectionCount = 9;
     self.segmentedControl.backgroundColor = [UIColor whiteColor];
     self.segmentedControl.tintColor = [UIColor colorWithRed:42/255.0 green:178/255.0 blue:123/255.0 alpha:1.0];
     self.segmentedControl.selectionIndicatorHeight = 4.0;
-
+    self.segmentedControl.disableSelectedSegment = NO;
     
     [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:kCellViewIdentifier];
     [self.collectionView registerClass:[CollectionReusableHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewIdentifier];
@@ -75,9 +75,6 @@ static NSUInteger kSectionCount = 9;
 
 - (IBAction)didChangeSegment:(id)sender
 {
-    // Do something
-    NSLog(@"%s",__FUNCTION__);
-    
     NSInteger section = self.segmentedControl.selectedSegmentIndex;
     
     [self.collectionView scrollToSection:section forSupplementaryElementOfKind:UICollectionElementKindSectionHeader animated:YES];
@@ -101,7 +98,7 @@ static NSUInteger kSectionCount = 9;
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 50;
+    return arc4random() % 100 + 20;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -123,6 +120,8 @@ static NSUInteger kSectionCount = 9;
 {
     CollectionReusableHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewIdentifier forIndexPath:indexPath];
     header.titleLabel.text = [NSString stringWithFormat:@"Section Title %ld", indexPath.section+1];
+    header.delegate = self;
+    header.tag = indexPath.section;
     
     return header;
 }
@@ -146,6 +145,16 @@ static NSUInteger kSectionCount = 9;
     if (section != NSNotFound) {
         [self.segmentedControl setSelectedSegmentIndex:section animated:YES];
     }
+}
+
+
+#pragma mark - CollectionReusableHeaderViewDelegate
+
+- (void)collectionReusableHeaderView:(CollectionReusableHeaderView *)headerView didTapHeader:(id)sender
+{
+    NSInteger section = self.segmentedControl.selectedSegmentIndex;
+    
+    [self.collectionView scrollToSection:section forSupplementaryElementOfKind:UICollectionElementKindSectionHeader animated:YES];
 }
 
 @end

@@ -78,6 +78,7 @@
     _animationDuration = 0.2;
     _autoAdjustSelectionIndicatorWidth = YES;
     _adjustsButtonTopInset = YES;
+    _disableSelectedSegment = YES;
     _font = [UIFont systemFontOfSize:15.0f];
     
     _selectionIndicator = [UIView new];
@@ -494,7 +495,7 @@
     
     if (offset == truncf(offset) && self.selectedSegmentIndex != index) {
         
-        [self disableAllButtonsSelection];
+        [self unselectAllButtons];
         [self.buttons[index] setSelected:YES];
         
         _selectedSegmentIndex = index;
@@ -516,27 +517,24 @@
         return;
     }
     
-    [self disableAllButtonsSelection];
-    [self enableAllButtonsInteraction:NO];
+    [self unselectAllButtons];
     
-    CGFloat duration = (self.selectedSegmentIndex < 0.0f) ? 0.0f : self.animationDuration;
+    self.userInteractionEnabled = NO;
     
     _selectedSegmentIndex = segment;
     _transitioning = YES;
-    
-    UIButton *button = [self buttonAtIndex:segment];
     
     void (^animations)() = ^void(){
         self.selectionIndicator.frame = [self selectionIndicatorRect];
     };
     
     void (^completion)(BOOL finished) = ^void(BOOL finished){
-        [self enableAllButtonsInteraction:YES];
-        button.userInteractionEnabled = NO;
+        self.userInteractionEnabled = YES;
         _transitioning = NO;
     };
     
     if (animated) {
+        CGFloat duration = (self.selectedSegmentIndex < 0.0f) ? 0.0f : self.animationDuration;
         CGFloat damping = !self.bouncySelectionIndicator ? : 0.65f;
         CGFloat velocity = !self.bouncySelectionIndicator ? : 0.5f;
         
@@ -888,9 +886,10 @@
     UIButton *button = (UIButton *)sender;
     
     if (self.selectedSegmentIndex != button.tag && !self.isTransitioning) {
-        
         [self setSelectedSegmentIndex:button.tag animated:YES];
-        
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
+    else if (!self.disableSelectedSegment) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }
@@ -903,7 +902,7 @@
     button.selected = YES;
 }
 
-- (void)disableAllButtonsSelection
+- (void)unselectAllButtons
 {
     [self.buttons setValue:@NO forKey:@"selected"];
     [self.buttons setValue:@NO forKey:@"highlighted"];

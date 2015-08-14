@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="t6c-oA-kzk">
-                                <rect key="frame" x="0.0" y="64" width="320" height="460"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="526"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewLayout key="collectionViewLayout" id="g1k-dW-42f" customClass="CollectionViewLayout"/>
                                 <cells/>
@@ -37,14 +37,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="XZc-li-rog" firstAttribute="top" secondItem="hKn-en-jrH" secondAttribute="bottom" constant="460" id="8SZ-jI-Z8J"/>
-                            <constraint firstItem="t6c-oA-kzk" firstAttribute="top" secondItem="hKn-en-jrH" secondAttribute="bottom" id="IE5-kd-PLE"/>
-                            <constraint firstItem="XZc-li-rog" firstAttribute="leading" secondItem="Vsl-Bc-VpI" secondAttribute="leading" id="Jd4-kS-VvN"/>
-                            <constraint firstItem="XZc-li-rog" firstAttribute="top" secondItem="t6c-oA-kzk" secondAttribute="bottom" id="MOt-RK-aku"/>
-                            <constraint firstItem="t6c-oA-kzk" firstAttribute="leading" secondItem="XZc-li-rog" secondAttribute="leading" id="m08-R1-fzJ"/>
-                            <constraint firstAttribute="trailing" secondItem="XZc-li-rog" secondAttribute="trailing" id="tkm-kg-yV3"/>
-                            <constraint firstItem="t6c-oA-kzk" firstAttribute="trailing" secondItem="XZc-li-rog" secondAttribute="trailing" id="v1M-Ic-zoq"/>
-                            <constraint firstItem="XZc-li-rog" firstAttribute="bottom" secondItem="NiP-Ou-LQO" secondAttribute="top" id="x0H-eM-KB9"/>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="leading" secondItem="Vsl-Bc-VpI" secondAttribute="leading" id="5O6-v6-xla"/>
+                            <constraint firstItem="XZc-li-rog" firstAttribute="top" secondItem="hKn-en-jrH" secondAttribute="bottom" constant="460" id="7gV-fr-DWN"/>
+                            <constraint firstItem="NiP-Ou-LQO" firstAttribute="top" secondItem="t6c-oA-kzk" secondAttribute="bottom" constant="42" id="NqD-xQ-Drp"/>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="top" secondItem="Vsl-Bc-VpI" secondAttribute="top" id="PgC-De-Q1m"/>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="leading" secondItem="XZc-li-rog" secondAttribute="leading" id="Q0t-6q-IUL"/>
+                            <constraint firstItem="XZc-li-rog" firstAttribute="trailing" secondItem="t6c-oA-kzk" secondAttribute="trailing" id="c92-BM-MOH"/>
+                            <constraint firstItem="XZc-li-rog" firstAttribute="bottom" secondItem="NiP-Ou-LQO" secondAttribute="top" id="ifv-my-CjC"/>
+                            <constraint firstAttribute="trailing" secondItem="XZc-li-rog" secondAttribute="trailing" id="vfi-1k-Geg"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mRP-73-doE"/>
@@ -55,7 +55,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ED-5o-XlR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1521" y="454"/>
+            <point key="canvasLocation" x="1523" y="454"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jIo-lq-cM6">
