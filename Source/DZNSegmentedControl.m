@@ -727,7 +727,7 @@
 
 - (void)setFont:(UIFont *)font
 {
-    if ([self.font.fontName isEqualToString:font.fontName]) {
+    if ( [self.font.fontName isEqualToString:font.fontName] && self.font.pointSize == font.pointSize ) {
         return;
     }
     
