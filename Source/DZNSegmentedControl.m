@@ -429,10 +429,10 @@
     
     id firstItem = [items firstObject];
     
-    NSPredicate *classPredicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", [firstItem class]];
-    NSAssert([items filteredArrayUsingPredicate:classPredicate].count == items.count, @"Cannot include different objects in the array. Please make sure to either pass an array of NSString or UIImage objects.");
-    
     _imageMode = [firstItem isKindOfClass:[UIImage class]];
+    
+    NSPredicate *classPredicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", _imageMode ? [UIImage class] : [NSString class]];
+    NSAssert([items filteredArrayUsingPredicate:classPredicate].count == items.count, @"Cannot include different objects in the array. Please make sure to either pass an array of NSString or UIImage objects.");
     
     _items = [NSArray arrayWithArray:items];
     
@@ -727,7 +727,7 @@
 
 - (void)setFont:(UIFont *)font
 {
-    if ([self.font.fontName isEqualToString:font.fontName]) {
+    if ( [self.font.fontName isEqualToString:font.fontName] && self.font.pointSize == font.pointSize ) {
         return;
     }
     
