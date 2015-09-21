@@ -431,12 +431,17 @@
     
     _imageMode = [firstItem isKindOfClass:[UIImage class]];
     
-    NSPredicate *classPredicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", _imageMode ? [UIImage class] : [NSString class]];
+    Class class = _imageMode ? [UIImage class] : [NSString class];
+    
+    // Consider cases where NSCFConstantString can also be used
+    class = [class isSubclassOfClass:[NSString class]] ? [NSString class] : class;
+    
+    NSPredicate *classPredicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", class];
     NSAssert([items filteredArrayUsingPredicate:classPredicate].count == items.count, @"Cannot include different objects in the array. Please make sure to either pass an array of NSString or UIImage objects.");
     
     _items = [NSArray arrayWithArray:items];
     
-    if (!self.imageMode) {
+    if (!_imageMode) {
         _counts = [NSMutableArray arrayWithCapacity:items.count];
         
         for (int i = 0; i < items.count; i++) {
