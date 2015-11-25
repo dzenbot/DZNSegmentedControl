@@ -125,8 +125,12 @@
     
     [[self buttons] enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL *stop) {
         
-        CGRect rect = CGRectMake(roundf(self.bounds.size.width/self.numberOfSegments)*idx, 0.0f, roundf(self.bounds.size.width/self.numberOfSegments),
-                                 self.bounds.size.height);
+        CGFloat width = self.bounds.size.width / self.numberOfSegments;
+        CGFloat height = self.bounds.size.height;
+        CGFloat x = width*idx;
+
+        CGRect rect = CGRectMake(x, 0.0f, width, height);
+        
         [button setFrame:rect];
         
         if (_adjustsButtonTopInset) {
