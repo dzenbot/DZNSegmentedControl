@@ -7,7 +7,7 @@
 //
 
 #import "TableViewController.h"
-#import "DZNSegmentedControl.h"
+#import "NavigationBar.h"
 
 #define DEBUG_APPERANCE     0
 #define DEBUG_IMAGE         0
@@ -17,7 +17,7 @@
 #define kHairlineColor      [UIColor colorWithRed:0/255.0 green:36/255.0 blue:100/255.0 alpha:1.0]
 
 @interface TableViewController () <DZNSegmentedControlDelegate>
-@property (nonatomic, strong) DZNSegmentedControl *control;
+//@property (nonatomic, strong) DZNSegmentedControl *control;
 @property (nonatomic, strong) NSArray *menuItems;
 @end
 
@@ -46,7 +46,7 @@
     
     self.title = NSStringFromClass([DZNSegmentedControl class]);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addSegment:)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshSegments:)];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshSegments:)];
 }
 
 - (void)viewDidLoad
@@ -59,7 +59,6 @@
     _menuItems = @[[@"Tweets" uppercaseString], [@"Following" uppercaseString], [@"Followers" uppercaseString]];
 #endif
     
-    self.tableView.tableHeaderView = self.control;
     self.tableView.tableFooterView = [UIView new];
 }
 
@@ -69,9 +68,8 @@
     
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.clipsToBounds = YES;
     
-    [self updateControlCounts];
+    [self configureSegmentedControl];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -79,31 +77,17 @@
     [super viewDidAppear:animated];
 }
 
+
+#pragma mark - Getters
+
+- (NavigationBar *)navigationBar
+{
+    return (NavigationBar *)self.navigationController.navigationBar;
+}
+
 - (DZNSegmentedControl *)control
 {
-    if (!_control)
-    {
-        _control = [[DZNSegmentedControl alloc] initWithItems:self.menuItems];
-        _control.delegate = self;
-        _control.selectedSegmentIndex = 1;
-        _control.bouncySelectionIndicator = NO;
-        _control.height = 60.0f;
-        
-//                _control.height = 120.0f;
-//                _control.width = 300.0f;
-//                _control.showsGroupingSeparators = YES;
-//                _control.inverseTitles = YES;
-//                _control.backgroundColor = [UIColor lightGrayColor];
-//                _control.tintColor = [UIColor purpleColor];
-//                _control.hairlineColor = [UIColor purpleColor];
-//                _control.showsCount = NO;
-//                _control.autoAdjustSelectionIndicatorWidth = NO;
-//                _control.selectionIndicatorHeight = 4.0;
-//                _control.adjustsFontSizeToFitWidth = YES;
-        
-        [_control addTarget:self action:@selector(didChangeSegment:) forControlEvents:UIControlEventValueChanged];
-    }
-    return _control;
+    return self.navigationBar.segmentedControl;
 }
 
 
@@ -152,7 +136,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    TableViewController *controller = [[TableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 
@@ -168,7 +153,6 @@
     [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:newSegment];
     [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:newSegment];
 #endif
-    
 }
 
 - (void)refreshSegments:(id)sender
@@ -186,10 +170,34 @@
     _menuItems = array;
     
     [self.control setItems:self.menuItems];
-    [self updateControlCounts];
+    [self updateSegmentedControl];
 }
 
-- (void)updateControlCounts
+- (void)configureSegmentedControl
+{
+    self.control.items = self.menuItems;
+    
+    self.control.delegate = self;
+    self.control.selectedSegmentIndex = 1;
+    self.control.bouncySelectionIndicator = NO;
+    self.control.height = 60.0f;
+    
+    self.control.showsGroupingSeparators = YES;
+    self.control.inverseTitles = YES;
+//    self.control.backgroundColor = [UIColor lightGrayColor];
+//    self.control.tintColor = [UIColor purpleColor];
+//    self.control.hairlineColor = [UIColor purpleColor];
+//    self.control.showsCount = NO;
+//    self.control.autoAdjustSelectionIndicatorWidth = NO;
+//    self.control.selectionIndicatorHeight = 4.0;
+//    self.control.adjustsFontSizeToFitWidth = YES;
+
+    [self.control addTarget:self action:@selector(didChangeSegment:) forControlEvents:UIControlEventValueChanged];
+    
+    [self updateSegmentedControl];
+}
+
+- (void)updateSegmentedControl
 {
     [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:0];
     [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:1];

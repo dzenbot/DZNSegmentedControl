@@ -36,6 +36,7 @@
 		4FEFACCB1B7989C700D905B8 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEFACCA1B7989C700D905B8 /* images.xcassets */; };
 		4FEFACCC1B798CA800D905B8 /* TableView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285841A75E9F700B573DE /* TableView-Example.storyboard */; };
 		C46F97D4245BDD7548E1F345 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 336F7DD8CF855E383EFF085A /* libPods.a */; };
+		F5C027261C05B3200066E1F8 /* NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C027251C05B3200066E1F8 /* NavigationBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,8 @@
 		4FEFACCA1B7989C700D905B8 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = images.xcassets; sourceTree = "<group>"; };
 		6D1B7A53DF3E7887603E7DB1 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		EBC31919615717889044CEB4 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		F5C027241C05B3200066E1F8 /* NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationBar.h; sourceTree = "<group>"; };
+		F5C027251C05B3200066E1F8 /* NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationBar.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +161,8 @@
 			children = (
 				4FB285851A75E9F700B573DE /* TableViewController.h */,
 				4FB285861A75E9F700B573DE /* TableViewController.m */,
+				F5C027241C05B3200066E1F8 /* NavigationBar.h */,
+				F5C027251C05B3200066E1F8 /* NavigationBar.m */,
 				4FB2858C1A765E9000B573DE /* Supporting Files */,
 			);
 			path = "TableView Example";
@@ -459,6 +464,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FB285621A75E94C00B573DE /* AppDelegate.m in Sources */,
+				F5C027261C05B3200066E1F8 /* NavigationBar.m in Sources */,
 				4FB285C51A766CEC00B573DE /* main.m in Sources */,
 				4FB285881A75E9F700B573DE /* TableViewController.m in Sources */,
 			);
