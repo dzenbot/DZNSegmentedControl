@@ -464,8 +464,21 @@
     
     [super setTintColor:color];
     
-    [self setTitleColor:color forState:UIControlStateHighlighted];
-    [self setTitleColor:color forState:UIControlStateSelected];
+    if (self.isImageMode) {
+
+        for (UIButton *btn in self.buttons) {
+            
+            UIImage *normalImage = [btn imageForState:UIControlStateNormal];
+            UIImage *selectedImage = [normalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            
+            [btn setImage:selectedImage forState:UIControlStateSelected];
+            btn.tintColor = color;
+        }
+    }
+    else {
+        [self setTitleColor:color forState:UIControlStateHighlighted];
+        [self setTitleColor:color forState:UIControlStateSelected];
+    }
 }
 
 - (void)setDelegate:(id<DZNSegmentedControlDelegate>)delegate
@@ -574,7 +587,10 @@
     NSAssert([tintColor isKindOfClass:[UIColor class]], @"Cannot assign a tint color with an unvalid color object.");
     
     UIButton *button = [self buttonAtIndex:segment];
-    button.backgroundColor = tintColor;
+    
+    if (!self.isImageMode) {
+        button.backgroundColor = tintColor;
+    }
 }
 
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment
