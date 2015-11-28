@@ -527,6 +527,7 @@
     }
     
     [self unselectAllButtons];
+    [self.buttons[segment] setSelected:YES];
     
     self.userInteractionEnabled = NO;
     
