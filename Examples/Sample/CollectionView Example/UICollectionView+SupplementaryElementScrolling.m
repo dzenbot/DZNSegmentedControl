@@ -12,28 +12,19 @@
 
 - (void)scrollToSection:(NSUInteger)section forSupplementaryElementOfKind:(NSString *)kind animated:(BOOL)animated
 {
-    UICollectionViewLayout *layout = (UICollectionViewLayout *)self.collectionViewLayout;
-    
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:section];
-
+    
+    UICollectionViewLayout *layout = (UICollectionViewLayout *)self.collectionViewLayout;
     UICollectionViewLayoutAttributes *layoutAttributes = [layout layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath];
     
     CGFloat offsetY = layoutAttributes.frame.origin.y;
     
-    CGFloat contentInsetY = self.contentInset.top;
-    CGFloat sectionInsetY = ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset.top;
-    
-    [self setContentOffset:CGPointMake(self.contentOffset.x, offsetY - contentInsetY - sectionInsetY) animated:animated];
+    [self setContentOffset:CGPointMake(self.contentOffset.x, offsetY) animated:animated];
 }
 
-- (NSUInteger)sectionForVisibleSupplementaryElementOfKind:(NSString *)kind;
+- (NSUInteger)sectionForHighestSupplementaryElementOfKind:(NSString *)kind;
 {
     NSArray *indexPaths = [self indexPathsForVisibleItems];
-    
-    if (indexPaths.count == 0) {
-        return NSNotFound;
-    }
-    
     return [[indexPaths valueForKeyPath:@"@min.section"] integerValue];
 }
 

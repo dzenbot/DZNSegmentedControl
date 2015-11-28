@@ -45,6 +45,10 @@ static NSUInteger kSectionCount = 9;
     self.segmentedControl.tintColor = [UIColor colorWithRed:42/255.0 green:178/255.0 blue:123/255.0 alpha:1.0];
     self.segmentedControl.selectionIndicatorHeight = 4.0;
     self.segmentedControl.disableSelectedSegment = NO;
+    self.segmentedControl.adjustsFontSizeToFitWidth = NO;
+    self.segmentedControl.autoAdjustSelectionIndicatorWidth = NO;
+    self.segmentedControl.selectedSegmentIndex = 0;
+    self.segmentedControl.showsCount = NO;
     
     [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:kCellViewIdentifier];
     [self.collectionView registerClass:[CollectionReusableHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewIdentifier];
@@ -131,7 +135,7 @@ static NSUInteger kSectionCount = 9;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSUInteger section = [self.collectionView sectionForVisibleSupplementaryElementOfKind:UICollectionElementKindSectionHeader];
+    NSUInteger section = [self.collectionView sectionForHighestSupplementaryElementOfKind:UICollectionElementKindSectionHeader];
     
     if (section != NSNotFound && (scrollView.isDecelerating || scrollView.isDragging)) {
         [self.segmentedControl setSelectedSegmentIndex:section animated:YES];
@@ -140,7 +144,7 @@ static NSUInteger kSectionCount = 9;
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
 {
-    NSUInteger section = [self.collectionView sectionForVisibleSupplementaryElementOfKind:UICollectionElementKindSectionHeader];
+    NSUInteger section = [self.collectionView sectionForHighestSupplementaryElementOfKind:UICollectionElementKindSectionHeader];
     
     if (section != NSNotFound) {
         [self.segmentedControl setSelectedSegmentIndex:section animated:YES];
@@ -152,7 +156,7 @@ static NSUInteger kSectionCount = 9;
 
 - (void)collectionReusableHeaderView:(CollectionReusableHeaderView *)headerView didTapHeader:(id)sender
 {
-    NSInteger section = self.segmentedControl.selectedSegmentIndex;
+    NSInteger section = headerView.tag;
     
     [self.collectionView scrollToSection:section forSupplementaryElementOfKind:UICollectionElementKindSectionHeader animated:YES];
 }
