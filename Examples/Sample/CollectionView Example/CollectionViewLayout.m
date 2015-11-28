@@ -53,7 +53,12 @@
 }
 
 
-#pragma mark - UICollectionViewLayout Methods
+#pragma mark - UICollectionViewLayout UISubclassingHooks Methods
+
+- (void)prepareLayout
+{
+    [super prepareLayout];
+}
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
@@ -79,6 +84,7 @@
     [missingSections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:idx];
         UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath];
+        
         [visibleLayoutAttributes addObject:layoutAttributes];
     }];
     
@@ -97,12 +103,14 @@
             UICollectionViewLayoutAttributes *firstObjectAttrs;
             UICollectionViewLayoutAttributes *lastObjectAttrs;
             
-            if (numberOfItemsInSection > 0) { // use cell data if items exist
+            if (numberOfItemsInSection > 0) {
+                // use cell data if items exist
                 isCell = YES;
                 firstObjectAttrs = [self layoutAttributesForItemAtIndexPath:firstObjectIndexPath];
                 lastObjectAttrs = [self layoutAttributesForItemAtIndexPath:lastObjectIndexPath];
             }
-            else { // else use the header and footer
+            else {
+                // else use the header and footer
                 firstObjectAttrs = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:firstObjectIndexPath];
                 lastObjectAttrs = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:lastObjectIndexPath];
             }
@@ -122,13 +130,10 @@
                 .origin = origin,
                 .size = layoutAttributes.frame.size
             };
-            
         }
-        
     }
     
     return visibleLayoutAttributes;
-    
 }
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds

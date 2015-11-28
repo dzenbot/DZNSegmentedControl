@@ -12,6 +12,6 @@
 
 - (void)scrollToSection:(NSUInteger)section forSupplementaryElementOfKind:(NSString *)kind animated:(BOOL)animated;
 
-- (NSUInteger)sectionForVisibleSupplementaryElementOfKind:(NSString *)kind;
+- (NSUInteger)sectionForHighestSupplementaryElementOfKind:(NSString *)kind;
 
 @end
