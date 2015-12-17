@@ -45,8 +45,6 @@ static NSString *contentOffsetKey = @"contentOffset";
 
 - (void)setSegmentedControl:(DZNSegmentedControl *)segmentedControl
 {
-    objc_setAssociatedObject(self, &segmentedControlKey, segmentedControl, OBJC_ASSOCIATION_ASSIGN);
-    
     if (segmentedControl) {
         [self addObserver:self forKeyPath:contentOffsetKey options:NSKeyValueObservingOptionNew context:&observerContext];
         [segmentedControl addTarget:self action:@selector(dzn_didChangeSegement:) forControlEvents:UIControlEventValueChanged];
@@ -55,6 +53,8 @@ static NSString *contentOffsetKey = @"contentOffset";
         [self removeObserver:self forKeyPath:contentOffsetKey context:&observerContext];
         [segmentedControl removeTarget:self action:@selector(dzn_didChangeSegement:) forControlEvents:UIControlEventValueChanged];
     }
+    
+    objc_setAssociatedObject(self, &segmentedControlKey, segmentedControl, OBJC_ASSOCIATION_ASSIGN);
     
     self.scrollOnSegmentChange = YES;
 }
