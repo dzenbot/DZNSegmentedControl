@@ -535,7 +535,7 @@
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment animated:(BOOL)animated
 {
-    if (self.selectedSegmentIndex == segment || self.isTransitioning) {
+    if (self.numberOfSegments == 0 || self.selectedSegmentIndex == segment || self.isTransitioning) {
         return;
     }
     
