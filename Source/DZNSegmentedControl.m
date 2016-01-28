@@ -20,7 +20,6 @@
 
 @property (nonatomic, assign) CGPoint scrollOffset;
 
-@property (nonatomic, getter = isTransitioning) BOOL transitioning;
 @property (nonatomic, getter = isImageMode) BOOL imageMode; // Default NO
 
 @end
@@ -535,25 +534,21 @@
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment animated:(BOOL)animated
 {
-    if (self.numberOfSegments == 0 || self.selectedSegmentIndex == segment || self.isTransitioning) {
+    if (self.numberOfSegments == 0 || self.selectedSegmentIndex == segment) {
         return;
     }
     
     [self unselectAllButtons];
-    [self.buttons[segment] setSelected:YES];
+    [self enableAllButtonsInteraction:YES];
     
-    self.userInteractionEnabled = NO;
+    UIButton *targetButton = self.buttons[segment];
+    targetButton.selected = YES;
+    targetButton.userInteractionEnabled = NO;
     
     _selectedSegmentIndex = segment;
-    _transitioning = YES;
     
     void (^animations)() = ^void(){
         self.selectionIndicator.frame = [self selectionIndicatorRect];
-    };
-    
-    void (^completion)(BOOL finished) = ^void(BOOL finished){
-        self.userInteractionEnabled = YES;
-        _transitioning = NO;
     };
     
     if (animated) {
@@ -567,11 +562,10 @@
               initialSpringVelocity:velocity
                             options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                          animations:animations
-                         completion:completion];
+                         completion:NULL];
     }
     else {
         animations();
-        completion(NO);
     }
 }
 
@@ -911,7 +905,7 @@
 {
     UIButton *button = (UIButton *)sender;
     
-    if (self.selectedSegmentIndex != button.tag && !self.isTransitioning) {
+    if (self.selectedSegmentIndex != button.tag) {
         [self setSelectedSegmentIndex:button.tag animated:YES];
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
@@ -941,10 +935,6 @@
 
 - (void)removeAllSegments
 {
-    if (self.isTransitioning) {
-        return;
-    }
-    
     // Removes all the buttons
     [[self buttons] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
