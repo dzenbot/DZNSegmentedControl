@@ -539,7 +539,11 @@
     }
     
     [self unselectAllButtons];
-    [self.buttons[segment] setSelected:YES];
+    [self enableAllButtonsInteraction:YES];
+    
+    UIButton *targetButton = self.buttons[segment];
+    targetButton.selected = YES;
+    targetButton.userInteractionEnabled = NO;
     
     _selectedSegmentIndex = segment;
     
