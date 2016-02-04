@@ -439,7 +439,7 @@
     // Consider cases where NSCFConstantString can also be used
     class = [class isSubclassOfClass:[NSString class]] ? [NSString class] : class;
     
-    NSPredicate *classPredicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", class];
+    __unused NSPredicate *classPredicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", class];
     NSAssert([items filteredArrayUsingPredicate:classPredicate].count == items.count, @"Cannot include different objects in the array. Please make sure to either pass an array of NSString or UIImage objects.");
     
     _items = [NSArray arrayWithArray:items];
