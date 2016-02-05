@@ -89,6 +89,11 @@ static NSUInteger kSectionCount = 9;
 
 - (UIBarPosition)positionForBar:(id <UIBarPositioning>)view
 {
+    return UIBarPositionBottom;
+}
+
+- (UIBarPosition)positionForSelectionIndicator:(id<UIBarPositioning>)bar
+{
     return UIBarPositionTop;
 }
 

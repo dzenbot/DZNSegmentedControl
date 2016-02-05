@@ -168,7 +168,6 @@
     [self.control setTitle:[@"Favorites" uppercaseString] forSegmentAtIndex:newSegment];
     [self.control setCount:@((arc4random()%10000)) forSegmentAtIndex:newSegment];
 #endif
-    
 }
 
 - (void)refreshSegments:(id)sender
@@ -206,11 +205,16 @@
 }
 
 
-#pragma mark - UIBarPositioningDelegate Methods
+#pragma mark - DZNSegmentedControlDelegate Methods
 
 - (UIBarPosition)positionForBar:(id <UIBarPositioning>)view
 {
-    return UIBarPositionBottom;
+    return UIBarPositionAny;
+}
+
+- (UIBarPosition)positionForSelectionIndicator:(id<UIBarPositioning>)bar
+{
+    return UIBarPositionAny;
 }
 
 @end

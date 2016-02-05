@@ -32,7 +32,8 @@
     self.segmentedControl.showsCount = NO;
     self.segmentedControl.autoAdjustSelectionIndicatorWidth = NO;
     self.segmentedControl.height = 30;
-    
+    self.segmentedControl.delegate = self;
+
     self.scrollView.segmentedControl = self.segmentedControl;
     self.scrollView.scrollDirection = DZNScrollDirectionVertical;
     self.scrollView.scrollOnSegmentChange = YES;
@@ -121,9 +122,22 @@
 }
 
 
+#pragma mark - DZNSegmentedControlDelegate Methods
+
+- (UIBarPosition)positionForBar:(id <UIBarPositioning>)view
+{
+    return UIBarPositionTop;
+}
+
+- (UIBarPosition)positionForSelectionIndicator:(id<UIBarPositioning>)bar
+{
+    return UIBarPositionBottom;
+}
+
+
 #pragma mark - View Auto-Rotation
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
