@@ -162,7 +162,14 @@ enum {
 @end
 
 /**
- The DZNSegmentedControlDelegate protocol defines the interface that DZNSegmentedControl delegate objects implement to manage the segmented control behavior. This protocol declares no methods of its own but conforms to the UIBarPositioningDelegate protocol to support the positioning of a segmented control when it is moved to a window.
+ This protocol conforms to the UIBarPositioningDelegate protocol to support the any directional decoration drawing accordingly (ie: the hairline and the selection indicator bar).
  */
 @protocol DZNSegmentedControlDelegate <UIBarPositioningDelegate>
+@optional
+
+/**
+ Implement this method to position the selector indicator either at the top or bottom of the view. Default is UIBarPositionAny which means the selector indicator will be placed at the bottom. If not implemented, the value for positionForBar: will be used instead.
+ */
+- (UIBarPosition)positionForSelectionIndicator:(id<UIBarPositioning>)bar;
+
 @end

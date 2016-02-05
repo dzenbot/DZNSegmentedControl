@@ -25,7 +25,6 @@
 @end
 
 @implementation DZNSegmentedControl
-@synthesize barPosition = _barPosition;
 @synthesize height = _height;
 @synthesize width = _width;
 
@@ -52,6 +51,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _width = CGRectGetWidth(frame);
+        _height = CGRectGetHeight(frame);
+
         [self commonInit];
     }
     return self;
@@ -148,16 +150,6 @@
     [self configureAccessoryViews];
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview
-{
-    [super willMoveToSuperview:newSuperview];
-    
-    // Only lay out its subviews if a superview is available
-    if (newSuperview) {
-        [self layoutIfNeeded];
-    }
-}
-
 - (void)didMoveToWindow
 {
     [super didMoveToWindow];
@@ -169,16 +161,6 @@
     [self configureSegments];
     
     [self layoutIfNeeded];
-}
-
-- (void)layoutIfNeeded
-{
-    // Only lay out its subviews if a superview is available
-    if (!self.superview) {
-        return;
-    }
-    
-    [super layoutIfNeeded];
 }
 
 - (CGSize)intrinsicContentSize
@@ -322,7 +304,14 @@
     }
     
     CGRect frame = CGRectZero;
-    frame.origin.y = (_barPosition > UIBarPositionBottom) ? 0.0f : (button.frame.size.height-self.selectionIndicatorHeight);
+    CGFloat appropriateY = button.frame.size.height-self.selectionIndicatorHeight;
+    
+    if (self.selectionIndicatorPosition != UIBarPositionAny) {
+        frame.origin.y = (self.selectionIndicatorPosition > UIBarPositionBottom) ? 0.0f : appropriateY;
+    }
+    else {
+        frame.origin.y = (self.barPosition > UIBarPositionBottom) ? 0.0f : appropriateY;
+    }
     
     if (self.autoAdjustSelectionIndicatorWidth) {
         
@@ -392,8 +381,31 @@
     return fontSize;
 }
 
+- (UIBarPosition)barPosition
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(positionForBar:)]) {
+        return [self.delegate positionForBar:self];
+    }
+    return UIBarPositionAny;
+}
+
+- (UIBarPosition)selectionIndicatorPosition
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(positionForSelectionIndicator:)]) {
+        return [self.delegate positionForSelectionIndicator:self];
+    }
+    return UIBarPositionAny;
+}
+
 
 #pragma mark - Setter Methods
+
+- (void)setDelegate:(id<DZNSegmentedControlDelegate>)delegate
+{
+    _delegate = delegate;
+    
+    [self layoutIfNeeded];
+}
 
 - (void)setFrame:(CGRect)frame
 {
@@ -480,12 +492,6 @@
         [self setTitleColor:color forState:UIControlStateHighlighted];
         [self setTitleColor:color forState:UIControlStateSelected];
     }
-}
-
-- (void)setDelegate:(id<DZNSegmentedControlDelegate>)delegate
-{
-    _delegate = delegate;
-    _barPosition = [delegate positionForBar:self];
 }
 
 - (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
