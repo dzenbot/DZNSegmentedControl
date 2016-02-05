@@ -342,7 +342,9 @@
 
 - (CGRect)hairlineRect
 {
-    CGRect frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 0.5f);
+    CGFloat hairlineWidth = 1.0 / [UIScreen mainScreen].scale;
+    
+    CGRect frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, hairlineWidth);
     frame.origin.y = (self.barPosition > UIBarPositionBottom) ? 0.0f : self.frame.size.height;
     
     return frame;
