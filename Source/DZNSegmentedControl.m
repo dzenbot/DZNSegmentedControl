@@ -191,7 +191,8 @@
 
 - (NSArray *)buttons
 {
-    return self.items;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", [DZNStaticButton class]];
+    return [self.subviews filteredArrayUsingPredicate:predicate];
 }
 
 - (DZNStaticButton *)buttonAtIndex:(NSUInteger)segment
