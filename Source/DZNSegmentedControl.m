@@ -494,6 +494,8 @@
         [self setTitleColor:color forState:UIControlStateHighlighted];
         [self setTitleColor:color forState:UIControlStateSelected];
     }
+    
+    self.selectionIndicator.backgroundColor = color;
 }
 
 - (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
