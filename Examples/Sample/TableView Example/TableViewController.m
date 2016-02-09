@@ -87,6 +87,7 @@
         _control.delegate = self;
         _control.selectedSegmentIndex = 1;
         _control.bouncySelectionIndicator = NO;
+        _control.disableSelectedSegment = NO;
         _control.height = 60.0f;
         
 //                _control.height = 120.0f;
@@ -201,6 +202,8 @@
 
 - (void)didChangeSegment:(DZNSegmentedControl *)control
 {
+    NSLog(@"%s",__FUNCTION__);
+    
     [self.tableView reloadData];
 }
 

@@ -10,6 +10,9 @@
 
 #import "DZNSegmentedControl.h"
 
+@interface DZNSaticButton : UIButton
+@end
+
 @interface DZNSegmentedControl ()
 
 @property (nonatomic) BOOL initializing;
@@ -190,23 +193,23 @@
 {
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.items.count];
     
-    for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:[UIButton class]]) {
-            [buttons addObject:view];
+    for (DZNSaticButton *btn in self.subviews) {
+        if ([btn isKindOfClass:[DZNSaticButton class]]) {
+            [buttons addObject:btn];
         }
     }
     return buttons;
 }
 
-- (UIButton *)buttonAtIndex:(NSUInteger)segment
+- (DZNSaticButton *)buttonAtIndex:(NSUInteger)segment
 {
     if (self.items.count > 0 && segment < [self buttons].count) {
-        return (UIButton *)[[self buttons] objectAtIndex:segment];
+        return (DZNSaticButton *)[[self buttons] objectAtIndex:segment];
     }
     return nil;
 }
 
-- (UIButton *)selectedButton
+- (DZNSaticButton *)selectedButton
 {
     if (self.selectedSegmentIndex >= 0) {
         return [self buttonAtIndex:self.selectedSegmentIndex];
@@ -220,7 +223,7 @@
         return nil;
     }
     
-    UIButton *button = [self buttonAtIndex:segment];
+    DZNSaticButton *button = [self buttonAtIndex:segment];
     return [[button attributedTitleForState:UIControlStateNormal] string];
 }
 
@@ -293,7 +296,7 @@
 
 - (CGRect)selectionIndicatorRect
 {
-    UIButton *button = [self selectedButton];
+    DZNSaticButton *button = [self selectedButton];
     
     id item = self.items[button.tag];
     
@@ -481,7 +484,7 @@
     
     if (self.isImageMode) {
 
-        for (UIButton *btn in self.buttons) {
+        for (DZNSaticButton *btn in self.buttons) {
             
             UIImage *normalImage = [btn imageForState:UIControlStateNormal];
             UIImage *selectedImage = [normalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -555,7 +558,10 @@
     
     UIButton *targetButton = self.buttons[segment];
     targetButton.selected = YES;
-    targetButton.userInteractionEnabled = NO;
+    
+    if (self.disableSelectedSegment) {
+        targetButton.userInteractionEnabled = NO;
+    }
     
     _selectedSegmentIndex = segment;
     
@@ -592,7 +598,7 @@
     
     NSAssert([tintColor isKindOfClass:[UIColor class]], @"Cannot assign a tint color with an unvalid color object.");
     
-    UIButton *button = [self buttonAtIndex:segment];
+    DZNSaticButton *button = [self buttonAtIndex:segment];
     
     if (!self.isImageMode) {
         button.backgroundColor = tintColor;
@@ -662,7 +668,7 @@
 
 - (void)setAttributedTitle:(NSAttributedString *)attributedString forSegmentAtIndex:(NSUInteger)segment
 {
-    UIButton *button = [self buttonAtIndex:segment];
+    DZNSaticButton *button = [self buttonAtIndex:segment];
     button.titleLabel.numberOfLines = (self.showsCount) ? 2 : 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
@@ -686,9 +692,9 @@
     
     NSAssert([color isKindOfClass:[UIColor class]], @"Cannot assign a title color with an unvalid color object.");
     
-    for (UIButton *button in [self buttons]) {
+    for (DZNSaticButton *btn in [self buttons]) {
         
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[button attributedTitleForState:state]];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[btn attributedTitleForState:state]];
         NSString *string = attributedString.string;
         
         NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
@@ -739,7 +745,7 @@
             [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
         }
         
-        [button setAttributedTitle:attributedString forState:state];
+        [btn setAttributedTitle:attributedString forState:state];
     }
     
     NSString *key = [NSString stringWithFormat:@"UIControlState%d", (int)state];
@@ -792,7 +798,7 @@
 
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment
 {
-    UIButton *button = [self buttonAtIndex:segment];
+    DZNSaticButton *button = [self buttonAtIndex:segment];
     button.enabled = enabled;
 }
 
@@ -812,6 +818,14 @@
     [self layoutSubviews];
 }
 
+- (void)setDisableSelectedSegment:(BOOL)disableSelectedSegment
+{
+    _disableSelectedSegment = disableSelectedSegment;
+    
+    DZNSaticButton *button = [self selectedButton];
+    button.userInteractionEnabled = !disableSelectedSegment;
+}
+
 
 #pragma mark - DZNSegmentedControl Configuration
 
@@ -828,7 +842,7 @@
 
 - (void)addButtonForSegment:(NSUInteger)segment
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    DZNSaticButton *button = [DZNSaticButton buttonWithType:UIButtonTypeCustom];
     
     [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
     [button addTarget:self action:@selector(didSelectButton:) forControlEvents:UIControlEventTouchDragOutside|UIControlEventTouchDragInside|UIControlEventTouchDragEnter|UIControlEventTouchDragExit|UIControlEventTouchCancel|UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
@@ -845,8 +859,8 @@
 
 - (void)configureSegments
 {
-    for (UIButton *button in [self buttons]) {
-        [self configureButtonForSegment:button.tag];
+    for (DZNSaticButton *btn in [self buttons]) {
+        [self configureButtonForSegment:btn.tag];
     }
     
     [self configureAccessoryViews];
@@ -906,19 +920,17 @@
 
 - (void)configureButtonImage:(UIImage *)image forSegment:(NSUInteger)segment
 {
-    UIButton *button = [self buttonAtIndex:segment];
+    DZNSaticButton *button = [self buttonAtIndex:segment];
     
     [button setImage:image forState:UIControlStateNormal];
     
     [self setAttributedTitle:nil forSegmentAtIndex:segment];
 }
 
-- (void)willSelectedButton:(id)sender
+- (void)willSelectedButton:(DZNSaticButton *)sender
 {
-    UIButton *button = (UIButton *)sender;
-    
-    if (self.selectedSegmentIndex != button.tag) {
-        [self setSelectedSegmentIndex:button.tag animated:YES];
+    if (self.selectedSegmentIndex != sender.tag) {
+        [self setSelectedSegmentIndex:sender.tag animated:YES];
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
     else if (!self.disableSelectedSegment) {
@@ -926,12 +938,10 @@
     }
 }
 
-- (void)didSelectButton:(id)sender
+- (void)didSelectButton:(DZNSaticButton *)sender
 {
-    UIButton *button = (UIButton *)sender;
-    
-    button.highlighted = NO;
-    button.selected = YES;
+    sender.highlighted = NO;
+    sender.selected = YES;
 }
 
 - (void)unselectAllButtons
@@ -969,6 +979,15 @@
     });
     
     return defaultFormatter;
+}
+
+@end
+
+
+@implementation DZNSaticButton
+
+- (void)setHighlighted:(BOOL)highlighted {
+    // Let's not call super here, so there is no highlight state.
 }
 
 @end
