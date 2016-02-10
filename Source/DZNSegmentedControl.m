@@ -77,7 +77,7 @@
     _initializing = YES;
     
     _showsCount = YES;
-    _selectedSegmentIndex = -1;
+    _selectedSegmentIndex = 0;
     _selectionIndicatorHeight = 2.0f;
     _animationDuration = 0.2;
     _autoAdjustSelectionIndicatorWidth = YES;
@@ -121,10 +121,7 @@
     [self sizeToFit];
     
     if ([self buttons].count == 0) {
-        _selectedSegmentIndex = -1;
-    }
-    else if (self.selectedSegmentIndex < 0) {
-        _selectedSegmentIndex = 0;
+        _selectedSegmentIndex = DZNSegmentedControlNoSegment;
     }
     
     [[self buttons] enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL *stop) {
@@ -260,7 +257,6 @@
     if (!color) {
         switch (state) {
             case UIControlStateNormal:              return [UIColor darkGrayColor];
-            case UIControlStateHighlighted:         return self.tintColor;
             case UIControlStateDisabled:            return [UIColor lightGrayColor];
             case UIControlStateSelected:            return self.tintColor;
             default:                                return self.tintColor;
@@ -291,6 +287,11 @@
 - (CGRect)selectionIndicatorRect
 {
     DZNStaticButton *button = [self selectedButton];
+    
+    if (!button) {
+        // Let's then grab the first button, so the selection indicator is always aligned correctly.
+        button = [self buttonAtIndex:0];
+    }
     
     id item = self.items[button.tag];
     
@@ -488,52 +489,19 @@
         }
     }
     else {
-        [self setTitleColor:color forState:UIControlStateHighlighted];
         [self setTitleColor:color forState:UIControlStateSelected];
     }
     
     self.selectionIndicator.backgroundColor = color;
 }
 
-- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
+- (void)setHairlineColor:(UIColor *)color
 {
-    self.autoAdjustSelectionIndicatorWidth = NO;
-    self.bouncySelectionIndicator = NO;
-    
-    CGFloat offset = 0.0;
-    
-    // Horizontal scroll
-    if (self.scrollOffset.x != scrollOffset.x) {
-        offset = scrollOffset.x/(contentSize.width/self.numberOfSegments);
-    }
-    // Vertical scroll
-    else if (self.scrollOffset.y != scrollOffset.y) {
-        offset = scrollOffset.y/(contentSize.height/self.numberOfSegments);
-    }
-    // Skip
-    else {
+    if (self.initializing) {
         return;
     }
     
-    CGFloat buttonWidth = roundf(self.width/self.numberOfSegments);
-    
-    CGRect indicatorRect = self.selectionIndicator.frame;
-    indicatorRect.origin.x = (buttonWidth * offset);
-    self.selectionIndicator.frame = indicatorRect;
-    
-    NSUInteger index = (NSUInteger)offset;
-    
-    if (offset == truncf(offset) && self.selectedSegmentIndex != index) {
-        
-        [self unselectAllButtons];
-        [self.buttons[index] setSelected:YES];
-        
-        _selectedSegmentIndex = index;
-        
-        [self sendActionsForControlEvents:UIControlEventValueChanged];
-    }
-    
-    _scrollOffset = scrollOffset;
+    self.hairline.backgroundColor = color;
 }
 
 - (void)setSelectedSegmentIndex:(NSInteger)segment
@@ -550,29 +518,38 @@
     [self unselectAllButtons];
     [self enableAllButtonsInteraction:YES];
     
-    UIButton *targetButton = self.buttons[segment];
-    targetButton.selected = YES;
-    
-    if (self.disableSelectedSegment) {
-        targetButton.userInteractionEnabled = NO;
-    }
-    
     _selectedSegmentIndex = segment;
     
+    BOOL showSelectorIndicator = (segment >= 0 && segment < self.numberOfSegments);
+    
+    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut;
+
+    UIButton *button = [self buttonAtIndex:segment];
+    button.selected = YES;
+    
+    if (self.disableSelectedSegment) {
+        button.userInteractionEnabled = NO;
+    }
+    
     void (^animations)() = ^void(){
-        self.selectionIndicator.frame = [self selectionIndicatorRect];
+        if (showSelectorIndicator) {
+            self.selectionIndicator.frame = [self selectionIndicatorRect];
+            self.selectionIndicator.alpha = 1.0f;
+        }
+        else {
+            self.selectionIndicator.alpha = 0.0f;
+        }
     };
     
     if (animated) {
-        CGFloat duration = (self.selectedSegmentIndex < 0.0f) ? 0.0f : self.animationDuration;
         CGFloat damping = !self.bouncySelectionIndicator ? : 0.65f;
         CGFloat velocity = !self.bouncySelectionIndicator ? : 0.5f;
         
-        [UIView animateWithDuration:duration
+        [UIView animateWithDuration:self.animationDuration
                               delay:0.0f
              usingSpringWithDamping:damping
               initialSpringVelocity:velocity
-                            options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
+                            options:options
                          animations:animations
                          completion:NULL];
     }
@@ -666,12 +643,10 @@
     button.titleLabel.numberOfLines = (self.showsCount) ? 2 : 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
-    [button setAttributedTitle:attributedString forState:UIControlStateHighlighted];
     [button setAttributedTitle:attributedString forState:UIControlStateSelected];
     [button setAttributedTitle:attributedString forState:UIControlStateDisabled];
     
     [self setTitleColor:[self titleColorForState:UIControlStateNormal] forState:UIControlStateNormal];
-    [self setTitleColor:[self titleColorForState:UIControlStateHighlighted] forState:UIControlStateHighlighted];
     [self setTitleColor:[self titleColorForState:UIControlStateDisabled] forState:UIControlStateDisabled];
     [self setTitleColor:[self titleColorForState:UIControlStateSelected] forState:UIControlStateSelected];
     
@@ -796,13 +771,45 @@
     button.enabled = enabled;
 }
 
-- (void)setHairlineColor:(UIColor *)color
+- (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
 {
-    if (self.initializing) {
+    self.autoAdjustSelectionIndicatorWidth = NO;
+    self.bouncySelectionIndicator = NO;
+    
+    CGFloat offset = 0.0;
+    
+    // Horizontal scroll
+    if (self.scrollOffset.x != scrollOffset.x) {
+        offset = scrollOffset.x/(contentSize.width/self.numberOfSegments);
+    }
+    // Vertical scroll
+    else if (self.scrollOffset.y != scrollOffset.y) {
+        offset = scrollOffset.y/(contentSize.height/self.numberOfSegments);
+    }
+    // Skip
+    else {
         return;
     }
     
-    self.hairline.backgroundColor = color;
+    CGFloat buttonWidth = roundf(self.width/self.numberOfSegments);
+    
+    CGRect indicatorRect = self.selectionIndicator.frame;
+    indicatorRect.origin.x = (buttonWidth * offset);
+    self.selectionIndicator.frame = indicatorRect;
+    
+    NSUInteger index = (NSUInteger)offset;
+    
+    if (offset == truncf(offset) && self.selectedSegmentIndex != index) {
+        
+        [self unselectAllButtons];
+        [self.buttons[index] setSelected:YES];
+        
+        _selectedSegmentIndex = index;
+        
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
+    
+    _scrollOffset = scrollOffset;
 }
 
 - (void)setAdjustsButtonTopInset:(BOOL)adjustsButtonTopInset
@@ -838,8 +845,7 @@
 {
     DZNStaticButton *button = [DZNStaticButton buttonWithType:UIButtonTypeCustom];
     
-    [button addTarget:self action:@selector(willSelectedButton:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(didSelectButton:) forControlEvents:UIControlEventTouchDragOutside|UIControlEventTouchDragInside|UIControlEventTouchDragEnter|UIControlEventTouchDragExit|UIControlEventTouchCancel|UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+    [button addTarget:self action:@selector(selectedButton:) forControlEvents:UIControlEventTouchDown];
     
     button.backgroundColor = [UIColor clearColor];
     button.opaque = YES;
@@ -921,27 +927,18 @@
     [self setAttributedTitle:nil forSegmentAtIndex:segment];
 }
 
-- (void)willSelectedButton:(DZNStaticButton *)sender
+- (void)selectedButton:(DZNStaticButton *)sender
 {
-    if (self.selectedSegmentIndex != sender.tag) {
-        [self setSelectedSegmentIndex:sender.tag animated:YES];
+    [self setSelectedSegmentIndex:sender.tag animated:YES];
+    
+    if (self.selectedSegmentIndex != sender.tag || !self.disableSelectedSegment) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
-    else if (!self.disableSelectedSegment) {
-        [self sendActionsForControlEvents:UIControlEventValueChanged];
-    }
-}
-
-- (void)didSelectButton:(DZNStaticButton *)sender
-{
-    sender.highlighted = NO;
-    sender.selected = YES;
 }
 
 - (void)unselectAllButtons
 {
     [self.buttons setValue:@NO forKey:@"selected"];
-    [self.buttons setValue:@NO forKey:@"highlighted"];
 }
 
 - (void)enableAllButtonsInteraction:(BOOL)enable

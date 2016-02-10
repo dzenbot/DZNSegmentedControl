@@ -15,7 +15,6 @@
 		4FB285CA1A766D0300B573DE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285C91A766D0300B573DE /* Default-568h@2x.png */; };
 		4FB285D01A7671A400B573DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285611A75E94C00B573DE /* AppDelegate.m */; };
 		4FB285D11A7671A400B573DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285C31A766CEC00B573DE /* main.m */; };
-		4FB285D21A7671A400B573DE /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB285861A75E9F700B573DE /* TableViewController.m */; };
 		4FB285D41A7671A400B573DE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 336F7DD8CF855E383EFF085A /* libPods.a */; };
 		4FB285D71A7671A400B573DE /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285C41A766CEC00B573DE /* Storyboard.storyboard */; };
 		4FB285D81A7671A400B573DE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285C91A766D0300B573DE /* Default-568h@2x.png */; };
@@ -34,8 +33,8 @@
 		4FEA1D801B7A5DF800E1DBDF /* CollectionView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FEA1D7F1B7A5DF800E1DBDF /* CollectionView-Example.storyboard */; };
 		4FEA1D861B7A67E700E1DBDF /* UICollectionView+SupplementaryElementScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEA1D851B7A67E700E1DBDF /* UICollectionView+SupplementaryElementScrolling.m */; };
 		4FEFACCB1B7989C700D905B8 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEFACCA1B7989C700D905B8 /* images.xcassets */; };
-		4FEFACCC1B798CA800D905B8 /* TableView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285841A75E9F700B573DE /* TableView-Example.storyboard */; };
 		C46F97D4245BDD7548E1F345 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 336F7DD8CF855E383EFF085A /* libPods.a */; };
+		F59D40EC1C6AE665004E9AAC /* TableView-Example.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FB285841A75E9F700B573DE /* TableView-Example.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -332,7 +331,7 @@
 				4FEFACCB1B7989C700D905B8 /* images.xcassets in Resources */,
 				4FB285C71A766CEC00B573DE /* Storyboard.storyboard in Resources */,
 				4FB285CA1A766D0300B573DE /* Default-568h@2x.png in Resources */,
-				4FEFACCC1B798CA800D905B8 /* TableView-Example.storyboard in Resources */,
+				F59D40EC1C6AE665004E9AAC /* TableView-Example.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +469,6 @@
 			files = (
 				4FB285D01A7671A400B573DE /* AppDelegate.m in Sources */,
 				4FB285D11A7671A400B573DE /* main.m in Sources */,
-				4FB285D21A7671A400B573DE /* TableViewController.m in Sources */,
 				4FB285E11A76730300B573DE /* ScrollViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -26,7 +26,7 @@ enum {
 @property (nonatomic, weak) IBOutlet id <DZNSegmentedControlDelegate> delegate;
 /** The items displayed on the control. */
 @property (nonatomic, retain) NSArray *items;
-/** The index number identifying the selected segment (that is, the last segment touched). */
+/** The index number identifying the selected segment (that is, the last segment touched). Default is 0. */
 @property (nonatomic) NSInteger selectedSegmentIndex;
 /** Returns the number of segments the receiver has. */
 @property (nonatomic, readonly) NSUInteger numberOfSegments;
@@ -37,7 +37,7 @@ enum {
 /** The height of the selection indicator. Default is 2pts. */
 @property (nonatomic, readwrite) CGFloat selectionIndicatorHeight UI_APPEARANCE_SELECTOR;
 /** The duration of the indicator's animation. Default is 0.2 sec. */
-@property (nonatomic, readwrite) CGFloat animationDuration UI_APPEARANCE_SELECTOR;
+@property (nonatomic, readwrite) NSTimeInterval animationDuration UI_APPEARANCE_SELECTOR;
 /** The font family to be used on labels. Default is system font (HelveticaNeue). Font size is managed by the class. */
 @property (nonatomic, retain) UIFont *font UI_APPEARANCE_SELECTOR;
 /** The color of the hairline. Default is light gray. To hide the hairline, just set clipsToBounds to YES, like you would do it for UIToolBar & UINavigationBar. */
