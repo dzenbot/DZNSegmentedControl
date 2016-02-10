@@ -161,9 +161,6 @@
 
 - (void)addSegment:(id)sender
 {
-    [self.control setSelectedSegmentIndex:DZNSegmentedControlNoSegment animated:YES];
-    return;
-    
     NSUInteger newSegment = self.control.numberOfSegments;
     
 #if DEBUG_IMAGE
