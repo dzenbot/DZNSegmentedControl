@@ -929,9 +929,11 @@
 
 - (void)selectedButton:(DZNStaticButton *)sender
 {
+    NSInteger idx = self.selectedSegmentIndex;
+    
     [self setSelectedSegmentIndex:sender.tag animated:YES];
     
-    if (self.selectedSegmentIndex != sender.tag || !self.disableSelectedSegment) {
+    if (idx != sender.tag || !self.disableSelectedSegment) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }
