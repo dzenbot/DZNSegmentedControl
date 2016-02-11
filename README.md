@@ -19,7 +19,7 @@ A drop-in replacement for UISegmentedControl for showing counts, to be used typi
 
 ## Installation
 
-Available in [Cocoa Pods](http://cocoapods.org/?q=DZNSegmentedControl)
+Available in [CocoaPods](http://cocoapods.org/?q=DZNSegmentedControl)
 ```
 pod 'DZNSegmentedControl'
 ```
