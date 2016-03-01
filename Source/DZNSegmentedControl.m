@@ -304,7 +304,7 @@
     }
     
     CGRect frame = CGRectZero;
-    CGFloat appropriateY = button.frame.size.height-self.selectionIndicatorHeight;
+    CGFloat appropriateY = button.frame.size.height-self.selectionIndicatorHeight-self.selectionIndicatorPadding;
     
     if (self.selectionIndicatorPosition != UIBarPositionAny) {
         frame.origin.y = (self.selectionIndicatorPosition > UIBarPositionBottom) ? 0.0f : appropriateY;

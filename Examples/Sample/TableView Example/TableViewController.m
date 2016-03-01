@@ -33,6 +33,7 @@
     
     [[DZNSegmentedControl appearance] setFont:[UIFont fontWithName:@"EuphemiaUCAS" size:15.0]];
     [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:2.5];
+    [[DZNSegmentedControl appearance] setSelectionIndicatorPadding:5];
     [[DZNSegmentedControl appearance] setAnimationDuration:0.125];
     
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor darkGrayColor], NSFontAttributeName: [UIFont systemFontOfSize:18.0]}];
@@ -88,6 +89,7 @@
         _control.selectedSegmentIndex = 1;
         _control.bouncySelectionIndicator = NO;
         _control.height = 60.0f;
+        _control.selectionIndicatorPadding = 5.0f;
         
 //                _control.height = 120.0f;
 //                _control.width = 300.0f;
