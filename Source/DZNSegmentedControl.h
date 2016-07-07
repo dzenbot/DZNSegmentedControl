@@ -129,6 +129,15 @@ enum {
  */
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
 
+
+/**
+  Returns whether the given segment is selected or not
+ 
+ @param segment An index number identifying a segment in the control. It must be a number between 0 and the number of segments (numberOfSegments) minus 1; values exceeding this upper range are pinned to it.
+ @returns Returns whether the given segment is selected or not
+ */
+- (BOOL)isSegmentAtIndexEnabled:(NSUInteger)segment;
+
 /**
  Sets a contentOffset and contentSize to enable scrollView tracking.
  To be used in combination with UIScrollView+DZNSegmentedControl.
