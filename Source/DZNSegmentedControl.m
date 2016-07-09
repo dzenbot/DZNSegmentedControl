@@ -792,6 +792,12 @@
     button.enabled = enabled;
 }
 
+- (BOOL)isSegmentAtIndexEnabled:(NSUInteger)segment
+{
+    UIButton *button = [self buttonAtIndex:segment];
+    return button.enabled;
+}
+
 - (void)setHairlineColor:(UIColor *)color
 {
     if (self.initializing) {
