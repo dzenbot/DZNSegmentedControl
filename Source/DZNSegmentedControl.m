@@ -496,8 +496,8 @@
 
 - (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
 {
-    self.autoAdjustSelectionIndicatorWidth = NO;
-    self.bouncySelectionIndicator = NO;
+//    self.autoAdjustSelectionIndicatorWidth = NO;
+//    self.bouncySelectionIndicator = NO;
     
     CGFloat offset = 0.0;
     
@@ -517,7 +517,7 @@
     CGFloat buttonWidth = roundf(self.width/self.numberOfSegments);
     
     CGRect indicatorRect = self.selectionIndicator.frame;
-    indicatorRect.origin.x = (buttonWidth * offset);
+    indicatorRect.origin.x = (buttonWidth * offset) + (buttonWidth - CGRectGetWidth(indicatorRect)) / 2;
     self.selectionIndicator.frame = indicatorRect;
     
     NSUInteger index = (NSUInteger)offset;
