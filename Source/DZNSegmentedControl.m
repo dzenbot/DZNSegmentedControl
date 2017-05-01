@@ -496,9 +496,6 @@
 
 - (void)setScrollOffset:(CGPoint)scrollOffset contentSize:(CGSize)contentSize
 {
-//    self.autoAdjustSelectionIndicatorWidth = NO;
-//    self.bouncySelectionIndicator = NO;
-    
     CGFloat offset = 0.0;
     
     // Horizontal scroll
