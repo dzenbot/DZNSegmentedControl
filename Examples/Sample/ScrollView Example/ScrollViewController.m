@@ -30,12 +30,12 @@
     
     self.segmentedControl.items = @[@"Page #1", @"Page #2", @"Page #3"];
     self.segmentedControl.showsCount = NO;
-    self.segmentedControl.autoAdjustSelectionIndicatorWidth = NO;
+    self.segmentedControl.autoAdjustSelectionIndicatorWidth = YES;
     self.segmentedControl.height = 30;
     self.segmentedControl.delegate = self;
 
     self.scrollView.segmentedControl = self.segmentedControl;
-    self.scrollView.scrollDirection = DZNScrollDirectionVertical;
+    self.scrollView.scrollDirection = DZNScrollDirectionHorizontal;
     self.scrollView.scrollOnSegmentChange = YES;
 }
 
