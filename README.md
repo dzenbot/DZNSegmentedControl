@@ -1,19 +1,21 @@
 DZNSegmentedControl
 ========================
-[![Pod Version](http://img.shields.io/cocoapods/v/DZNSegmentedControl.svg)](https://cocoadocs.org/docsets/DZNSegmentedControl)
+
 [![License](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Pod Version](http://img.shields.io/cocoapods/v/DZNSegmentedControl.svg)](https://cocoadocs.org/docsets/DZNSegmentedControl)
+[![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg)](https://github.com/Carthage/Carthage)
+[![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=5a0a23e99cf2f4000128fd32&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/5a0a23e99cf2f4000128fd32/build/latest?branch=master)
 
-
-A drop-in replacement for UISegmentedControl for showing counts, to be used typically on a user profile.
+A drop-in replacement for UISegmentedControl for showing counts, images and many other useful features.
 
 ![Demo Gif](Screenshots/segmentedcontrol_demo.gif)
 
 ### Features
-* Customizable control with tint color, font, sizes and animation duration.
+* Fully customizable control with tint color, font, sizes and animation duration.
 * Animated and width auto-adjusting selection indicator.
 * UIBarPositioning support.
 * UIAppearance support.
-* ARC & 64bits.
+* UIScrollView extension for scroll offset binding.
 <br>
 
 ## Installation

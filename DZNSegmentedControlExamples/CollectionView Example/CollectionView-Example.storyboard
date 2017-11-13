@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="aUd-o0-OKC">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Delegate-->
+        <scene sceneID="kAl-rh-SSU">
+            <objects>
+                <viewController id="6lh-Md-jCk" customClass="CollectionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hKn-en-jrH"/>
+                        <viewControllerLayoutGuide type="bottom" id="NiP-Ou-LQO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Vsl-Bc-VpI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="t6c-oA-kzk">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewLayout key="collectionViewLayout" id="g1k-dW-42f" customClass="CollectionViewLayout"/>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="6lh-Md-jCk" id="UIe-eO-nS4"/>
+                                    <outlet property="delegate" destination="6lh-Md-jCk" id="t5t-99-hhj"/>
+                                </connections>
+                            </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XZc-li-rog" customClass="DZNSegmentedControl">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="hoU-Gy-jKA"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="didChangeSegment:" destination="6lh-Md-jCk" eventType="valueChanged" id="kbp-DM-CyC"/>
+                                    <outlet property="delegate" destination="6lh-Md-jCk" id="DRH-M4-Htz"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="leading" secondItem="Vsl-Bc-VpI" secondAttribute="leading" id="2RZ-L1-pc5"/>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="leading" secondItem="XZc-li-rog" secondAttribute="leading" id="9Hw-bz-9kU"/>
+                            <constraint firstItem="NiP-Ou-LQO" firstAttribute="top" secondItem="XZc-li-rog" secondAttribute="bottom" id="J6u-DW-FFU"/>
+                            <constraint firstAttribute="trailing" secondItem="XZc-li-rog" secondAttribute="trailing" id="LGP-cu-0fC"/>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="top" secondItem="Vsl-Bc-VpI" secondAttribute="top" id="UrX-BL-udQ"/>
+                            <constraint firstItem="NiP-Ou-LQO" firstAttribute="top" secondItem="t6c-oA-kzk" secondAttribute="bottom" constant="44" id="Yhr-tb-Lgm"/>
+                            <constraint firstItem="t6c-oA-kzk" firstAttribute="trailing" secondItem="XZc-li-rog" secondAttribute="trailing" id="dZA-bH-SWU"/>
+                            <constraint firstItem="XZc-li-rog" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hKn-en-jrH" secondAttribute="bottom" id="lQC-Kg-WV8"/>
+                            <constraint firstItem="XZc-li-rog" firstAttribute="bottom" secondItem="NiP-Ou-LQO" secondAttribute="top" id="qj8-Lc-G58"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="mRP-73-doE"/>
+                    <connections>
+                        <outlet property="collectionView" destination="t6c-oA-kzk" id="zHU-Uz-rh6"/>
+                        <outlet property="segmentedControl" destination="XZc-li-rog" id="0fl-8L-WpJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2ED-5o-XlR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1523" y="454"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="jIo-lq-cM6">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aUd-o0-OKC" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tBb-E5-zsS">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6lh-Md-jCk" kind="relationship" relationship="rootViewController" id="Gzm-U1-h12"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tl8-rm-hnQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="989" y="454"/>
+        </scene>
+    </scenes>
+</document>
