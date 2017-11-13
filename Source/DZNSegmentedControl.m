@@ -552,7 +552,7 @@
     
     _selectedSegmentIndex = segment;
     
-    void (^animations)() = ^void(){
+    void (^animations)(void) = ^void(){
         self.selectionIndicator.frame = [self selectionIndicatorRect];
     };
     

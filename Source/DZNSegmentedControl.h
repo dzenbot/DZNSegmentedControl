@@ -30,13 +30,13 @@ enum {
 @property (nonatomic) NSInteger selectedSegmentIndex;
 /** Returns the number of segments the receiver has. */
 @property (nonatomic, readonly) NSUInteger numberOfSegments;
-/** The height of the control. Default is 56pts, and if not showing counts, default is 30pts. */
+/** The height of the control. Default is 56 points, and if not showing counts, default is 30 points. */
 @property (nonatomic, readwrite) CGFloat height UI_APPEARANCE_SELECTOR;
 /** The width of the control. Default is superview's width. */
 @property (nonatomic, readwrite) CGFloat width UI_APPEARANCE_SELECTOR;
-/** The height of the selection indicator. Default is 2pts. */
+/** The height of the selection indicator. Default is 2 points. */
 @property (nonatomic, readwrite) CGFloat selectionIndicatorHeight UI_APPEARANCE_SELECTOR;
-/** The padding height of the selection indicator from the title of the button. Default is the height of the containter minus 2pts. */
+/** The padding height of the selection indicator from the title of the button. Default is 0 points. */
 @property (nonatomic, readwrite) CGFloat selectionIndicatorPadding UI_APPEARANCE_SELECTOR;
 /** The duration of the indicator's animation. Default is 0.2 sec. */
 @property (nonatomic, readwrite) CGFloat animationDuration UI_APPEARANCE_SELECTOR;

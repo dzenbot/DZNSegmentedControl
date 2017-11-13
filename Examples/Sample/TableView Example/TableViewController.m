@@ -33,7 +33,6 @@
     
     [[DZNSegmentedControl appearance] setFont:[UIFont fontWithName:@"EuphemiaUCAS" size:15.0]];
     [[DZNSegmentedControl appearance] setSelectionIndicatorHeight:2.5];
-    [[DZNSegmentedControl appearance] setSelectionIndicatorPadding:5];
     [[DZNSegmentedControl appearance] setAnimationDuration:0.125];
     
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor darkGrayColor], NSFontAttributeName: [UIFont systemFontOfSize:18.0]}];
@@ -102,6 +101,8 @@
 //                _control.autoAdjustSelectionIndicatorWidth = NO;
 //                _control.selectionIndicatorHeight = 4.0;
 //                _control.adjustsFontSizeToFitWidth = YES;
+
+        _control.selectionIndicatorPadding = 5.0;
         
         [_control addTarget:self action:@selector(didChangeSegment:) forControlEvents:UIControlEventValueChanged];
     }
